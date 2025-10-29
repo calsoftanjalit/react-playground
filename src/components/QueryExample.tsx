@@ -35,7 +35,7 @@ export const QueryExample = () => {
   if (error) {
     return (
       <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-4">
-        <Text c="red">Error: {error.message}</Text>
+        <Text c="red">Error loading users. Please try again later.</Text>
       </Card>
     );
   }
