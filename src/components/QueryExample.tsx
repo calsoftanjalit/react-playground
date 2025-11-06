@@ -1,26 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { Card, Text, Loader } from '@mantine/core';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  username: string;
-}
-
-const fetchUsers = async (): Promise<User[]> => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/users?_limit=5');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+import { Card, Text, Loader } from "@mantine/core";
+import { useUsers } from "../hooks";
+import type { User } from "../types";
 
 export const QueryExample = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['users'],
-    queryFn: fetchUsers,
-  });
+  const { data, isLoading, error } = useUsers();
 
   if (isLoading) {
     return (
@@ -46,10 +29,17 @@ export const QueryExample = () => {
         React Query Example
       </Text>
       <div className="space-y-2">
-        {data?.map((user) => (
-          <div key={user.id} className="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors">
-            <Text size="sm" fw={500}>{user.name}</Text>
-            <Text size="xs" c="dimmed">{user.email}</Text>
+        {data?.map((user: User) => (
+          <div
+            key={user.id}
+            className="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+          >
+            <Text size="sm" fw={500}>
+              {user.name}
+            </Text>
+            <Text size="xs" c="dimmed">
+              {user.email}
+            </Text>
           </div>
         ))}
       </div>
