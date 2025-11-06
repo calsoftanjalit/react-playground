@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { FeaturedCategories } from "./FeaturedCategories";
+import { FeaturedCategories } from "../../../components/home/FeaturedCategories";
 import { MantineProvider } from "@mantine/core";
 
 describe("FeaturedCategories", () => {
