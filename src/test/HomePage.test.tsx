@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { HomePage } from "./HomePage";
+import { HomePage } from "../pages";
 
 import { vi } from "vitest";
 import { MantineProvider } from "@mantine/core";

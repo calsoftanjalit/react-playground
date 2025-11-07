@@ -1,4 +1,4 @@
 export * from './HeroSection';
 export * from './FeaturedCategories';
 export * from './PopularProducts';
-export * from '../misc/Footer';
+export * from '../miscellaneous/Footer';
