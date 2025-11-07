@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { HeroSection } from "../../../components/home/HeroSection";
+import { HeroSection } from "../components/home/HeroSection";
 import { MantineProvider } from "@mantine/core";
 
 describe("HeroSection", () => {

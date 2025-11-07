@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Footer } from "../../../components/misc/Footer";
+import { Footer } from "../components/home";
 import { MantineProvider } from "@mantine/core";
 
 describe("Footer", () => {

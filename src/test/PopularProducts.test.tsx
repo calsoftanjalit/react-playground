@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { PopularProducts } from "../../../components/home/PopularProducts";
+import { PopularProducts } from "../components/home/PopularProducts";
 import { MantineProvider } from "@mantine/core";
 
 describe("PopularProducts", () => {
