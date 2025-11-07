@@ -6,6 +6,10 @@ import {
   Card,
   Container,
 } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPosts } from "../../services/postService";
+import LoaderComponent from "../misc/Loader";
+import ErrorMessage from "../misc/ErrorMessage";
 
 const products = [
   { id: 1, name: "Premium Product 1", price: 99.99 },
@@ -15,29 +19,34 @@ const products = [
 ];
 
 export const PopularProducts = () => {
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['posts'],
+    queryFn: () => fetchPosts(4)
+  })
+  
+  if (isLoading) return <LoaderComponent />
+  if (error?.message) return <ErrorMessage message={error?.message} />
+
   return (
     <Container size="lg" py="xl">
       <Title order={2} ta="center" mb="lg">
         Popular Products
       </Title>
       <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg">
-        {products.map((product) => (
+        {data && data.map((post) => (
           <Card
-            key={product.id}
+            key={post.id}
             shadow="sm"
             padding="lg"
             radius="md"
             withBorder
           >
             <Text fw={500} size="lg" mt="md">
-              {product.name}
+              {post.title}
             </Text>
-            <Text c="dimmed" size="sm">
-              ${product.price}
-            </Text>
-            <Button variant="light" fullWidth mt="md">
+            {/* <Button variant="light" fullWidth mt="md">
               Add to Cart
-            </Button>
+            </Button> */}
           </Card>
         ))}
       </SimpleGrid>
