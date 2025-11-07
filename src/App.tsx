@@ -1,8 +1,18 @@
-import { HomePage } from "./pages";
+import { BrowserRouter, useRoutes } from "react-router-dom";
 import "./App.scss";
+import { routes } from "./routes/routes";
+
+function AppRoutes() {
+  const element = useRoutes(routes);
+  return element;
+}
 
 function App() {
-  return <HomePage />;
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
 
 export default App;
