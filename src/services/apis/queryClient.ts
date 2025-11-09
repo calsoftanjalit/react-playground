@@ -1,8 +1,8 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 
 const STALE_TIME = 3
 // const CACHE_TIME = 5
-const RETRY = 0
+const RETRY = false
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,6 +13,10 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+export const invalidateQuery = (key: QueryKey) => {
+  queryClient.invalidateQueries({ queryKey: key });
+};
 
 export default queryClient;
 

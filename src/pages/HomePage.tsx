@@ -3,8 +3,10 @@ import {
   HeroSection,
   FeaturedCategories,
   PopularProducts,
-  Footer,
+  PostList,
 } from "../components/home";
+
+import { Footer } from "../components/miscellaneous";
 
 export const HomePage = () => {
   return (
@@ -12,6 +14,7 @@ export const HomePage = () => {
       <HeroSection />
       <FeaturedCategories />
       <PopularProducts />
+      <PostList />
       <Footer />
     </Stack>
   );

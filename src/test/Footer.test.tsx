@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { Footer } from "../components/home";
 import { MantineProvider } from "@mantine/core";
+import { Footer } from "../components/miscellaneous";
 
 describe("Footer", () => {
   it("renders all footer sections", () => {

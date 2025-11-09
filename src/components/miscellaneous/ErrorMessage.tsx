@@ -1,12 +1,11 @@
 import { Text } from "@mantine/core";
 import { ErrorMessageInterface } from "../../types/errorMessage";
 
-const ErrorMessage: React.FC<ErrorMessageInterface> = ({
+export const ErrorMessage: React.FC<ErrorMessageInterface> = ({
   message
 }) => {
+   if (!message) return null;
   return(
     <Text c="red">{message}</Text>
   )
 }
-
-export default ErrorMessage;
