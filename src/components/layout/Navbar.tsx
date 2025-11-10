@@ -1,19 +1,17 @@
 import { NavLink, ScrollArea, Stack } from "@mantine/core";
 import { IconHome, IconInfoCircle } from "@tabler/icons-react";
+import { FC } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routes";
+import { NavbarProps } from "../../types";
 
-interface NavbarProps {
-  opened: boolean;
-  toggle: () => void;
-}
-
-export const Navbar = ({ opened, toggle }: NavbarProps) => {
+export const Navbar: FC<NavbarProps> = ({ opened, toggle }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
-    { icon: IconHome, label: "Home", path: "/" },
-    { icon: IconInfoCircle, label: "About", path: "/about" },
+    { icon: IconHome, label: "Home", path: ROUTE_PATHS.HOME },
+    { icon: IconInfoCircle, label: "About", path: ROUTE_PATHS.ABOUT },
   ];
 
   return (

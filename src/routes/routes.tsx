@@ -1,10 +1,11 @@
 import { RouteObject } from "react-router-dom";
 import { Layout } from "../components/layout";
 import { AboutPage, HomePage } from "../pages";
+import { ROUTE_PATHS } from "./paths";
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
+    path: ROUTE_PATHS.ROOT,
     element: <Layout />,
     children: [
       {
@@ -12,7 +13,7 @@ export const routes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: "about",
+        path: ROUTE_PATHS.ABOUT,
         element: <AboutPage />,
       },
     ],

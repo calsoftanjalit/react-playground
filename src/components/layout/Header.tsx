@@ -1,13 +1,10 @@
 import { Burger, Group, Text } from "@mantine/core";
 import { IconRocket } from "@tabler/icons-react";
+import { FC } from "react";
+import { HeaderProps } from "../../types";
 import { HeaderActions } from "./HeaderActions";
 
-interface HeaderProps {
-  opened: boolean;
-  toggle: () => void;
-}
-
-export const Header = ({ opened, toggle }: HeaderProps) => {
+export const Header: FC<HeaderProps> = ({ opened, toggle }) => {
   return (
     <Group h="100%" px="md" className="justify-between">
       <Group>

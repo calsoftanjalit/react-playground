@@ -7,15 +7,18 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import "./styles/main.scss"
 import App from './App.tsx'
 import queryClient from './services/apis/queryClient.ts'
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider>
-        <Notifications />
-        <App />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </MantineProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider>
+          <Notifications />
+          <App />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </MantineProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </StrictMode>
 );
