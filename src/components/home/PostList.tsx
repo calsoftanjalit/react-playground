@@ -10,14 +10,9 @@ export const PostList: React.FC = () => {
     queryFn: () => fetchPosts(4)
   })
 
-  // const response = useQuery({
-  //   queryKey: ['posts'],
-  //   queryFn: () => fetchPosts(4)
-  // })
-
   if (isLoading) return <LoaderComponent />
   if (error?.message) return <ErrorMessage message={error?.message} />
-  
+
   return(
     <>
       <Container size="sm" py="lg">

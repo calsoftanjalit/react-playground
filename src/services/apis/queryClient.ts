@@ -1,7 +1,6 @@
 import { QueryClient, QueryKey } from "@tanstack/react-query";
 
 const STALE_TIME = 3
-// const CACHE_TIME = 5
 const RETRY = false
 
 const queryClient = new QueryClient({
