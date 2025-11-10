@@ -1,0 +1,25 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.button {
+  @apply px-4 py-2 rounded-md font-medium text-white;
+  background-color: $primary-color;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: darken($primary-color, 5%);
+  }
+
+  &:focus {
+    outline: 2px solid lighten($primary-color, 20%);
+    outline-offset: 2px;
+  }
+
+  &--secondary {
+    background-color: $secondary-color;
+  }
+
+  &--disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}

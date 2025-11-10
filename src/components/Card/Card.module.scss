@@ -1,0 +1,25 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.card {
+  @apply p-4 rounded-lg shadow-md bg-white;
+  border: 1px solid #e2e8f0;
+  @include transition(transform);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  &:focus-within {
+    border-color: $primary-color;
+  }
+
+  &__title {
+    @apply font-semibold text-lg mb-2;
+  }
+
+  &__content {
+    @apply text-sm text-gray-600;
+  }
+}
