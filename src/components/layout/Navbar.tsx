@@ -1,4 +1,4 @@
-import { NavLink, ScrollArea } from "@mantine/core";
+import { NavLink, ScrollArea, Stack } from "@mantine/core";
 import { IconHome, IconInfoCircle } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ export const Navbar = ({ opened, toggle }: NavbarProps) => {
 
   return (
     <ScrollArea>
-      <div className="space-y-1">
+      <Stack gap="xs">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -32,7 +32,7 @@ export const Navbar = ({ opened, toggle }: NavbarProps) => {
             className="rounded-lg"
           />
         ))}
-      </div>
+      </Stack>
     </ScrollArea>
   );
 };

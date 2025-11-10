@@ -1,4 +1,4 @@
-import { Container, Text } from "@mantine/core";
+import { Box, Container, Text } from "@mantine/core";
 import { AboutHero, DevelopmentTimeline, TechStack } from "../components/about";
 
 export const AboutPage = () => {
@@ -8,11 +8,11 @@ export const AboutPage = () => {
       <TechStack />
       <DevelopmentTimeline />
 
-      <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+      <Box className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
         <Text size="sm" c="dimmed" ta="center">
           🚀 Ready to build something amazing? Start exploring the playground!
         </Text>
-      </div>
+      </Box>
     </Container>
   );
 };

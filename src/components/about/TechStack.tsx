@@ -1,4 +1,4 @@
-import { Badge, Card, Group, Text, Title } from "@mantine/core";
+import { Badge, Box, Card, Group, Stack, Text, Title } from "@mantine/core";
 
 export const TechStack = () => {
   return (
@@ -11,8 +11,8 @@ export const TechStack = () => {
         tools and libraries to provide the best development experience possible.
       </Text>
 
-      <div className="mt-6 space-y-4">
-        <div>
+      <Stack gap="md" mt="xl">
+        <Box>
           <Text fw={600} className="mb-2">
             🎨 UI & Styling
           </Text>
@@ -27,9 +27,9 @@ export const TechStack = () => {
               SCSS Modules
             </Badge>
           </Group>
-        </div>
+        </Box>
 
-        <div>
+        <Box>
           <Text fw={600} className="mb-2">
             ⚡ Build Tools
           </Text>
@@ -44,9 +44,9 @@ export const TechStack = () => {
               PostCSS
             </Badge>
           </Group>
-        </div>
+        </Box>
 
-        <div>
+        <Box>
           <Text fw={600} className="mb-2">
             🔧 Development
           </Text>
@@ -61,8 +61,8 @@ export const TechStack = () => {
               ESLint
             </Badge>
           </Group>
-        </div>
-      </div>
+        </Box>
+      </Stack>
     </Card>
   );
 };

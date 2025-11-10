@@ -1,5 +1,9 @@
 import { ActionIcon, Avatar, Menu } from "@mantine/core";
-import { IconLogout, IconSettings, IconUser } from "@tabler/icons-react";
+import {
+  IconLogout,
+  IconSettings,
+  IconUser,
+} from "@tabler/icons-react";
 
 export const UserMenu = () => {
   return (
@@ -13,13 +17,13 @@ export const UserMenu = () => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Account</Menu.Label>
+        <Menu.Label>My Account</Menu.Label>
         <Menu.Item leftSection={<IconUser size={16} />}>Profile</Menu.Item>
         <Menu.Item leftSection={<IconSettings size={16} />}>Settings</Menu.Item>
 
         <Menu.Divider />
 
-        <Menu.Label>Danger zone</Menu.Label>
+        <Menu.Label>Session</Menu.Label>
         <Menu.Item color="red" leftSection={<IconLogout size={16} />}>
           Logout
         </Menu.Item>
