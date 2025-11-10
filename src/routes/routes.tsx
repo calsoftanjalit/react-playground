@@ -1,7 +1,10 @@
+import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 import { Layout } from "../components/layout";
-import { AboutPage, HomePage } from "../pages";
 import { ROUTE_PATHS } from "./paths";
+
+const HomePage = lazy(() => import("../pages/HomePage"));
+const AboutPage = lazy(() => import("../pages/AboutPage"));
 
 export const routes: RouteObject[] = [
   {

@@ -1,6 +1,8 @@
 import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
+import { LoadingFallback } from "../common";
 import { Header } from "./Header";
 import { Navbar } from "./Navbar";
 
@@ -28,7 +30,9 @@ export function Layout() {
       </AppShell.Navbar>
 
       <AppShell.Main className="bg-gray-50">
-        <Outlet />
+        <Suspense fallback={<LoadingFallback />}>
+          <Outlet />
+        </Suspense>
       </AppShell.Main>
     </AppShell>
   );

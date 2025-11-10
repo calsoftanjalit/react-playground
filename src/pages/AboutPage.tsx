@@ -1,7 +1,7 @@
 import { Box, Container, Text } from "@mantine/core";
 import { AboutHero, DevelopmentTimeline, TechStack } from "../components/about";
 
-export const AboutPage = () => {
+const AboutPage = () => {
   return (
     <Container size="md" className="py-8">
       <AboutHero />
@@ -16,3 +16,5 @@ export const AboutPage = () => {
     </Container>
   );
 };
+
+export default AboutPage;
