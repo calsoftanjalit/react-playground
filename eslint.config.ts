@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import pluginReact from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 import prettier from 'eslint-config-prettier';
 import type { Linter } from 'eslint';
@@ -21,6 +22,7 @@ const config: Linter.Config[] = [
 
     plugins: {
       react: pluginReact,
+      'react-hooks': reactHooks,
       prettier: eslintPluginPrettier,
     },
 
@@ -30,7 +32,25 @@ const config: Linter.Config[] = [
 
     rules: {
       'react/react-in-jsx-scope': 'off',
-      'no-unused-vars': 'error',
+
+      // Disabling base rule
+      'no-unused-vars': 'off',
+
+      // TS-aware unused vars rule
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: true,
+        },
+      ],
+
+      // React Hooks rules
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // Prettier
       'prettier/prettier': [
         'error',
         {
