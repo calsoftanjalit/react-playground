@@ -55,7 +55,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: $primary-color;
-  color: #fff;
+  color: $button-text-color;
   cursor: pointer;
   @include transition(border-color);
 }

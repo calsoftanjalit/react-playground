@@ -3,12 +3,12 @@
 
 .card {
   @apply p-4 rounded-lg shadow-md bg-white;
-  border: 1px solid #e2e8f0;
+  border: 0.0625rem solid $card-border-color;
   @include transition(transform);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.5rem 1rem $card-shadow-color;
   }
 
   &:focus-within {
