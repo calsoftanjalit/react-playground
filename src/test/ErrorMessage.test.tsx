@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MantineProvider } from "@mantine/core";
-import { ErrorMessageInterface } from "../types/errorMessage";
-import { ErrorMessage } from "../components/miscellaneous";
+import { ErrorMessageInterface } from "@types";
+import { ErrorMessage } from "@components/miscellaneous";
 
 describe("ErrorMessage component", () => {
   const renderWithMantine = (ui: React.ReactNode) => {

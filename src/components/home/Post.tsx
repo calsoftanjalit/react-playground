@@ -1,5 +1,5 @@
 import { Card, Text } from "@mantine/core";
-import { PostInterface } from "../../types/post";
+import type { PostInterface } from "@types";
 
 const Post: React.FC<PostInterface> = ({
   id,

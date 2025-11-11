@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_TIMEOUT } from "../../constants/api";
+import { API_TIMEOUT } from "@constants/api";
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com/'
 

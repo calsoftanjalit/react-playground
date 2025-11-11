@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import { HomePage } from "../pages";
 
 import { vi } from "vitest";
 import { MantineProvider } from "@mantine/core";
+import { HomePage } from "@pages/HomePage";
 
 vi.mock("../components/home", () => ({
   HeroSection: () => <div data-testid="hero-section">Hero Section</div>,

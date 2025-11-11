@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchPosts } from "../../services/postService"
 import { Container, Stack, Title } from "@mantine/core"
-import { ErrorMessage, LoadingIndicator } from "../miscellaneous"
+import { ErrorMessage, LoadingIndicator } from "@components/miscellaneous"
+import { fetchPosts } from "@services/postService"
 import Post from "./Post"
 
 export const PostList: React.FC = () => {

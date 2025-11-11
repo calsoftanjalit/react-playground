@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { ErrorMessageInterface } from "../../types/errorMessage";
+import { ErrorMessageInterface } from "@types";
 
 export const ErrorMessage: React.FC<ErrorMessageInterface> = ({
   message

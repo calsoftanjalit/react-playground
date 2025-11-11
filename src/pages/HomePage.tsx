@@ -4,9 +4,8 @@ import {
   FeaturedCategories,
   PopularProducts,
   PostList,
-} from "../components/home";
-
-import { Footer } from "../components/miscellaneous";
+} from "@components/home";
+import { Footer } from "@components/miscellaneous";
 
 const HomePage = () => {
   return (

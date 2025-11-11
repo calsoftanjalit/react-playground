@@ -1,6 +1,6 @@
 
-import { PostInterface } from "../types/post";
-import apiClient from "./apis/apiClient";
+import { PostInterface } from "@types";
+import apiClient from "@services/apis/apiClient";
 
 const POSTS_URL = '/posts'
 

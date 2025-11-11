@@ -2,8 +2,8 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MantineProvider } from "@mantine/core";
-import { PostList } from "../components/home";
-import * as postService from "../services/postService";
+import { PostList } from "@components/home";
+import * as postService from "@services/postService";
 
 vi.mock("../components/miscellaneous", () => ({
   LoadingIndicator: () => <div data-testid="loader">Loading...</div>,

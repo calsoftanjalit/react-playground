@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MantineProvider } from "@mantine/core";
-import { PostInterface } from "../types/post";
-import Post from "../components/home/Post";
+import { PostInterface } from "@types";
+import Post from "@components/home/Post";
 
 describe("Post component", () => {
   const mockPost: PostInterface = {
