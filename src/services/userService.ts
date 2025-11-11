@@ -1,5 +1,4 @@
-import type { User } from '../types';
-
+import type { User } from '@/types';
 
 // this is just a example API endpoint
 
