@@ -25,12 +25,10 @@ describe('HomePage', () => {
 
     const sections = screen.getAllByTestId(/section|featured|products|post|footer/);
     expect(sections).toHaveLength(5);
-    expect(sections.map((s) => s.textContent)).toEqual([
-      'Hero Section',
-      'Featured Categories',
-      'Popular Products',
-      'Post List',
-      'Footer',
-    ]);
+    expect(sections[0]).toHaveTextContent('Hero Section');
+    expect(sections[1]).toHaveTextContent('Featured Categories');
+    expect(sections[2]).toHaveTextContent('Popular Products');
+    expect(sections[3]).toHaveTextContent('Post List');
+    expect(sections[4]).toHaveTextContent('Footer');
   });
 });

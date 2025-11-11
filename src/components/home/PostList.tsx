@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Container, Stack, Title } from '@mantine/core';
-import Post from './Post';
+import Post from '@/components/home/Post';
 import { fetchPosts } from '@/services/postService';
 import { ErrorMessage, LoadingIndicator } from '@/components/miscellaneous';
 
