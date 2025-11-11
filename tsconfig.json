@@ -25,16 +25,8 @@
     "types": ["vitest/globals"],
     "baseUrl": ".",
     "paths": {
-      "@assets/*": ["src/hooks"],
-      "@components/*": ["src/components/*"],
-      "@constants/*": ["src/constants/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"],
-      "@services/*": ["src/services/*"],
-      "@styles/*": ["src/styles/*"],
-      "@types/*": ["src/types/*"],
-      "@types": ["src/types/index"]
-    } 
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src", "src/types"]
 }

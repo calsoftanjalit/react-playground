@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import { vi } from 'vitest';
 import { MantineProvider } from '@mantine/core';
-import HomePage from '@pages/HomePage';
+import { HomePage } from '@/pages';
 
 vi.mock('../components/home', () => ({
   HeroSection: () => <div data-testid="hero-section">Hero Section</div>,
@@ -25,10 +25,12 @@ describe('HomePage', () => {
 
     const sections = screen.getAllByTestId(/section|featured|products|post|footer/);
     expect(sections).toHaveLength(5);
-    expect(sections[0]).toHaveTextContent('Hero Section');
-    expect(sections[1]).toHaveTextContent('Featured Categories');
-    expect(sections[2]).toHaveTextContent('Popular Products');
-    expect(sections[3]).toHaveTextContent('Post List');
-    expect(sections[4]).toHaveTextContent('Footer');
+    expect(sections.map((s) => s.textContent)).toEqual([
+      'Hero Section',
+      'Featured Categories',
+      'Popular Products',
+      'Post List',
+      'Footer',
+    ]);
   });
 });
