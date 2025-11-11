@@ -8,7 +8,7 @@ import {
 
 import { Footer } from "../components/miscellaneous";
 
-export const HomePage = () => {
+const HomePage = () => {
   return (
     <Stack>
       <HeroSection />
@@ -19,3 +19,5 @@ export const HomePage = () => {
     </Stack>
   );
 };
+
+export default HomePage;
