@@ -6,7 +6,7 @@ import { PostList } from "../components/home";
 import * as postService from "../services/postService";
 
 vi.mock("../components/miscellaneous", () => ({
-  LoaderComponent: () => <div data-testid="loader">Loading...</div>,
+  LoadingIndicator: () => <div data-testid="loader">Loading...</div>,
   ErrorMessage: ({ message }: { message: string }) => <div data-testid="error">{message}</div>,
 }));
 

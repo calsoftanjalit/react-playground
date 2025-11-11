@@ -1,6 +1,6 @@
 import { Loader } from "@mantine/core"
 
-export const LoaderComponent: React.FC = () => {
+export const LoadingIndicator: React.FC = () => {
   return(
       <div>
         <Loader size="lg"/>

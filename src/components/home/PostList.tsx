@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { fetchPosts } from "../../services/postService"
 import { Container, Stack, Title } from "@mantine/core"
-import {LoaderComponent, ErrorMessage} from "../miscellaneous"
+import { ErrorMessage, LoadingIndicator } from "../miscellaneous"
 import Post from "./Post"
 
 export const PostList: React.FC = () => {
@@ -10,7 +10,7 @@ export const PostList: React.FC = () => {
     queryFn: () => fetchPosts(4)
   })
 
-  if (isLoading) return <LoaderComponent />
+  if (isLoading) return <LoadingIndicator />
   if (error?.message) return <ErrorMessage message={error?.message} />
 
   return(
