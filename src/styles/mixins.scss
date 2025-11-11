@@ -1,0 +1,17 @@
+
+@mixin transition($prop: all, $time: 0.2s, $ease: ease-in-out) {
+    transition: $prop $time $ease;
+  }
+  
+  @mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @mixin hover-brighten {
+    &:hover {
+      filter: brightness(1.1);
+    }
+  }
+  
