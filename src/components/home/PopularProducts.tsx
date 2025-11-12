@@ -21,7 +21,13 @@ export const PopularProducts = () => {
       </Title>
       <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg">
         {data?.products?.map((product: ProductInterface) => (
-          <Product key={product.id} id={product.id} title={product.title} price={product.price} />
+          <Product
+            key={product.id}
+            id={product.id}
+            title={product.title}
+            price={product.price}
+            thumbnail={product.thumbnail}
+          />
         ))}
       </SimpleGrid>
     </Container>

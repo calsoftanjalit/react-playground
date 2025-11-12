@@ -9,6 +9,7 @@ describe('Product component', () => {
     id: 1,
     title: 'Test Product',
     price: 99.99,
+    thumbnail: '/a.jpg',
   };
 
   const renderWithMantine = (ui: React.ReactNode) => {
@@ -19,6 +20,7 @@ describe('Product component', () => {
     renderWithMantine(<Product {...mockProduct} />);
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('$99.99')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Test Product' }));
     expect(screen.getByRole('button', { name: /add to cart/i })).toBeInTheDocument();
   });
 
@@ -37,10 +39,12 @@ describe('Product component', () => {
       id: 2,
       title: 'Another Product',
       price: 49.5,
+      thumbnail: '/a.jpg',
     };
 
     renderWithMantine(<Product {...newProduct} />);
     expect(screen.getByText('Another Product')).toBeInTheDocument();
     expect(screen.getByText('$49.5')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Another Product' })).toBeInTheDocument();
   });
 });

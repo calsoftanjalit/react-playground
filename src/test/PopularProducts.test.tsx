@@ -11,8 +11,9 @@ vi.mock('@/components/miscellaneous', () => ({
 }));
 
 vi.mock('@/components/home/Product', () => ({
-  default: ({ title, price }: { title: string; price: number }) => (
+  default: ({ title, price, thumbnail }: { title: string; price: number; thumbnail: string }) => (
     <div data-testid="product">
+      <img src={thumbnail} alt={title} data-testid="thumbnail" />
       <h3>{title}</h3>
       <p>{price}</p>
     </div>
@@ -65,8 +66,8 @@ describe('PopularProducts Component', () => {
   it('renders products when fetching succeeds', async () => {
     const mockData = {
       products: [
-        { id: 1, title: 'Product A', price: 100 },
-        { id: 2, title: 'Product B', price: 200 },
+        { id: 1, title: 'Product A', price: 100, thumbnail: '/a.jpg' },
+        { id: 2, title: 'Product B', price: 200, thumbnail: '/a.jpg' },
       ],
     };
 
@@ -79,6 +80,9 @@ describe('PopularProducts Component', () => {
 
     expect(screen.getByText('Product A')).toBeInTheDocument();
     expect(screen.getByText('Product B')).toBeInTheDocument();
+    expect(screen.getByAltText('Product A')).toBeInTheDocument();
+    expect(screen.findByRole('img', { name: 'Product A' }));
+    expect(screen.findByRole('img', { name: 'Product B' }));
 
     expect(screen.getByText(/popular products/i)).toBeInTheDocument();
   });
