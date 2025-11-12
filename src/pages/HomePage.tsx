@@ -1,5 +1,5 @@
 import { Stack } from '@mantine/core';
-import { HeroSection, FeaturedCategories, PopularProducts, PostList } from '@/components/home';
+import { HeroSection, FeaturedCategories, PopularProducts } from '@/components/home';
 import { Footer } from '@/components/miscellaneous';
 
 const HomePage = () => {
@@ -8,7 +8,6 @@ const HomePage = () => {
       <HeroSection />
       <FeaturedCategories />
       <PopularProducts />
-      <PostList />
       <Footer />
     </Stack>
   );

@@ -1,42 +1,89 @@
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { PopularProducts } from '@/components/home/PopularProducts';
 import { MantineProvider } from '@mantine/core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as productService from '@/services/productService';
+import { PopularProducts } from '@/components/home';
 
-describe('PopularProducts', () => {
-  it('renders all products correctly', () => {
-    render(
-      <MantineProvider>
-        <PopularProducts />
-      </MantineProvider>
-    );
+vi.mock('@/components/miscellaneous', () => ({
+  LoadingIndicator: () => <div data-testid="loader">Loading...</div>,
+  ErrorMessage: ({ message }: { message: string }) => <div data-testid="error">{message}</div>,
+}));
 
-    expect(screen.getByText('Popular Products')).toBeInTheDocument();
-    expect(screen.getAllByText(/Premium Product/)).toHaveLength(4);
-    expect(screen.getAllByText('Add to Cart')).toHaveLength(4);
+vi.mock('@/components/home/Product', () => ({
+  default: ({ title, price, thumbnail }: { title: string; price: number; thumbnail: string }) => (
+    <div data-testid="product">
+      <img src={thumbnail} alt={title} data-testid="thumbnail" />
+      <h3>{title}</h3>
+      <p>{price}</p>
+    </div>
+  ),
+}));
+
+vi.mock('@/services/productService', () => ({
+  fetchProducts: vi.fn(),
+}));
+
+const renderWithProviders = (ui: React.ReactNode) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+    },
   });
 
-  it('displays product prices', () => {
-    render(
-      <MantineProvider>
-        <PopularProducts />
-      </MantineProvider>
-    );
-    expect(screen.getByText('$99.99')).toBeInTheDocument();
-    expect(screen.getByText('$149.99')).toBeInTheDocument();
+  return render(
+    <MantineProvider>
+      <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+    </MantineProvider>
+  );
+};
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe('PopularProducts Component', () => {
+  it('renders loader while fetching products', () => {
+    vi.spyOn(productService, 'fetchProducts').mockReturnValue(new Promise(() => {}));
+
+    renderWithProviders(<PopularProducts />);
+
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
-  it('has clickable add to cart buttons', async () => {
-    render(
-      <MantineProvider>
-        <PopularProducts />
-      </MantineProvider>
+  it('renders error message when fetching fails', async () => {
+    vi.spyOn(productService, 'fetchProducts').mockRejectedValue(
+      new Error('Failed to load products')
     );
-    const user = userEvent.setup();
 
-    const buttons = screen.getAllByText('Add to Cart');
-    await user.click(buttons[0]);
+    renderWithProviders(<PopularProducts />);
 
-    expect(buttons[0]).toBeInTheDocument();
+    const errorEl = await screen.findByTestId('error');
+    expect(errorEl).toBeInTheDocument();
+    expect(errorEl).toHaveTextContent('Failed to load products');
+  });
+
+  it('renders products when fetching succeeds', async () => {
+    const mockData = {
+      products: [
+        { id: 1, title: 'Product A', price: 100, thumbnail: '/a.jpg' },
+        { id: 2, title: 'Product B', price: 200, thumbnail: '/a.jpg' },
+      ],
+    };
+
+    vi.spyOn(productService, 'fetchProducts').mockResolvedValue(mockData);
+
+    renderWithProviders(<PopularProducts />);
+
+    const products = await screen.findAllByTestId('product');
+    expect(products).toHaveLength(2);
+
+    expect(screen.getByText('Product A')).toBeInTheDocument();
+    expect(screen.getByText('Product B')).toBeInTheDocument();
+    expect(screen.getByAltText('Product A')).toBeInTheDocument();
+    expect(screen.findByRole('img', { name: 'Product A' }));
+    expect(screen.findByRole('img', { name: 'Product B' }));
+
+    expect(screen.getByText(/popular products/i)).toBeInTheDocument();
   });
 });
