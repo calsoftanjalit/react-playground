@@ -1,28 +1,47 @@
+import { Header } from "@/components/Header/Header";
 import { MantineProvider } from "@mantine/core";
-import { render, screen } from "@testing-library/react";
-import { Header } from "../components/layout";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 
-describe("Header", () => {
+describe("Header Component", () => {
   const mockToggle = vi.fn();
 
-  it("renders the header with logo and title", () => {
+  const setup = () =>
     render(
       <MantineProvider>
-        <Header opened={false} toggle={mockToggle} />
+        <BrowserRouter>
+          <Header opened={false} toggle={mockToggle} />
+        </BrowserRouter>
       </MantineProvider>
     );
 
-    expect(screen.getByText("React Playground")).toBeInTheDocument();
+  it("renders the title", () => {
+    setup();
+    expect(screen.getByText("MyShop")).toBeInTheDocument();
   });
 
-  it("renders the burger menu", () => {
-    render(
-      <MantineProvider>
-        <Header opened={false} toggle={mockToggle} />
-      </MantineProvider>
-    );
+  it("renders all navigation links", () => {
+    setup();
 
-    const buttons = screen.getAllByRole("button");
-    expect(buttons.length).toBeGreaterThan(0);
+    const links = ["Home", "Products", "Cart", "Checkout"];
+
+    links.forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
+  });
+
+  it("renders the burger menu button", () => {
+    setup();
+    const burger = screen.getByRole("button"); // Burger component renders a <button>
+    expect(burger).toBeInTheDocument();
+  });
+
+  it("calls toggle when burger is clicked", () => {
+    setup();
+
+    const burger = screen.getByRole("button");
+    fireEvent.click(burger);
+
+    expect(mockToggle).toHaveBeenCalledTimes(1);
   });
 });

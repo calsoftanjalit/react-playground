@@ -5,6 +5,9 @@ import { ROUTE_PATHS } from "./paths";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const AboutPage = lazy(() => import("../pages/AboutPage"));
+const ProductsPage = lazy(() => import("../pages/ProductPage"));
+const CartPage = lazy(() => import("../pages/CartPage"));
+const CheckoutPage = lazy(() => import("../pages/CheckoutPage"));
 
 export const routes: RouteObject[] = [
   {
@@ -18,6 +21,18 @@ export const routes: RouteObject[] = [
       {
         path: ROUTE_PATHS.ABOUT,
         element: <AboutPage />,
+      },
+        {
+        path: ROUTE_PATHS.PRODUCTS,
+        element: <ProductsPage />,
+      },
+      {
+        path: ROUTE_PATHS.CART,
+        element: <CartPage />,
+      },
+      {
+        path: ROUTE_PATHS.CHECKOUT,
+        element: <CheckoutPage />,
       },
     ],
   },
