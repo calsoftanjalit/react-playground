@@ -21,4 +21,13 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
+class IntersectionObserverMock {
+  constructor() {}
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+
 window.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+window.IntersectionObserver = IntersectionObserverMock as any;
