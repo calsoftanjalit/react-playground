@@ -2,7 +2,7 @@ import { ActionIcon, Group, Tooltip, useMantineColorScheme } from '@mantine/core
 import { notifications } from '@mantine/notifications';
 import { IconBell, IconBrandGithub, IconMoon, IconSun } from '@tabler/icons-react';
 import { UserMenu } from './UserMenu';
-import CartIcon from '../Cart/CartIcon';
+import CartIcon from '@/components/Cart/CartIcon';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/routes';
 
