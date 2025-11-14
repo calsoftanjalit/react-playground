@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MantineProvider } from '@mantine/core';
 import { describe, it, expect, vi } from 'vitest';
-import Cart from '@/components/Cart/Cart';
 import { BrowserRouter } from 'react-router-dom';
+import Cart from '@/pages/Cart';
 
 vi.mock('@/components/Cart/CartTable', () => ({
   default: () => <div>Mock CartTable</div>,

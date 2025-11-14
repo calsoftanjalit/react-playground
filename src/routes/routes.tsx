@@ -3,9 +3,9 @@ import { RouteObject } from 'react-router-dom';
 import { Layout } from '../components/layout';
 import { ROUTE_PATHS } from './paths';
 
-const HomePage = lazy(() => import('../pages/HomePage'));
-const AboutPage = lazy(() => import('../pages/AboutPage'));
-const CartPage = lazy(() => import('@/components/Cart/Cart'));
+const HomePage = lazy(() => import('@/pages/HomePage'));
+const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const CartPage = lazy(() => import('@/pages/Cart'));
 
 export const routes: RouteObject[] = [
   {
