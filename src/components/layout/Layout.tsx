@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { LoadingFallback } from "../common";
 import { Navbar } from "./Navbar";
-import {Header} from "../Header/Header";
+import { Header } from "../Header";
 
 export function Layout() {
   const [opened, { toggle }] = useDisclosure();
