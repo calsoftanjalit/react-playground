@@ -54,7 +54,7 @@ const config: Linter.Config[] = [
       'prettier/prettier': [
         'error',
         {
-          singleQuote: true,
+          singleQuote: false,
           semi: true,
           trailingComma: 'es5',
           printWidth: 100,
