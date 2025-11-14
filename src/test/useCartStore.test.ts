@@ -46,8 +46,8 @@ describe('useCartStore', () => {
       const { result } = renderHook(() => useCartStore(), { wrapper });
 
       expect(result.current.items).toEqual([]);
-      expect(result.current.getTotalItems()).toBe(0);
-      expect(result.current.getTotalPrice()).toBe(0);
+      expect(result.current.totalItems).toBe(0);
+      expect(result.current.totalPrice).toBe(0);
       expect(result.current.isLoading).toBe(false);
     });
 
@@ -72,8 +72,8 @@ describe('useCartStore', () => {
       });
 
       expect(result.current.items).toEqual(cartData);
-      expect(result.current.getTotalItems()).toBe(3);
-      expect(result.current.getTotalPrice()).toBe(175);
+      expect(result.current.totalItems).toBe(3);
+      expect(result.current.totalPrice).toBe(175);
     });
   });
 
@@ -95,8 +95,8 @@ describe('useCartStore', () => {
         ...newItem,
         quantity: 1,
       });
-      expect(result.current.getTotalItems()).toBe(1);
-      expect(result.current.getTotalPrice()).toBeCloseTo(99.99, 2);
+      expect(result.current.totalItems).toBe(1);
+      expect(result.current.totalPrice).toBeCloseTo(99.99, 2);
     });
 
     it('should increase quantity when adding existing item', async () => {
@@ -115,8 +115,8 @@ describe('useCartStore', () => {
       });
 
       expect(result.current.items).toHaveLength(1);
-      expect(result.current.getTotalItems()).toBe(3);
-      expect(result.current.getTotalPrice()).toBe(150);
+      expect(result.current.totalItems).toBe(3);
+      expect(result.current.totalPrice).toBe(150);
     });
 
     it('should add multiple different items', async () => {
@@ -136,8 +136,8 @@ describe('useCartStore', () => {
         expect(result.current.items).toHaveLength(3);
       });
 
-      expect(result.current.getTotalItems()).toBe(3);
-      expect(result.current.getTotalPrice()).toBe(150);
+      expect(result.current.totalItems).toBe(3);
+      expect(result.current.totalPrice).toBe(150);
     });
 
     it('should handle decimal prices correctly', async () => {
@@ -152,10 +152,10 @@ describe('useCartStore', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.getTotalItems()).toBe(3);
+        expect(result.current.totalItems).toBe(3);
       });
 
-      expect(result.current.getTotalPrice()).toBeCloseTo(59.97, 2);
+      expect(result.current.totalPrice).toBeCloseTo(59.97, 2);
     });
   });
 
@@ -175,8 +175,8 @@ describe('useCartStore', () => {
         expect(result.current.items[0].quantity).toBe(5);
       });
 
-      expect(result.current.getTotalItems()).toBe(5);
-      expect(result.current.getTotalPrice()).toBe(250);
+      expect(result.current.totalItems).toBe(5);
+      expect(result.current.totalPrice).toBe(250);
     });
 
     it('should remove item when quantity set to 0', async () => {
@@ -194,8 +194,8 @@ describe('useCartStore', () => {
         expect(result.current.items).toHaveLength(0);
       });
 
-      expect(result.current.getTotalItems()).toBe(0);
-      expect(result.current.getTotalPrice()).toBe(0);
+      expect(result.current.totalItems).toBe(0);
+      expect(result.current.totalPrice).toBe(0);
     });
 
     it('should remove item when quantity set to negative', async () => {
@@ -213,7 +213,7 @@ describe('useCartStore', () => {
         expect(result.current.items).toHaveLength(0);
       });
 
-      expect(result.current.getTotalItems()).toBe(0);
+      expect(result.current.totalItems).toBe(0);
     });
 
     it('should handle updating non-existent item gracefully', async () => {
@@ -245,7 +245,7 @@ describe('useCartStore', () => {
         expect(result.current.items[1].quantity).toBe(1);
       });
 
-      expect(result.current.getTotalPrice()).toBe(575);
+      expect(result.current.totalPrice).toBe(575);
     });
   });
 
@@ -267,7 +267,7 @@ describe('useCartStore', () => {
       });
 
       expect(result.current.items[0].id).toBe(2);
-      expect(result.current.getTotalPrice()).toBe(75);
+      expect(result.current.totalPrice).toBe(75);
     });
 
     it('should handle removing non-existent item gracefully', async () => {
@@ -304,7 +304,7 @@ describe('useCartStore', () => {
       });
 
       expect(result.current.items.map((i) => i.id)).toEqual([1, 3]);
-      expect(result.current.getTotalPrice()).toBe(75);
+      expect(result.current.totalPrice).toBe(75);
     });
   });
 
@@ -327,8 +327,8 @@ describe('useCartStore', () => {
         expect(result.current.items).toHaveLength(0);
       });
 
-      expect(result.current.getTotalItems()).toBe(0);
-      expect(result.current.getTotalPrice()).toBe(0);
+      expect(result.current.totalItems).toBe(0);
+      expect(result.current.totalPrice).toBe(0);
     });
 
     it('should handle clearing empty cart', async () => {
@@ -355,14 +355,14 @@ describe('useCartStore', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.getTotalPrice()).toBe(60);
+        expect(result.current.totalPrice).toBe(60);
       });
     });
 
     it('should return 0 for empty cart', async () => {
       const { result } = renderHook(() => useCartStore(), { wrapper });
 
-      expect(result.current.getTotalPrice()).toBe(0);
+      expect(result.current.totalPrice).toBe(0);
     });
   });
 
@@ -377,7 +377,7 @@ describe('useCartStore', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.getTotalItems()).toBe(3);
+        expect(result.current.totalItems).toBe(3);
       });
     });
 
@@ -395,14 +395,14 @@ describe('useCartStore', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.getTotalItems()).toBe(8);
+        expect(result.current.totalItems).toBe(8);
       });
     });
 
     it('should return 0 for empty cart', async () => {
       const { result } = renderHook(() => useCartStore(), { wrapper });
 
-      expect(result.current.getTotalItems()).toBe(0);
+      expect(result.current.totalItems).toBe(0);
     });
   });
 
@@ -505,7 +505,7 @@ describe('useCartStore', () => {
       });
 
       expect(result.current.items).toEqual(initialData);
-      expect(result.current.getTotalPrice()).toBe(175);
+      expect(result.current.totalPrice).toBe(175);
     });
   });
 

@@ -11,8 +11,8 @@ export interface CartContextType {
   updateItem: (id: number, quantity: number) => void;
   removeItem: (id: number) => void;
   clearCart: () => void;
-  getTotalPrice: () => number;
-  getTotalItems: () => number;
+  totalPrice: number;
+  totalItems: number;
   isLoading: boolean;
 }
 

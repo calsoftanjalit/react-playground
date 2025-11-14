@@ -11,7 +11,7 @@ const Product: React.FC<ProductInterface> = ({
 }) => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
 
-  const cartItem = items.find((i) => i.id === id);
+  const cartItem = items.find((item) => item.id === id);
   const quantity = cartItem?.quantity ?? 0;
 
   const handleIncrement = () => {

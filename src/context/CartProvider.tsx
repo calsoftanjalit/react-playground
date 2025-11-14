@@ -72,11 +72,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setItems([]);
   }, []);
 
-  const getTotalPrice = useCallback(() => {
+  const totalPrice = useMemo(() => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   }, [items]);
 
-  const getTotalItems = useCallback(() => {
+  const totalItems = useMemo(() => {
     return items.reduce((total, item) => total + item.quantity, 0);
   }, [items]);
 
@@ -87,8 +87,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       updateItem,
       removeItem,
       clearCart,
-      getTotalPrice,
-      getTotalItems,
+      totalPrice,
+      totalItems,
       isLoading,
     }),
     [
@@ -97,8 +97,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       updateItem,
       removeItem,
       clearCart,
-      getTotalPrice,
-      getTotalItems,
+      totalPrice,
+      totalItems,
       isLoading,
     ]
   );
