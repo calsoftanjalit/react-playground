@@ -36,8 +36,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   color: $text-color;
@@ -85,4 +83,8 @@ button:focus-visible {
     background-color: $background-color;
     color: $text-color;
   }
+}
+
+.mantine-Image-root {
+  text-align: left !important;
 }
