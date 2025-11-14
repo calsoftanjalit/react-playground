@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { CartContext } from "./CartContext";
 
 import { CART_STORAGE_KEY } from "@/constants/cart";
+import { getFromStorage, setInStorage } from "@/utils/storage";
 
 import type {
   CartContextType,
@@ -16,41 +17,32 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const loadCart = () => {
-      try {
-        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-        if (savedCart) {
-          setItems(JSON.parse(savedCart));
-        }
-      } catch (error) {
-        console.error("Failed to load cart from localStorage:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadCart();
+    const savedCart = getFromStorage<CartItem[]>(CART_STORAGE_KEY);
+    if (savedCart) {
+      setItems(savedCart);
+    }
+    setIsLoading(false);
   }, []);
 
   // Save cart to localStorage whenever items change
   useEffect(() => {
     if (!isLoading) {
-      try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-      } catch (error) {
-        console.error("Failed to save cart to localStorage:", error);
-      }
+      setInStorage(CART_STORAGE_KEY, items);
     }
   }, [items, isLoading]);
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
     setItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+      const existingItem = prevItems.find(
+        (cartItem) => cartItem.id === item.id
+      );
 
       if (existingItem) {
         // If item exists, increase quantity
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        return prevItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
         );
       }
 
@@ -63,15 +55,17 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setItems((prevItems) => {
       if (quantity <= 0) {
         // remove Item if quantity is zero or less
-        return prevItems.filter((i) => i.id !== id);
+        return prevItems.filter((cartItem) => cartItem.id !== id);
       }
 
-      return prevItems.map((i) => (i.id === id ? { ...i, quantity } : i));
+      return prevItems.map((cartItem) =>
+        cartItem.id === id ? { ...cartItem, quantity } : cartItem
+      );
     });
   }, []);
 
   const removeItem = useCallback((id: number) => {
-    setItems((prevItems) => prevItems.filter((i) => i.id !== id));
+    setItems((prevItems) => prevItems.filter((cartItem) => cartItem.id !== id));
   }, []);
 
   const clearCart = useCallback(() => {
