@@ -1,16 +1,7 @@
 import { ProductInterface } from "@/types/product";
-import {
-  Button,
-  Card,
-  Image,
-  Text,
-  Group,
-  ActionIcon,
-  Badge,
-  Box,
-} from "@mantine/core";
-import { IconPlus, IconMinus } from "@tabler/icons-react";
+import { Button, Card, Image, Text } from "@mantine/core";
 import { useCartStore } from "@/context";
+import QuantitySelector from "./QuantitySelector";
 
 const Product: React.FC<ProductInterface> = ({
   id,
@@ -53,31 +44,11 @@ const Product: React.FC<ProductInterface> = ({
           Add to Cart
         </Button>
       ) : (
-        <Box mt="md">
-          <Group justify="center">
-            <ActionIcon
-              variant="light"
-              size="lg"
-              onClick={handleDecrement}
-              aria-label={`Decrease quantity for ${title}`}
-            >
-              <IconMinus size={18} />
-            </ActionIcon>
-
-            <Badge variant="light" size="lg">
-              {quantity}
-            </Badge>
-
-            <ActionIcon
-              variant="light"
-              size="lg"
-              onClick={handleIncrement}
-              aria-label={`Increase quantity for ${title}`}
-            >
-              <IconPlus size={18} />
-            </ActionIcon>
-          </Group>
-        </Box>
+        <QuantitySelector
+          quantity={quantity}
+          handleIncrement={handleIncrement}
+          handleDecrement={handleDecrement}
+        />
       )}
     </Card>
   );
