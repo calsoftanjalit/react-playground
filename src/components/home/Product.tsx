@@ -1,7 +1,10 @@
+import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 import { ProductInterface } from '@/types/product';
 import { Button, Card, Image, Text } from '@mantine/core';
 
 const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) => {
+  const { handleAddCartProduct, mutation } = useAddCartProduct();
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Image src={thumbnail} height={160} alt={title} />
@@ -11,7 +14,13 @@ const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) =>
       <Text c="dimmed" size="sm">
         ${price}
       </Text>
-      <Button variant="light" fullWidth mt="md">
+      <Button
+        variant="light"
+        fullWidth
+        mt="md"
+        onClick={() => handleAddCartProduct(id)}
+        disabled={mutation.isPending}
+      >
         Add to Cart
       </Button>
     </Card>
