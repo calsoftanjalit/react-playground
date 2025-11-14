@@ -3,15 +3,18 @@ import { render, screen } from '@testing-library/react';
 import { HeaderActions } from '../components/layout';
 import { MemoryRouter } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/routes';
+import { CartProvider } from '@/context';
 
 describe('HeaderActions', () => {
   it('renders all action buttons', () => {
     render(
-      <MemoryRouter>
-        <MantineProvider>
-          <HeaderActions />
-        </MantineProvider>
-      </MemoryRouter>
+      <CartProvider>
+        <MemoryRouter>
+          <MantineProvider>
+            <HeaderActions />
+          </MantineProvider>
+        </MemoryRouter>
+      </CartProvider>
     );
 
     const buttons = screen.getAllByRole('button');
@@ -20,11 +23,13 @@ describe('HeaderActions', () => {
 
   it('renders GitHub link', () => {
     render(
-      <MemoryRouter>
-        <MantineProvider>
-          <HeaderActions />
-        </MantineProvider>
-      </MemoryRouter>
+      <CartProvider>
+        <MemoryRouter>
+          <MantineProvider>
+            <HeaderActions />
+          </MantineProvider>
+        </MemoryRouter>
+      </CartProvider>
     );
 
     const [cartLink, githubLink] = screen.getAllByRole('link');

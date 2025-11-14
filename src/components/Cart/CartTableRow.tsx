@@ -1,15 +1,16 @@
 import { CartTableRowProps } from '@/types/cart';
 import { Image, Table } from '@mantine/core';
-import { useMemo } from 'react';
-import CartQuantity from './CartQuantity';
+import React from 'react';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
+import QuantitySelector from '../home/QuantitySelector';
 
-const CartTableRow: React.FC<CartTableRowProps> = ({ product, onQuantityChange, onRemove }) => {
-  const totalPrice = useMemo(
-    () => (product.price * product.quantity).toFixed(2),
-    [product.price, product.quantity]
-  );
-
+const CartTableRow: React.FC<CartTableRowProps> = ({
+  product,
+  onQuantityChange,
+  onRemove,
+  quantity,
+  totalPrice,
+}) => {
   return (
     <Table.Tr key={product.id} ta="left">
       <Table.Td>
@@ -18,12 +19,17 @@ const CartTableRow: React.FC<CartTableRowProps> = ({ product, onQuantityChange, 
       <Table.Td className="break-words whitespace-normal max-w-[275px]">{product.title}</Table.Td>
       <Table.Td>{product.price.toFixed(2)}</Table.Td>
       <Table.Td ta="center">
-        <CartQuantity
-          quantity={product.quantity}
-          onQuantityChange={(newQuantity) => onQuantityChange(product.id, newQuantity)}
+        <QuantitySelector
+          quantity={quantity}
+          handleIncrement={() => {
+            onQuantityChange(product.id, quantity + 1);
+          }}
+          handleDecrement={() => {
+            onQuantityChange(product.id, quantity - 1);
+          }}
         />
       </Table.Td>
-      <Table.Td>{totalPrice}</Table.Td>
+      <Table.Td>{totalPrice.toFixed(2)}</Table.Td>
       <Table.Td ta="center">
         <MdOutlineDeleteOutline
           size={20}
@@ -36,4 +42,4 @@ const CartTableRow: React.FC<CartTableRowProps> = ({ product, onQuantityChange, 
   );
 };
 
-export default CartTableRow;
+export default React.memo(CartTableRow);

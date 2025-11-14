@@ -1,28 +1,10 @@
 import { ProductInterface } from '@/types/product';
 import { Button, Card, Image, Text } from '@mantine/core';
-import { useCartStore } from '@/context';
 import QuantitySelector from './QuantitySelector';
+import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 
 const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) => {
-  const { items, addItem, updateItem, removeItem } = useCartStore();
-
-  const cartItem = items.find((item) => item.id === id);
-  const quantity = cartItem?.quantity ?? 0;
-
-  const handleIncrement = () => {
-    // addItem({ id, title, price });
-  };
-
-  const handleDecrement = () => {
-    if (!cartItem) return;
-
-    if (cartItem.quantity <= 1) {
-      removeItem(id);
-      return;
-    }
-
-    updateItem(id, cartItem.quantity - 1);
-  };
+  const { handleAddCartProduct, updateItem, quantity, cartItem } = useAddCartProduct(id);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" key={`product-${id}`} withBorder>
@@ -35,14 +17,25 @@ const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) =>
       </Text>
 
       {!cartItem ? (
-        <Button variant="light" fullWidth mt="md" onClick={handleIncrement}>
+        <Button
+          variant="light"
+          fullWidth
+          mt="md"
+          onClick={() => {
+            handleAddCartProduct(id);
+          }}
+        >
           Add to Cart
         </Button>
       ) : (
         <QuantitySelector
           quantity={quantity}
-          handleIncrement={handleIncrement}
-          handleDecrement={handleDecrement}
+          handleIncrement={() => {
+            updateItem(id, cartItem.quantity + 1);
+          }}
+          handleDecrement={() => {
+            updateItem(id, cartItem.quantity - 1);
+          }}
         />
       )}
     </Card>

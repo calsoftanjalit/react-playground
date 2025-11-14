@@ -3,18 +3,14 @@ export interface CartItem {
   title: string;
   price: number;
   quantity: number;
-  total: number;
-  thumbnail: string;
+  total?: number;
+  thumbnail?: string;
 }
 
 export interface CartInterface {
   id: number;
   products: CartItem[];
   total: number;
-}
-
-export interface CartApiInterface {
-  carts: CartInterface;
 }
 
 export interface AddProductInterface {
@@ -27,20 +23,12 @@ export interface AddCartBodyInterface {
   products: AddProductInterface[];
 }
 
-export interface UpdateCartBodyInterface {
-  merge: boolean;
-  products: AddProductInterface[];
-}
-
-export interface CartQuantityInterface {
-  quantity: number;
-  onQuantityChange?: (newQuantity: number) => void;
-}
-
 export interface CartTableRowProps {
   product: CartItem;
   onQuantityChange: (id: number, newQuantity: number) => void;
   onRemove: (id: number) => void;
+  quantity: number;
+  totalPrice: number;
 }
 
 export interface CartContextType {

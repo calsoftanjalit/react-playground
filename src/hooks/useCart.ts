@@ -1,7 +1,7 @@
-import { CartProductInterface } from '@/types/cart';
+import { CartItem } from '@/types/cart';
 import { useCallback, useMemo, useState } from 'react';
 
-const dummyCartData: CartProductInterface[] = [
+const dummyCartData: CartItem[] = [
   {
     id: 1,
     title: 'Eyeshadow Palette with Mirror',
@@ -50,7 +50,7 @@ const dummyCartData: CartProductInterface[] = [
 ];
 
 export const useCart = () => {
-  const [cartItems, setCartItems] = useState<CartProductInterface[]>(dummyCartData);
+  const [cartItems, setCartItems] = useState<CartItem[]>(dummyCartData);
 
   const total: string = useMemo(() => {
     return cartItems.reduce((acc, el) => acc + el.price * el.quantity, 0).toFixed(2);

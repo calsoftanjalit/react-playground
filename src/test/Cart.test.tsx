@@ -3,32 +3,44 @@ import '@testing-library/jest-dom';
 import { MantineProvider } from '@mantine/core';
 import { describe, it, expect, vi } from 'vitest';
 import Cart from '@/components/Cart/Cart';
+import { BrowserRouter } from 'react-router-dom';
 
-// Mocking the child CartTable component
 vi.mock('@/components/Cart/CartTable', () => ({
-  __esModule: true,
-  default: () => <div data-testid="cart-table">CartTable Component</div>,
+  default: () => <div>Mock CartTable</div>,
 }));
 
-const renderWithMantine = (ui: React.ReactNode) => render(<MantineProvider>{ui}</MantineProvider>);
+const renderWithProviders = (ui: React.ReactNode) =>
+  render(
+    <BrowserRouter>
+      <MantineProvider>{ui}</MantineProvider>
+    </BrowserRouter>
+  );
 
 describe('<Cart /> component', () => {
-  it('renders without crashing and displays static elements', () => {
-    renderWithMantine(<Cart />);
+  it('renders static UI elements correctly', () => {
+    renderWithProviders(<Cart />);
 
+    expect(screen.getByRole('link', { name: /back to home/i })).toBeInTheDocument();
     expect(screen.getByText(/cart items/i)).toBeInTheDocument();
     expect(screen.getByRole('separator')).toBeInTheDocument();
-    expect(screen.getByTestId('cart-table')).toBeInTheDocument();
+    expect(screen.getByText('Mock CartTable')).toBeInTheDocument();
 
-    const checkoutBtn = screen.getByRole('button', { name: /checkout/i });
-    expect(checkoutBtn).toBeInTheDocument();
-    expect(checkoutBtn).toBeEnabled();
+    const btn = screen.getByRole('button', { name: /checkout/i });
+    expect(btn).toBeInTheDocument();
+    expect(btn).toBeEnabled();
   });
 
-  it('renders the Checkout button with correct Mantine props', () => {
-    renderWithMantine(<Cart />);
+  it('renders Checkout button with Mantine Button root class', () => {
+    renderWithProviders(<Cart />);
 
-    const button = screen.getByRole('button', { name: /checkout/i });
-    expect(button).toHaveClass('mantine-Button-root');
+    const btn = screen.getByRole('button', { name: /checkout/i });
+    expect(btn.className).toMatch(/mantine-Button-root/);
+  });
+
+  it('contains a valid link to home route', () => {
+    renderWithProviders(<Cart />);
+
+    const link = screen.getByRole('link', { name: /back to home/i });
+    expect(link).toHaveAttribute('href', '/');
   });
 });
