@@ -33,6 +33,7 @@ const ProductDetails = () => {
     enabled: !!id,
   });
 
+  console.log(product)
   if (isLoading) {
     return (
       <Center>
@@ -123,27 +124,10 @@ const ProductDetails = () => {
             <Stack gap="lg">
               <Box style={{ maxWidth: '65ch' }}>
                 <Text ta="justify" size="sm" style={{ lineHeight: 1.6 }}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium quam nesciunt
-                  nam, officiis, sint facere pariatur, perferendis eum itaque earum non! Quibusdam
-                  eum nisi itaque excepturi officiis harum nesciunt. Molestias. Molestiae dolorum
-                  beatae autem voluptatibus accusantium debitis maiores asperiores libero,
-                  necessitatibus vel iste consequatur porro. Minima ad ut alias corporis, aliquam,
-                  corrupti ipsum ab quis cupiditate consectetur fugiat vitae obcaecati? Lorem ipsum
-                  dolor sit amet consectetur adipisicing elit. Laudantium quam nesciunt nam,
-                  officiis, sint facere pariatur, perferendis eum itaque earum non! Quibusdam eum
-                  nisi itaque excepturi officiis harum nesciunt. Molestias. Molestiae dolorum beatae
-                  autem voluptatibus accusantium debitis maiores asperiores libero, necessitatibus
-                  vel iste consequatur porro. Minima ad ut alias corporis, aliquam, corrupti ipsum
-                  ab quis cupiditate consectetur fugiat vitae obcaecati? Lorem ipsum dolor sit amet
-                  consectetur adipisicing elit. Laudantium quam nesciunt nam, officiis, sint facere
-                  pariatur, perferendis eum itaque earum non! Quibusdam eum nisi itaque excepturi
-                  officiis harum nesciunt. Molestias. Molestiae dolorum beatae autem voluptatibus
-                  accusantium debitis maiores asperiores libero, necessitatibus vel iste consequatur
-                  porro. Minima ad ut alias corporis, aliquam, corrupti ipsum ab quis cupiditate
-                  consectetur fugiat vitae obcaecati?
+                  
+                    {product.description}
                 </Text>
               </Box>
-
               <Group mt="md" justify="flex-start" gap="md">
                 <Button color="red" size="md" leftSection={<IconShoppingCartCopy size={18} />}>
                   Buy Now

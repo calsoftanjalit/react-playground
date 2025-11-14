@@ -1,8 +1,6 @@
 import React from 'react'
 import { Card, Text, Rating, Group, Avatar, Stack } from '@mantine/core';
 import {Product} from "@/types/index"
-import '@mantine/core/styles.css';
-import '@mantine/carousel/styles.css';
 import { Carousel } from '@mantine/carousel';
 
 const ProductReviewComponent = ({reviews}:Product) => {
