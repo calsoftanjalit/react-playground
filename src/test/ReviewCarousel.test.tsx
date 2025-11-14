@@ -105,7 +105,7 @@ describe('ProductReviewComponent', () => {
     const carousel = container.querySelector('.mantine-Carousel-root');
     expect(carousel).toBeInTheDocument();
 
-    // No slides should be rendered
+    // case when No slides should be rendered
     const slides = container.querySelectorAll('.mantine-Carousel-slide');
     expect(slides.length).toBe(0);
   });

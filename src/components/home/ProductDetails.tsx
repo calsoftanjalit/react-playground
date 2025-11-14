@@ -119,10 +119,8 @@ const ProductDetails = () => {
             </Stack>
           </Grid.Col>
 
-          {/* RIGHT SIDE — Text with max-width */}
           <Grid.Col span={{ base: 12, md: 7 }}>
             <Stack gap="lg">
-              {/* Add max-width to improve readability */}
               <Box style={{ maxWidth: '65ch' }}>
                 <Text ta="justify" size="sm" style={{ lineHeight: 1.6 }}>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium quam nesciunt

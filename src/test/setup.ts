@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 
-// Mock window.matchMedia for Mantine components
+// Mocking window.matchMedia for Mantine components
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation(query => ({
