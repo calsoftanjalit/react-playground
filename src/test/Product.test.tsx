@@ -4,15 +4,12 @@ import { MantineProvider } from '@mantine/core';
 import Product from '@/components/home/Product';
 import { ProductInterface } from '@/types/product';
 
-// Mock hook
 vi.mock('@/hooks/useAddCartProduct', () => ({
   useAddCartProduct: vi.fn(),
 }));
 
-// Import AFTER mock
 import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 
-// Mock QuantitySelector (render simple buttons instead)
 vi.mock('@/components/home/QuantitySelector', () => ({
   default: ({ quantity, handleIncrement, handleDecrement }: any) => (
     <div>

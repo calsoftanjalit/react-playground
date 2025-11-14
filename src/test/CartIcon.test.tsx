@@ -10,7 +10,6 @@ vi.mock('@/context', () => ({
 
 import { useCartStore } from '@/context';
 
-// Utility wrapper
 const renderWithMantine = (ui: React.ReactNode) => render(<MantineProvider>{ui}</MantineProvider>);
 
 describe('<CartIcon /> component', () => {
@@ -25,14 +24,11 @@ describe('<CartIcon /> component', () => {
 
     renderWithMantine(<CartIcon />);
 
-    // Text value
     expect(screen.getByText('3')).toBeInTheDocument();
 
-    // Icon rendered as <svg>
     const svg = screen.getByText('3').previousSibling as SVGElement;
     expect(svg.tagName.toLowerCase()).toBe('svg');
 
-    // Wrapper contains both elements
     const wrapper = screen.getByText('3').closest('div');
     expect(wrapper).toHaveClass('flex');
     expect(wrapper).toHaveClass('cursor-pointer');
