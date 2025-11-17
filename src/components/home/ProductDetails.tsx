@@ -15,11 +15,14 @@ import {
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IconShoppingCartCopy, IconShoppingCart } from '@tabler/icons-react';
+import {  IconShoppingCart,  IconBolt } from '@tabler/icons-react';
 import ProductReviewComponent from '@/components/miscellaneous/ProductReviewDetails';
 import { useCartStore } from '@/context';
 import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
 import { ROUTE_PATHS } from '@/routes';
+import QuantitySelector from '@/components/home/QuantitySelector';
+import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
+
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
@@ -167,35 +170,39 @@ const handleBuyNow = () => {
           <Grid.Col span={{ base: 12, md: 7 }}>
             <Stack gap="lg">
               <Box style={{ maxWidth: '65ch' }}>
-                <Text ta="justify" size="sm" style={{ lineHeight: 1.6 }}>
+                <Text size="sm" fw={500} c="gray.7" style={{ lineHeight: 1.65 }} ta="justify">
                   {product.description}
                 </Text>
               </Box>
               <Group mt="md" justify="flex-start" gap="md">
                 <Button
-                  color="red"
+                  variant='filled'
+                  color='blue'
                   size="md"
-                  leftSection={<IconShoppingCartCopy size={18} />}
+                  leftSection={<IconBolt size={18} />}
                   onClick={handleBuyNow}
                 >
                   Buy Now
                 </Button>
                 {!cartItem ? (
-                  <Button size="md" onClick={handleIncrement} leftSection={<IconShoppingCart size={18} />}>
+                  <Button
+                    size="md"
+                    variant="light"
+                    onClick={handleIncrement}
+                    leftSection={<IconShoppingCart size={18} />}
+                  >
                     Add To Cart
                   </Button>
                 ) : (
-                  <Group gap="sm">
-                    <Button size="md" onClick={handleDecrement}>
-                      -
-                    </Button>
-                    <Text size="lg">{quantity}</Text>
-                    <Button size="md" onClick={handleIncrement}>
-                      +
-                    </Button>
-                  </Group>
+                     <QuantitySelector
+                      quantity={quantity}
+                      handleIncrement={handleIncrement}
+                      handleDecrement={handleDecrement}
+                    />
+
                 )}
               </Group>
+              <ProductInfoPanel product={product} />
             </Stack>
           </Grid.Col>
         </Grid>

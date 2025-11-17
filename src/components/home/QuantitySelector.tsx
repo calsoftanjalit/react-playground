@@ -12,7 +12,12 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   return (
     <Box mt="md">
       <Group justify="center">
-        <ActionIcon variant="light" size="lg" onClick={handleDecrement}>
+        <ActionIcon
+          variant="light"
+          size="lg"
+          onClick={handleDecrement}
+          aria-label="Decrease quantity"
+        >
           <IconMinus size={18} />
         </ActionIcon>
 
@@ -20,7 +25,12 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           {quantity}
         </Badge>
 
-        <ActionIcon variant="light" size="lg" onClick={handleIncrement}>
+        <ActionIcon
+          variant="light"
+          size="lg"
+          onClick={handleIncrement}
+          aria-label="Increase quantity"
+        >
           <IconPlus size={18} />
         </ActionIcon>
       </Group>
