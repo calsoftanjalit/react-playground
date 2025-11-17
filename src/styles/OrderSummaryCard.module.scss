@@ -1,0 +1,17 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+.orderSummaryCard {
+  position: sticky;
+  top: 5rem;
+  align-self: flex-start;
+}
+
+.scrollArea {
+  margin-top: var(--mantine-spacing-lg);
+  margin-bottom: var(--mantine-spacing-lg);
+}
+
+.scrollViewport {
+  padding-right: var(--mantine-spacing-sm);
+}

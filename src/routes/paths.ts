@@ -6,6 +6,8 @@ export const ROUTE_PATHS = {
   CART: "/cart",
   CHECKOUT: "/checkout",
   PRODUCT_DETAILS: '/products/:id',
+  CART_CHECKOUT: '/cart/checkout',
+  PRODUCT_CHECKOUT: '/products/:id/checkout',
 } as const;
 
 export type RoutePathKey = keyof typeof ROUTE_PATHS;

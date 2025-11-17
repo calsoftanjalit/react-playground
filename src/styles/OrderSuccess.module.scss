@@ -1,0 +1,95 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+.container {
+  min-height: calc(100vh - 3.75rem);
+  padding: 1rem;
+
+  @media (min-width: 48rem) {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    padding: 2rem;
+  }
+}
+
+.containerLight {
+  background-color: var(--mantine-color-gray-0);
+}
+
+.successIconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.successIcon {
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 50%;
+  background-color: var(--mantine-color-green-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.5rem 1.5rem var(--mantine-color-green-2);
+
+  @include transition(transform);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.successHeader {
+  text-align: center;
+}
+
+.itemCard {
+  border-radius: var(--mantine-radius-md);
+}
+
+.itemCardLight {
+  background-color: var(--mantine-color-gray-0);
+}
+
+.itemCardDark {
+  background-color: var(--mantine-color-dark-6);
+}
+
+.itemDetails {
+  flex: 1;
+}
+
+.summaryCard {
+  position: sticky;
+  top: 5rem;
+}
+
+.whatsNextBox {
+  padding: 1rem;
+  border-radius: var(--mantine-radius-md);
+}
+
+.whatsNextBoxLight {
+  background-color: var(--mantine-color-blue-0);
+}
+
+.whatsNextBoxDark {
+  background-color: var(--mantine-color-blue-9);
+}
+
+.orderIdText {
+  font-family: var(--mantine-font-family-monospace, monospace);
+}
+
+.addressText {
+  text-align: right;
+  max-width: 60%;
+}
+
+.trustBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
