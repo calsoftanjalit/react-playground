@@ -34,22 +34,16 @@ const Product: React.FC<ProductInterface> = ({
     updateItem(id, cartItem.quantity - 1);
   };
   return (
-    <Card
-      shadow="sm"
-      padding="lg"
-      radius="md"
-      key={`product-${id}`}
-      withBorder      
-    > 
-      <Link to={`/products/${id}`} style={{ textDecoration: "none", color: "inherit" }}>
-      {thumbnail && <Image src={thumbnail} height={160} alt={title} />}
-      <Text fw={500} size="lg" mt="md">
-        {title}
-      </Text>
+    <Card shadow="sm" padding="lg" radius="md" key={`product-${id}`} withBorder>
+      <Link to={`/products/${id}`} className="linkReset">
+        {thumbnail && <Image src={thumbnail} height={160} alt={title} />}
+        <Text fw={500} size="lg" mt="md">
+          {title}
+        </Text>
 
-      <Text c="dimmed" size="sm">
-        ${price}
-      </Text>
+        <Text c="dimmed" size="sm">
+          ${price}
+        </Text>
       </Link>
 
       {!cartItem ? (

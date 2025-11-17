@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MantineProvider } from '@mantine/core';
-import ProductReviewComponent from '@/components/miscellaneous/ProductReviewComponent';
+import ProductReviewComponent from '@/components/miscellaneous/ProductReviewDetails';
 
 const mockReviews = [
   {

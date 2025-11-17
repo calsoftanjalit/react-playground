@@ -90,3 +90,12 @@ button:focus-visible {
 .mantine-Image-root {
   text-align: left !important;
 }
+
+.linkReset {
+  text-decoration: none;
+  color: inherit;
+}
+
+.errorText {
+  color: var(--mantine-color-red-6);
+}
