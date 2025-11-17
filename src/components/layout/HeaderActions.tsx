@@ -2,9 +2,9 @@ import { ActionIcon, Group, Tooltip, useMantineColorScheme } from '@mantine/core
 import { notifications } from '@mantine/notifications';
 import { IconBell, IconBrandGithub, IconMoon, IconSun } from '@tabler/icons-react';
 import { UserMenu } from './UserMenu';
-import CartIcon from '@/components/Cart/CartIcon';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/routes';
+import CartIndicator from '@/components/Cart/CartIndicator';
 
 export const HeaderActions = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -20,7 +20,7 @@ export const HeaderActions = () => {
   return (
     <Group gap="xs">
       <Link to={ROUTE_PATHS.CART}>
-        <CartIcon />
+        <CartIndicator />
       </Link>
       <Tooltip label="View on GitHub">
         <ActionIcon

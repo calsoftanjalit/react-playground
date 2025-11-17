@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MantineProvider } from '@mantine/core';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import CartIcon from '@/components/Cart/CartIcon';
+import CartIndicator from '@/components/Cart/CartIndicator';
 
 vi.mock('@/context', () => ({
   useCartStore: vi.fn(),
@@ -12,7 +12,7 @@ import { useCartStore } from '@/context';
 
 const renderWithMantine = (ui: React.ReactNode) => render(<MantineProvider>{ui}</MantineProvider>);
 
-describe('<CartIcon /> component', () => {
+describe('<CartIndicator /> component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -22,7 +22,7 @@ describe('<CartIcon /> component', () => {
       totalItems: 3,
     });
 
-    renderWithMantine(<CartIcon />);
+    renderWithMantine(<CartIndicator />);
 
     expect(screen.getByText('3')).toBeInTheDocument();
 
@@ -39,7 +39,7 @@ describe('<CartIcon /> component', () => {
       totalItems: 0,
     });
 
-    renderWithMantine(<CartIcon />);
+    renderWithMantine(<CartIndicator />);
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -48,7 +48,7 @@ describe('<CartIcon /> component', () => {
       totalItems: 10,
     });
 
-    renderWithMantine(<CartIcon />);
+    renderWithMantine(<CartIndicator />);
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 });

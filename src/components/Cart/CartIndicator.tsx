@@ -1,15 +1,15 @@
 import { useCartStore } from '@/context';
 import { Box, Text } from '@mantine/core';
-import { LuShoppingCart } from 'react-icons/lu';
+import { IconShoppingCart } from '@tabler/icons-react';
 
-const CartIcon = () => {
+const CartIndicator = () => {
   const { totalItems } = useCartStore();
   return (
     <Box mx="sm" className="flex cursor-pointer">
-      <LuShoppingCart size={20} />
-      <Text px="2px">{totalItems}</Text>
+      <IconShoppingCart size={20} />
+      <Text px="0.12rem">{totalItems}</Text>
     </Box>
   );
 };
 
-export default CartIcon;
+export default CartIndicator;

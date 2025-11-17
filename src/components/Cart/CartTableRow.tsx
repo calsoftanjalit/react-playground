@@ -1,8 +1,9 @@
 import { CartTableRowProps } from '@/types/cart';
 import { Image, Table } from '@mantine/core';
 import React from 'react';
-import { MdOutlineDeleteOutline } from 'react-icons/md';
+import { IconTrash } from '@tabler/icons-react';
 import QuantitySelector from '../home/QuantitySelector';
+import { formatPrice } from '@/utils';
 
 const CartTableRow: React.FC<CartTableRowProps> = ({
   product,
@@ -29,11 +30,11 @@ const CartTableRow: React.FC<CartTableRowProps> = ({
           }}
         />
       </Table.Td>
-      <Table.Td>{totalPrice.toFixed(2)}</Table.Td>
+      <Table.Td>{formatPrice(totalPrice)}</Table.Td>
       <Table.Td ta="center">
-        <MdOutlineDeleteOutline
+        <IconTrash
           size={20}
-          color="#FF0000"
+          color="red"
           className="cursor-pointer hover:scale-125"
           onClick={() => onRemove(product.id)}
         />
