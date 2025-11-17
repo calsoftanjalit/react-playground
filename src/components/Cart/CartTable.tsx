@@ -1,8 +1,9 @@
-import { Table, Text } from '@mantine/core';
+import { Box, Table, Text } from '@mantine/core';
 import CartTableRow from '@/components/Cart/CartTableRow';
 import { useCartStore } from '@/context';
 import { useCallback } from 'react';
 import { formatPrice } from '@/utils';
+import { IconCurrencyDollar } from '@tabler/icons-react';
 
 const TABLE_HEADERS = ['Image', 'Name', 'Price', 'Quantity', 'Total', 'Action'];
 
@@ -47,7 +48,12 @@ const CartTable: React.FC = () => {
               <Table.Td />
               <Table.Td />
               <Table.Td />
-              <Table.Td>{formatPrice(totalPrice)}</Table.Td>
+              <Table.Td>
+                <Box className="flex items-center">
+                  <IconCurrencyDollar size={14} />
+                  {formatPrice(totalPrice)}
+                </Box>
+              </Table.Td>
               <Table.Td />
             </Table.Tr>
           </>
