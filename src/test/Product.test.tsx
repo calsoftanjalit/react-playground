@@ -9,6 +9,8 @@ vi.mock('@/hooks/useAddCartProduct', () => ({
 }));
 
 import { useAddCartProduct } from '@/hooks/useAddCartProduct';
+import { MemoryRouter } from 'react-router-dom';
+import { CartProvider } from '@/context';
 
 vi.mock('@/components/home/QuantitySelector', () => ({
   default: ({ quantity, handleIncrement, handleDecrement }: any) => (
@@ -20,7 +22,14 @@ vi.mock('@/components/home/QuantitySelector', () => ({
   ),
 }));
 
-const renderWithMantine = (ui: React.ReactNode) => render(<MantineProvider>{ui}</MantineProvider>);
+const renderWithMantine = (ui: React.ReactNode) =>
+  render(
+    <MemoryRouter>
+      <CartProvider>
+        <MantineProvider>{ui}</MantineProvider>
+      </CartProvider>
+    </MemoryRouter>
+  );
 
 describe('Product Component', () => {
   const mockProduct: ProductInterface = {
@@ -103,3 +112,4 @@ describe('Product Component', () => {
     expect(mockUpdate).toHaveBeenCalledWith(1, 2);
   });
 });
+   

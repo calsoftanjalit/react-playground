@@ -3,6 +3,7 @@ export const ROUTE_PATHS = {
   HOME: '/',
   ABOUT: '/about',
   CART: '/cart',
+  PRODUCT_DETAILS: '/products/:id',
 } as const;
 
 export type RoutePathKey = keyof typeof ROUTE_PATHS;
