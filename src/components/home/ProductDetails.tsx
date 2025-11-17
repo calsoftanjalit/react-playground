@@ -22,7 +22,7 @@ import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
 import { ROUTE_PATHS } from '@/routes';
 import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
-
+import { calculateDiscountedPrice } from '@/utils';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
@@ -65,6 +65,8 @@ if (isFetching) {
     </Center>
   );
 }
+
+const finalPrice = calculateDiscountedPrice(product.price, product.discountPercentage);
 
 const cartItem = items.find((item) => item.id === product.id);
 const quantity = cartItem?.quantity ?? 0;
@@ -161,7 +163,15 @@ const handleBuyNow = () => {
               <Text fw={700} size="xl" ta="center">
                 {product.title}
               </Text>
-              <Text fw={500} size="lg" ta="center" c="blue">
+              <Group justify="center" gap={2}>
+                <Text c="red" fw="500" size="sm">
+                 -{product.discountPercentage}%
+                </Text>
+                <Text fw={500} size="xl" ta="center" c="blue">
+                  ${finalPrice}
+                </Text>
+              </Group>
+              <Text fw={500} size="sm" ta="center" c="blue" td="line-through">
                 ${product.price}
               </Text>
             </Stack>
@@ -194,12 +204,11 @@ const handleBuyNow = () => {
                     Add To Cart
                   </Button>
                 ) : (
-                     <QuantitySelector
-                      quantity={quantity}
-                      handleIncrement={handleIncrement}
-                      handleDecrement={handleDecrement}
-                    />
-
+                  <QuantitySelector
+                    quantity={quantity}
+                    handleIncrement={handleIncrement}
+                    handleDecrement={handleDecrement}
+                  />
                 )}
               </Group>
               <ProductInfoPanel product={product} />

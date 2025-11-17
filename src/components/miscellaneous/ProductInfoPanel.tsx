@@ -11,19 +11,16 @@ const ProductInfoPanel : React.FC<ProductInfoPanelProps> = ({ product }) => {
     warrantyInformation,
     rating,
     discountPercentage,
-    category,
   } = product;
 
   return (
-    <Card withBorder radius="md" shadow="sm" padding="lg" mt="xl" style={{ maxWidth: 450 }}>
+    <Card withBorder={false}  radius="md" shadow="none" padding="lg" mt="xl" style={{ maxWidth: 450 }}>
       <Stack gap="md">
         <Group justify="space-between">
           <Text fw={600} size="lg">
             Product Details
           </Text>
-          <Badge color="blue" variant="light">
-            {category?.toUpperCase()}
-          </Badge>
+         
         </Group>
 
         <Group>
