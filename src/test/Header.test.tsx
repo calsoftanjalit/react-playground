@@ -1,47 +1,55 @@
-import { Header } from "@/components/Header/Header";
-import { MantineProvider } from "@mantine/core";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { MantineProvider } from '@mantine/core';
+import { MemoryRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { Header } from '@/components/layout';
 
-describe("Header Component", () => {
-  const mockToggle = vi.fn();
+// Mock HeaderActions
+vi.mock('@/components/layout/HeaderActions', () => ({
+  HeaderActions: () => <div>Mock Header Actions</div>,
+}));
 
-  const setup = () =>
-    render(
+const renderHeader = (opened = false, toggle = vi.fn()) =>
+  render(
+    <MemoryRouter>
       <MantineProvider>
-        <BrowserRouter>
-          <Header opened={false} toggle={mockToggle} />
-        </BrowserRouter>
+        <Header opened={opened} toggle={toggle} />
       </MantineProvider>
-    );
+    </MemoryRouter>
+  );
 
-  it("renders the title", () => {
-    setup();
-    expect(screen.getByText("MyShop")).toBeInTheDocument();
+describe('<Header />', () => {
+  it('renders the header title', () => {
+    renderHeader();
+    expect(screen.getByText('React Playground')).toBeInTheDocument();
   });
 
-  it("renders all navigation links", () => {
-    setup();
-
-    const links = ["Home", "Products", "Cart", "Checkout"];
-
-    links.forEach((text) => {
-      expect(screen.getByText(text)).toBeInTheDocument();
-    });
+  it('renders the burger menu button', () => {
+    renderHeader();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  it("renders the burger menu button", () => {
-    setup();
-    const burger = screen.getByRole("button"); // Burger component renders a <button>
-    expect(burger).toBeInTheDocument();
-  });
+  it('calls toggle when burger menu is clicked', () => {
+    const mockToggle = vi.fn();
+    renderHeader(false, mockToggle);
 
-  it("calls toggle when burger is clicked", () => {
-    setup();
-
-    const burger = screen.getByRole("button");
-    fireEvent.click(burger);
+    fireEvent.click(screen.getByRole('button'));
 
     expect(mockToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders the rocket icon (as svg)', () => {
+    renderHeader();
+
+    const title = screen.getByText('React Playground');
+    const icon = title.previousSibling as SVGElement;
+
+    expect(icon?.tagName.toLowerCase()).toBe('svg');
+  });
+
+  it('renders HeaderActions component', () => {
+    renderHeader();
+    expect(screen.getByText('Mock Header Actions')).toBeInTheDocument();
   });
 });

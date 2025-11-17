@@ -1,13 +1,14 @@
-import { lazy } from "react";
-import { RouteObject } from "react-router-dom";
-import { Layout } from "../components/layout";
-import { ROUTE_PATHS } from "./paths";
+import { lazy } from 'react';
+import { RouteObject } from 'react-router-dom';
+import { Layout } from '../components/layout';
+import { ROUTE_PATHS } from './paths';
 
 const HomePage = lazy(() => import("../pages/HomePage"));
-const AboutPage = lazy(() => import("../pages/AboutPage"));
 const ProductsPage = lazy(() => import("../pages/ProductPage"));
-const CartPage = lazy(() => import("../pages/CartPage"));
 const CheckoutPage = lazy(() => import("../pages/CheckoutPage"));
+const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const CartPage = lazy(() => import('@/pages/Cart'));
+const ProductDetailPage = lazy(()=>import("@/components/home/ProductDetails"))
 
 export const routes: RouteObject[] = [
   {
@@ -33,6 +34,10 @@ export const routes: RouteObject[] = [
       {
         path: ROUTE_PATHS.CHECKOUT,
         element: <CheckoutPage />,
+      },
+      {
+        path: ROUTE_PATHS.PRODUCT_DETAILS,
+        element: <ProductDetailPage />,
       },
     ],
   },

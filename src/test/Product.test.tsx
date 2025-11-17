@@ -1,59 +1,115 @@
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { MantineProvider } from "@mantine/core";
-import { ProductInterface } from "@/types/product";
-import Product from "@/components/home/Product";
-import { CartProvider } from "@/context";
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { MantineProvider } from '@mantine/core';
+import Product from '@/components/home/Product';
+import { ProductInterface } from '@/types/product';
 
-describe("Product component", () => {
-  const mockProduct: ProductInterface = {
-    id: 1,
-    title: "Test Product",
-    price: 99.99,
-    thumbnail: "/a.jpg",
-  };
+vi.mock('@/hooks/useAddCartProduct', () => ({
+  useAddCartProduct: vi.fn(),
+}));
 
-  const renderWithMantine = (ui: React.ReactNode) => {
-    return render(
+import { useAddCartProduct } from '@/hooks/useAddCartProduct';
+import { MemoryRouter } from 'react-router-dom';
+import { CartProvider } from '@/context';
+
+vi.mock('@/components/home/QuantitySelector', () => ({
+  default: ({ quantity, handleIncrement, handleDecrement }: any) => (
+    <div>
+      <span>Qty: {quantity}</span>
+      <button onClick={handleIncrement}>+</button>
+      <button onClick={handleDecrement}>-</button>
+    </div>
+  ),
+}));
+
+const renderWithMantine = (ui: React.ReactNode) =>
+  render(
+    <MemoryRouter>
       <CartProvider>
         <MantineProvider>{ui}</MantineProvider>
       </CartProvider>
-    );
+    </MemoryRouter>
+  );
+
+describe('Product Component', () => {
+  const mockProduct: ProductInterface = {
+    id: 1,
+    title: 'Test Product',
+    price: 99.99,
+    thumbnail: '/a.jpg',
   };
 
-  it("renders without crashing", () => {
-    renderWithMantine(<Product {...mockProduct} />);
-    expect(screen.getByText("Test Product")).toBeInTheDocument();
-    expect(screen.getByText("$99.99")).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "Test Product" }));
-    expect(
-      screen.getByRole("button", { name: /add to cart/i })
-    ).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it("renders the correct title", () => {
+  it('renders product information correctly', () => {
+    (useAddCartProduct as ReturnType<typeof vi.fn>).mockReturnValue({
+      handleAddCartProduct: vi.fn(),
+      updateItem: vi.fn(),
+      quantity: 0,
+      cartItem: null,
+    });
+
     renderWithMantine(<Product {...mockProduct} />);
-    expect(screen.getByText("Test Product")).toBeInTheDocument();
+
+    expect(screen.getByText('Test Product')).toBeInTheDocument();
+    expect(screen.getByText('$99.99')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Test Product' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add to cart/i })).toBeInTheDocument();
   });
 
-  it("renders the correct price", () => {
+  it('calls handleAddCartProduct when "Add to Cart" is clicked', () => {
+    const mockAdd = vi.fn();
+
+    (useAddCartProduct as ReturnType<typeof vi.fn>).mockReturnValue({
+      handleAddCartProduct: mockAdd,
+      updateItem: vi.fn(),
+      quantity: 0,
+      cartItem: null,
+    });
+
     renderWithMantine(<Product {...mockProduct} />);
-    expect(screen.getByText("$99.99")).toBeInTheDocument();
+
+    const button = screen.getByRole('button', { name: /add to cart/i });
+    fireEvent.click(button);
+
+    expect(mockAdd).toHaveBeenCalledWith(mockProduct.id);
   });
 
-  it("renders correctly with different product data", () => {
-    const newProduct: ProductInterface = {
-      id: 2,
-      title: "Another Product",
-      price: 49.5,
-      thumbnail: "/a.jpg",
-    };
+  it('shows QuantitySelector when product is already in cart', () => {
+    const mockUpdate = vi.fn();
 
-    renderWithMantine(<Product {...newProduct} />);
-    expect(screen.getByText("Another Product")).toBeInTheDocument();
-    expect(screen.getByText("$49.5")).toBeInTheDocument();
-    expect(
-      screen.getByRole("img", { name: "Another Product" })
-    ).toBeInTheDocument();
+    (useAddCartProduct as ReturnType<typeof vi.fn>).mockReturnValue({
+      handleAddCartProduct: vi.fn(),
+      updateItem: mockUpdate,
+      quantity: 2,
+      cartItem: { id: 1, quantity: 2 },
+    });
+
+    renderWithMantine(<Product {...mockProduct} />);
+
+    expect(screen.getByText('Qty: 2')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /add to cart/i })).not.toBeInTheDocument();
+  });
+
+  it('calls updateItem when QuantitySelector increment/decrement are clicked', () => {
+    const mockUpdate = vi.fn();
+
+    (useAddCartProduct as ReturnType<typeof vi.fn>).mockReturnValue({
+      handleAddCartProduct: vi.fn(),
+      updateItem: mockUpdate,
+      quantity: 3,
+      cartItem: { id: 1, quantity: 3 },
+    });
+
+    renderWithMantine(<Product {...mockProduct} />);
+
+    fireEvent.click(screen.getByText('+'));
+    expect(mockUpdate).toHaveBeenCalledWith(1, 4);
+
+    fireEvent.click(screen.getByText('-'));
+    expect(mockUpdate).toHaveBeenCalledWith(1, 2);
   });
 });
+   
