@@ -1,0 +1,23 @@
+@import '../../styles/variables.scss';
+
+.iconPrimary {
+  color: $primary-color;
+}
+
+.activeLink {
+  color: $primary-color;
+  font-weight: 700;
+  text-decoration: none;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.inactiveLink {
+  color: $black-color;
+  font-weight: 500;
+  text-decoration: none;
+  &:hover {
+    color:$black-color;
+  }
+}
