@@ -7,6 +7,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   quantity,
   handleIncrement,
   handleDecrement,
+  
 }) => {
   return (
     <Box mt="md">

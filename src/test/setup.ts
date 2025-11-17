@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 
-// Mock window.matchMedia for Mantine components
+// Mocking window.matchMedia for Mantine components
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation(query => ({
@@ -21,4 +21,13 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
+class IntersectionObserverMock {
+  constructor() {}
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+
 window.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+window.IntersectionObserver = IntersectionObserverMock as any;

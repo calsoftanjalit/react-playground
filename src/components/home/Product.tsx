@@ -2,6 +2,7 @@ import { ProductInterface } from "@/types/product";
 import { Button, Card, Image, Text } from "@mantine/core";
 import { useCartStore } from "@/context";
 import QuantitySelector from "./QuantitySelector";
+import { Link} from "react-router-dom";
 
 const Product: React.FC<ProductInterface> = ({
   id,
@@ -14,11 +15,15 @@ const Product: React.FC<ProductInterface> = ({
   const cartItem = items.find((item) => item.id === id);
   const quantity = cartItem?.quantity ?? 0;
 
-  const handleIncrement = () => {
+  const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     addItem({ id, title, price });
   };
 
-  const handleDecrement = () => {
+  const handleDecrement = (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+     e.stopPropagation();
     if (!cartItem) return;
 
     if (cartItem.quantity <= 1) {
@@ -28,16 +33,18 @@ const Product: React.FC<ProductInterface> = ({
 
     updateItem(id, cartItem.quantity - 1);
   };
-
   return (
     <Card shadow="sm" padding="lg" radius="md" key={`product-${id}`} withBorder>
-      {thumbnail && <Image src={thumbnail} height={160} alt={title} />}
-      <Text fw={500} size="lg" mt="md">
-        {title}
-      </Text>
-      <Text c="dimmed" size="sm">
-        ${price}
-      </Text>
+      <Link to={`/products/${id}`} className="linkReset">
+        {thumbnail && <Image src={thumbnail} height={160} alt={title} />}
+        <Text fw={500} size="lg" mt="md">
+          {title}
+        </Text>
+
+        <Text c="dimmed" size="sm">
+          ${price}
+        </Text>
+      </Link>
 
       {!cartItem ? (
         <Button variant="light" fullWidth mt="md" onClick={handleIncrement}>
