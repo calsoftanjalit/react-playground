@@ -3,6 +3,7 @@ export const ROUTE_PATHS = {
   HOME: '/',
   ABOUT: '/about',
   CART: '/cart',
+  PRODUCTS: '/products',
   PRODUCT_DETAILS: '/products/:id',
 } as const;
 

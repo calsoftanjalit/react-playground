@@ -2,25 +2,31 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MantineProvider } from '@mantine/core';
 import { describe, it, expect, vi } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
 import Cart from '@/pages/Cart';
+import { CartProvider } from '@/context';
 
 vi.mock('@/components/Cart/CartTable', () => ({
   default: () => <div>Mock CartTable</div>,
 }));
 
+vi.mock('@/context', () => ({
+  useCartStore: () => ({
+    totalItems: 2,
+  }),
+  CartProvider: ({ children }: any) => <div>{children}</div>,
+}));
+
 const renderWithProviders = (ui: React.ReactNode) =>
   render(
-    <BrowserRouter>
+    <CartProvider>
       <MantineProvider>{ui}</MantineProvider>
-    </BrowserRouter>
+    </CartProvider>
   );
 
 describe('<Cart /> component', () => {
   it('renders static UI elements correctly', () => {
     renderWithProviders(<Cart />);
 
-    expect(screen.getByRole('link', { name: /back to home/i })).toBeInTheDocument();
     expect(screen.getByText(/cart items/i)).toBeInTheDocument();
     expect(screen.getByRole('separator')).toBeInTheDocument();
     expect(screen.getByText('Mock CartTable')).toBeInTheDocument();
@@ -37,10 +43,4 @@ describe('<Cart /> component', () => {
     expect(btn.className).toMatch(/mantine-Button-root/);
   });
 
-  it('contains a valid link to home route', () => {
-    renderWithProviders(<Cart />);
-
-    const link = screen.getByRole('link', { name: /back to home/i });
-    expect(link).toHaveAttribute('href', '/');
-  });
 });

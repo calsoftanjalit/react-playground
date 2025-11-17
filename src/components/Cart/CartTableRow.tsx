@@ -1,9 +1,12 @@
 import { CartTableRowProps } from '@/types/cart';
-import { Image, Table } from '@mantine/core';
+import { Box, Image, Table } from '@mantine/core';
 import React from 'react';
 import { IconTrash } from '@tabler/icons-react';
 import QuantitySelector from '../home/QuantitySelector';
 import { formatPrice } from '@/utils';
+import { Link } from 'react-router-dom';
+import { ROUTE_PATHS } from '@/routes';
+import { IconCurrencyDollar } from '@tabler/icons-react';
 
 const CartTableRow: React.FC<CartTableRowProps> = ({
   product,
@@ -17,8 +20,15 @@ const CartTableRow: React.FC<CartTableRowProps> = ({
       <Table.Td>
         <Image src={product.thumbnail} height={50} width={50} alt={product.title} />
       </Table.Td>
-      <Table.Td className="break-words whitespace-normal max-w-[275px]">{product.title}</Table.Td>
-      <Table.Td>{product.price.toFixed(2)}</Table.Td>
+      <Table.Td className="break-words whitespace-normal max-w-[275px]">
+        <Link to={`${ROUTE_PATHS.PRODUCTS}/${product.id}`}>{product.title}</Link>
+      </Table.Td>
+      <Table.Td>
+        <Box className="flex items-center">
+          <IconCurrencyDollar size={14} />
+          {formatPrice(product.price)}
+        </Box>
+      </Table.Td>
       <Table.Td ta="center">
         <QuantitySelector
           quantity={quantity}
@@ -30,7 +40,12 @@ const CartTableRow: React.FC<CartTableRowProps> = ({
           }}
         />
       </Table.Td>
-      <Table.Td>{formatPrice(totalPrice)}</Table.Td>
+      <Table.Td>
+        <Box className="flex items-center">
+          <IconCurrencyDollar size={14} />
+          {formatPrice(totalPrice)}
+        </Box>
+      </Table.Td>
       <Table.Td ta="center">
         <IconTrash
           size={20}
