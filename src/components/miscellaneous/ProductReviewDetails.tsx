@@ -5,7 +5,7 @@ import { Carousel } from '@mantine/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 
 const ProductReviewComponent = ({reviews}:Product) => {
-  const autoplay = useRef(Autoplay({ delay: 500,stopOnInteraction:false }));
+  const autoplay = useRef(Autoplay({ delay: 1500}));
 
   return (
     <Carousel
