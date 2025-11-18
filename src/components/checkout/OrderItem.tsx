@@ -1,16 +1,9 @@
 import classes from '@/styles/OrderItem.module.scss';
-import { CartItem as CartItemType } from '@/types/cart';
+import { OrderItemProps } from '@/types/cart';
+import { formatPrice } from '@/utils/formatters';
 import { ActionIcon, Box, Group, Image, Paper, Stack, Text } from '@mantine/core';
 import { IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import { FC } from 'react';
-
-interface OrderItemProps {
-  item: CartItemType;
-  showRemove?: boolean;
-  onRemove?: (id: number) => void;
-  showQuantityControls?: boolean;
-  onQuantityChange?: (id: number, newQuantity: number) => void;
-}
 
 export const OrderItem: FC<OrderItemProps> = ({
   item,
@@ -88,7 +81,7 @@ export const OrderItem: FC<OrderItemProps> = ({
               )}
             </Group>
             <Text fw={600} size="sm">
-              ${itemTotal.toFixed(2)}
+              ${formatPrice(itemTotal)}
             </Text>
           </Group>
         </Stack>

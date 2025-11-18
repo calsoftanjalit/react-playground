@@ -1,10 +1,8 @@
+import { STORAGE_KEYS } from '@/constants/checkout';
 import { CheckoutFormValues } from '@/types/checkout';
 import { getFromStorage, setInStorage } from '@/utils/storage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckoutFormContext } from './checkoutFormStore';
-
-const CHECKOUT_FORM_STORAGE_KEY = 'checkout-form-data';
-const CHECKOUT_STEP_STORAGE_KEY = 'checkout-active-step';
 
 const INITIAL_FORM_DATA: Partial<CheckoutFormValues> = {
   fullName: '',
@@ -31,8 +29,8 @@ export const CheckoutFormProvider: React.FC<CheckoutFormProviderProps> = ({ chil
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedFormData = getFromStorage<Partial<CheckoutFormValues>>(CHECKOUT_FORM_STORAGE_KEY);
-    const savedActiveStep = getFromStorage<number>(CHECKOUT_STEP_STORAGE_KEY);
+    const savedFormData = getFromStorage<Partial<CheckoutFormValues>>(STORAGE_KEYS.CHECKOUT_FORM_DATA);
+    const savedActiveStep = getFromStorage<number>(STORAGE_KEYS.CHECKOUT_ACTIVE_STEP);
 
     if (savedFormData) {
       setFormData(savedFormData);
@@ -45,13 +43,13 @@ export const CheckoutFormProvider: React.FC<CheckoutFormProviderProps> = ({ chil
 
   useEffect(() => {
     if (!isLoading) {
-      setInStorage(CHECKOUT_FORM_STORAGE_KEY, formData);
+      setInStorage(STORAGE_KEYS.CHECKOUT_FORM_DATA, formData);
     }
   }, [formData, isLoading]);
 
   useEffect(() => {
     if (!isLoading) {
-      setInStorage(CHECKOUT_STEP_STORAGE_KEY, activeStep);
+      setInStorage(STORAGE_KEYS.CHECKOUT_ACTIVE_STEP, activeStep);
     }
   }, [activeStep, isLoading]);
 
@@ -66,8 +64,8 @@ export const CheckoutFormProvider: React.FC<CheckoutFormProviderProps> = ({ chil
   const clearFormData = useCallback(() => {
     setFormData(INITIAL_FORM_DATA);
     setActiveStepState(0);
-    localStorage.removeItem(CHECKOUT_FORM_STORAGE_KEY);
-    localStorage.removeItem(CHECKOUT_STEP_STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEYS.CHECKOUT_FORM_DATA);
+    localStorage.removeItem(STORAGE_KEYS.CHECKOUT_ACTIVE_STEP);
   }, []);
 
   const value = useMemo(

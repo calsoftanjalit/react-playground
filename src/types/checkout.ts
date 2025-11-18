@@ -47,6 +47,7 @@ export interface OrderSummary {
 
 export interface CheckoutFormProps {
   cartItems: CartItem[];
+  totalPrice: number;
   onSubmitSuccess: (orderSummary: OrderSummary) => void;
 }
 

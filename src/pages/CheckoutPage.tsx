@@ -147,7 +147,11 @@ export const CheckoutPage: FC = () => {
               </Paper>
 
               <Paper shadow="md" p={{ base: 'md', sm: 'lg', lg: 'xl' }} radius="lg" withBorder>
-                <CheckoutForm cartItems={localItems} onSubmitSuccess={handleSubmitSuccess} />
+                <CheckoutForm
+                  cartItems={localItems}
+                  totalPrice={checkoutCart.pricing.total}
+                  onSubmitSuccess={handleSubmitSuccess}
+                />
               </Paper>
 
               <Paper shadow="md" p={{ base: 'md', sm: 'lg', lg: 'xl' }} radius="lg" withBorder>

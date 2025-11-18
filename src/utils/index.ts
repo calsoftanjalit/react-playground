@@ -2,12 +2,11 @@ export { getFromStorage, setInStorage, removeFromStorage, clearStorage } from '.
 
 export * from './formatters';
 export {
-  formatCardNumber,
-  formatCurrency,
-  formatExpiryDate,
-  formatFullAddress,
-  formatOrderDate,
-  generateOrderId
+    formatCardNumber,
+    formatExpiryDate,
+    formatFullAddress,
+    formatOrderDate,
+    generateOrderId
 } from './formatters';
 
 export { calculatePricing, recalculatePricing } from './checkout';

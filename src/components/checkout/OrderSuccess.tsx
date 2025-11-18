@@ -2,6 +2,7 @@ import { UI_CONSTANTS } from '@/constants/checkout';
 import classes from '@/styles/OrderSuccess.module.scss';
 import { OrderSuccessProps } from '@/types/checkout';
 import { calculatePricingFromItems } from '@/utils/checkout';
+import { formatPrice } from '@/utils/formatters';
 import {
   Anchor,
   Avatar,
@@ -192,7 +193,7 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                               {item.name}
                             </Text>
                             <Text c="dimmed" size="sm" mt={4}>
-                              ${item.price.toFixed(2)} each
+                              ${formatPrice(item.price)} each
                             </Text>
                           </Box>
                         </Group>
@@ -201,7 +202,7 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                             Quantity: {item.quantity}
                           </Text>
                           <Text fw={600} size="lg">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ${formatPrice(item.price * item.quantity)}
                           </Text>
                         </Group>
                       </Box>
@@ -221,19 +222,19 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
               <Stack gap="md">
                 <Group justify="space-between">
                   <Text>Subtotal:</Text>
-                  <Text fw={500}>${subtotal.toFixed(2)}</Text>
+                  <Text fw={500}>${formatPrice(subtotal)}</Text>
                 </Group>
 
                 <Group justify="space-between">
                   <Text>Shipping:</Text>
                   <Text fw={500} c={shipping === 0 ? 'green' : undefined}>
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? 'FREE' : `$${formatPrice(shipping)}`}
                   </Text>
                 </Group>
 
                 <Group justify="space-between">
                   <Text>Tax (9%):</Text>
-                  <Text fw={500}>${tax.toFixed(2)}</Text>
+                  <Text fw={500}>${formatPrice(tax)}</Text>
                 </Group>
 
                 <Divider my="sm" />
@@ -243,7 +244,7 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                     Total:
                   </Text>
                   <Text fw={700} size="xl" c="blue">
-                    ${total.toFixed(2)}
+                    ${formatPrice(total)}
                   </Text>
                 </Group>
 

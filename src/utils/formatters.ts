@@ -16,10 +16,6 @@ export const formatExpiryDate = (value: string): string => {
   return cleaned;
 };
 
-export const formatCurrency = (value: number): string => {
-  return `$${value.toFixed(2)}`;
-};
-
 export const formatFullAddress = (
   address: string,
   city: string,

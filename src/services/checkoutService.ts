@@ -4,10 +4,9 @@ import { formatFullAddress, formatOrderDate, generateOrderId } from '@/utils';
 
 export const generateOrderSummary = (
   values: CheckoutFormValues,
-  cartItems: CartItem[]
+  cartItems: CartItem[],
+  totalPrice: number
 ): OrderSummary => {
-  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
   return {
     orderId: generateOrderId(),
     fullName: values.fullName,
@@ -19,7 +18,7 @@ export const generateOrderSummary = (
       values.zipCode,
       values.country
     ),
-    totalAmount,
+    totalAmount: totalPrice,
     orderDate: formatOrderDate(new Date()),
     items: cartItems.map((item) => ({
       id: item.id,
@@ -34,11 +33,12 @@ export const generateOrderSummary = (
 export const submitOrder = (
   values: CheckoutFormValues,
   cartItems: CartItem[],
+  totalPrice: number,
   delay: number = 1500
 ): Promise<OrderSummary> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const orderSummary = generateOrderSummary(values, cartItems);
+      const orderSummary = generateOrderSummary(values, cartItems, totalPrice);
       resolve(orderSummary);
     }, delay);
   });

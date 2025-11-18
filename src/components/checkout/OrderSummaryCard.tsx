@@ -1,10 +1,11 @@
 import { UI_CONSTANTS } from '@/constants/checkout';
+import { useOrderSummaryCard } from '@/hooks/useOrderSummaryCard';
 import classes from '@/styles/OrderSummaryCard.module.scss';
 import { CheckoutCart } from '@/types/checkout';
-import { recalculatePricing } from '@/utils';
+import { formatPrice } from '@/utils/formatters';
 import { Badge, Box, Divider, Group, Paper, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import { IconShoppingBag, IconTags, IconTruck } from '@tabler/icons-react';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { OrderItem } from './OrderItem';
 
 interface OrderSummaryCardProps {
@@ -18,31 +19,10 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
   isSticky = true,
   onCartUpdate,
 }) => {
-  const [localCart, setLocalCart] = useState(cart);
-
-  useEffect(() => {
-    setLocalCart(cart);
-  }, [cart]);
-
-  const itemCount = localCart.items.reduce((sum, item) => sum + item.quantity, 0);
-
-  const handleQuantityChange = (itemId: number, newQuantity: number) => {
-    const updatedItems = localCart.items.map((item) =>
-      item.id === itemId ? { ...item, quantity: newQuantity } : item
-    );
-
-    const updatedPricing = recalculatePricing(updatedItems, localCart.pricing.discount || 0);
-
-    const updatedCart: CheckoutCart = {
-      items: updatedItems,
-      pricing: updatedPricing,
-    };
-
-    setLocalCart(updatedCart);
-    if (onCartUpdate) {
-      onCartUpdate(updatedCart);
-    }
-  };
+  const { localCart, itemCount, handleQuantityChange } = useOrderSummaryCard({
+    cart,
+    onCartUpdate,
+  });
 
   return (
     <Paper
@@ -93,7 +73,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
         <Stack gap="sm">
           <Group justify="space-between">
             <Text c="dimmed">Subtotal</Text>
-            <Text fw={500}>${localCart.pricing.subtotal.toFixed(2)}</Text>
+            <Text fw={500}>${formatPrice(localCart.pricing.subtotal)}</Text>
           </Group>
 
           <Group justify="space-between">
@@ -104,23 +84,23 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
             <Text fw={500} c={localCart.pricing.shipping === 0 ? UI_CONSTANTS.COLORS.SUCCESS_TEXT : undefined}>
               {localCart.pricing.shipping === 0
                 ? 'FREE'
-                : `$${localCart.pricing.shipping.toFixed(2)}`}
+                : `$${formatPrice(localCart.pricing.shipping)}`}
             </Text>
           </Group>
 
           <Group justify="space-between">
             <Text c="dimmed">Tax (9%)</Text>
-            <Text fw={500}>${localCart.pricing.tax.toFixed(2)}</Text>
+            <Text fw={500}>${formatPrice(localCart.pricing.tax)}</Text>
           </Group>
 
-          {localCart.pricing.discount && localCart.pricing.discount > 0 && (
+          {(localCart.pricing.discount ?? 0) > 0 && (
             <Group justify="space-between">
               <Group gap="xs">
                 <IconTags size={16} />
                 <Text c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>Discount</Text>
               </Group>
               <Text fw={500} c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>
-                -${localCart.pricing.discount.toFixed(2)}
+                -${formatPrice(localCart.pricing.discount ?? 0)}
               </Text>
             </Group>
           )}
@@ -131,7 +111,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
         <Group justify="space-between">
           <Title order={4}>Total</Title>
           <Title order={3} c="blue">
-            ${localCart.pricing.total.toFixed(2)}
+            ${formatPrice(localCart.pricing.total)}
           </Title>
         </Group>
       </Box>

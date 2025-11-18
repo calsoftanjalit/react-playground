@@ -38,13 +38,14 @@ const mockCartItems = [
 
 const renderCheckoutForm = () => {
   const onSubmitSuccess = vi.fn();
+  const totalPrice = 179.97;
 
   return {
     onSubmitSuccess,
     user: userEvent.setup(),
     ...render(
       <MantineProvider>
-        <CheckoutForm cartItems={mockCartItems} onSubmitSuccess={onSubmitSuccess} />
+        <CheckoutForm cartItems={mockCartItems} totalPrice={totalPrice} onSubmitSuccess={onSubmitSuccess} />
       </MantineProvider>
     ),
   };
@@ -330,7 +331,7 @@ describe('CheckoutForm', () => {
       
       render(
         <MantineProvider>
-          <CheckoutForm cartItems={[]} onSubmitSuccess={onSubmitSuccess} />
+          <CheckoutForm cartItems={[]} totalPrice={0} onSubmitSuccess={onSubmitSuccess} />
         </MantineProvider>
       );
 

@@ -78,3 +78,7 @@ export const CHECKOUT_STEPS = {
   PAYMENT: 'payment',
 } as const;
 
+export const STORAGE_KEYS = {
+  CHECKOUT_FORM_DATA: 'checkout-form-data',
+  CHECKOUT_ACTIVE_STEP: 'checkout-active-step',
+} as const;
