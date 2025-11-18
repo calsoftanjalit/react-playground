@@ -3,7 +3,9 @@ import { RouteObject } from 'react-router-dom';
 import { Layout } from '../components/layout';
 import { ROUTE_PATHS } from './paths';
 
-const HomePage = lazy(() => import('@/pages/HomePage'));
+const HomePage = lazy(() => import("../pages/HomePage"));
+const ProductsPage = lazy(() => import("../pages/ProductPage"));
+const CheckoutPage = lazy(() => import("../pages/CheckoutPage"));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const CartPage = lazy(() => import('@/pages/Cart'));
 const ProductDetailPage = lazy(()=>import("@/components/home/ProductDetails"))
@@ -21,9 +23,17 @@ export const routes: RouteObject[] = [
         path: ROUTE_PATHS.ABOUT,
         element: <AboutPage />,
       },
+        {
+        path: ROUTE_PATHS.PRODUCTS,
+        element: <ProductsPage />,
+      },
       {
         path: ROUTE_PATHS.CART,
         element: <CartPage />,
+      },
+      {
+        path: ROUTE_PATHS.CHECKOUT,
+        element: <CheckoutPage />,
       },
       {
         path: ROUTE_PATHS.PRODUCT_DETAILS,

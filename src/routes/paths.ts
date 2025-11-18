@@ -1,9 +1,10 @@
 export const ROUTE_PATHS = {
-  ROOT: '/',
-  HOME: '/',
-  ABOUT: '/about',
-  CART: '/cart',
-  PRODUCTS: '/products',
+  ROOT: "/",
+  HOME: "/",
+  ABOUT: "/about",
+  PRODUCTS: "/products",
+  CART: "/cart",
+  CHECKOUT: "/checkout",
   PRODUCT_DETAILS: '/products/:id',
 } as const;
 

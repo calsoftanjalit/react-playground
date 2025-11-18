@@ -3,8 +3,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { LoadingFallback } from "../common";
-import { Header } from "./Header";
 import { Navbar } from "./Navbar";
+import { Header } from "../Header";
 
 export function Layout() {
   const [opened, { toggle }] = useDisclosure();
@@ -19,8 +19,8 @@ export function Layout() {
       }}
       padding="md"
     >
-      <AppShell.Header>
-        <Header opened={opened} toggle={toggle} />
+      <AppShell.Header data-testid="header">
+          <Header opened={opened} toggle={toggle} />
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
