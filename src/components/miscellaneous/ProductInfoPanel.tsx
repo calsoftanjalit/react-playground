@@ -10,65 +10,60 @@ const ProductInfoPanel : React.FC<ProductInfoPanelProps> = ({ product }) => {
     dimensions,
     warrantyInformation,
     rating,
-    discountPercentage,
+    
   } = product;
 
   return (
-    <Card withBorder={false}  radius="md" shadow="none" padding="lg" mt="xl" style={{ maxWidth: 450 }}>
+    <Card
+      withBorder={false}
+      radius="md"
+      shadow="none"
+      padding="lg"
+      mt="xl"
+      style={{ maxWidth: 450 }}
+    >
       <Stack gap="md">
         <Group justify="space-between">
           <Text fw={600} size="lg">
             Product Details
           </Text>
-         
         </Group>
-
-        <Group>
+        <Group gap="xs">
           <IconTag size={20} />
-          <Text>
-            <b>Brand:</b> {brand}
-          </Text>
+          <Text fw={600}>Brand:</Text>
+          <Text>{brand}</Text>
         </Group>
 
-        <Group>
+        <Group gap="xs">
           <IconBox size={20} />
-          <Text>
-            <b>SKU:</b> {sku}
-          </Text>
+          <Text fw={600}>SKU:</Text>
+          <Text>{sku}</Text>
         </Group>
 
-        <Group>
+        <Group gap="xs">
           <IconWeight size={20} />
-          <Text>
-            <b>Weight:</b> {weight} kg
-          </Text>
+          <Text fw={600}>Weight:</Text>
+          <Text>{weight} kg</Text>
         </Group>
 
-        <Group>
+        <Group gap="xs">
           <IconRuler size={20} />
+          <Text fw={600}>Dimensions:</Text>
           <Text>
-            <b>Dimensions:</b> {dimensions?.width} × {dimensions?.height} × {dimensions?.depth} cm
+            {dimensions?.width} × {dimensions?.height} × {dimensions?.depth} cm
           </Text>
         </Group>
 
-        <Group>
+        <Group gap="xs">
           <IconShield size={20} />
-          <Text>
-            <b>Warranty:</b> {warrantyInformation}
-          </Text>
+          <Text fw={600}>Warranty:</Text>
+          <Text>{warrantyInformation}</Text>
         </Group>
 
-        <Group>
+        <Group gap="xs">
           <IconStar size={20} />
-          <Text>
-            <b>Rating:</b> {rating} / 5
-          </Text>
-        </Group>
-
-        <Group>
-          <Badge color="green" radius="xs" size="lg">
-            {discountPercentage}% OFF
-          </Badge>
+          <Text fw={600}>Rating:</Text>
+          <Text>{rating} / 5</Text>
         </Group>
       </Stack>
     </Card>
