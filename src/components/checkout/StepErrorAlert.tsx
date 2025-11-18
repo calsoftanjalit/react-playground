@@ -1,11 +1,8 @@
 import { UI_CONSTANTS } from '@/constants';
+import { StepErrorAlertProps } from '@/types/checkout';
 import { Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { FC } from 'react';
-
-interface StepErrorAlertProps {
-  message?: string;
-}
 
 export const StepErrorAlert: FC<StepErrorAlertProps> = ({
   message = 'Please fix the highlighted fields before continuing.',

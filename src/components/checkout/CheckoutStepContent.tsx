@@ -1,18 +1,8 @@
+import { CheckoutStepContentProps } from '@/types/checkout';
 import { Stack } from '@mantine/core';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { StepErrorAlert } from './StepErrorAlert';
 import { StepProgress } from './StepProgress';
-
-type StepState = 'idle' | 'completed' | 'error';
-
-interface CheckoutStepContentProps {
-  stepIndex: number;
-  totalSteps: number;
-  stepStatus: StepState;
-  primaryColor: string;
-  children: ReactNode;
-  navigationButtons: ReactNode;
-}
 
 export const CheckoutStepContent: FC<CheckoutStepContentProps> = ({
   stepIndex,

@@ -1,12 +1,6 @@
+import { StepProgressProps } from '@/types/checkout';
 import { Badge, Group, Text } from '@mantine/core';
 import { FC } from 'react';
-
-interface StepProgressProps {
-  currentStep: number;
-  totalSteps: number;
-  isCompleted: boolean;
-  primaryColor: string;
-}
 
 export const StepProgress: FC<StepProgressProps> = ({
   currentStep,

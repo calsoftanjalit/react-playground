@@ -1,18 +1,12 @@
 import { UI_CONSTANTS } from '@/constants/checkout';
 import { useOrderSummaryCard } from '@/hooks/useOrderSummaryCard';
 import classes from '@/styles/OrderSummaryCard.module.scss';
-import { CheckoutCart } from '@/types/checkout';
+import { OrderSummaryCardProps } from '@/types/checkout';
 import { formatPrice } from '@/utils/formatters';
 import { Badge, Box, Divider, Group, Paper, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import { IconShoppingBag, IconTags, IconTruck } from '@tabler/icons-react';
 import { FC } from 'react';
 import { OrderItem } from './OrderItem';
-
-interface OrderSummaryCardProps {
-  cart: CheckoutCart;
-  isSticky?: boolean;
-  onCartUpdate?: (updatedCart: CheckoutCart) => void;
-}
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
   cart,

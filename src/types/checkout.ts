@@ -1,4 +1,5 @@
 import { UseFormReturnType } from '@mantine/form';
+import React from 'react';
 import { CartItem } from './cart';
 
 export interface PricingBreakdown {
@@ -65,4 +66,40 @@ export interface ShippingAddressSectionProps {
 
 export interface PaymentInfoSectionProps {
   form: UseFormReturnType<CheckoutFormValues>;
+}
+
+export type StepState = 'idle' | 'completed' | 'error';
+
+export interface CheckoutStepContentProps {
+  stepIndex: number;
+  totalSteps: number;
+  stepStatus: StepState;
+  primaryColor: string;
+  children: React.ReactNode;
+  navigationButtons: React.ReactNode;
+}
+
+export interface OrderSummaryCardProps {
+  cart: CheckoutCart;
+  isSticky?: boolean;
+  onCartUpdate?: (updatedCart: CheckoutCart) => void;
+}
+
+export interface StepProgressProps {
+  currentStep: number;
+  totalSteps: number;
+  isCompleted: boolean;
+  primaryColor: string;
+}
+
+export interface StepErrorAlertProps {
+  message?: string;
+}
+
+export interface StepNavigationButtonsProps {
+  stepIndex: number;
+  totalSteps: number;
+  isSubmitting: boolean;
+  onPrevious: () => void;
+  onNext: () => void;
 }

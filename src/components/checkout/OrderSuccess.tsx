@@ -36,8 +36,7 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
   const navigate = useNavigate();
   const { colorScheme } = useMantineColorScheme();
 
-  const pricing = calculatePricingFromItems(orderSummary.items);
-  const { subtotal, tax, shipping, total } = pricing;
+  const { subtotal, tax, shipping, total } = calculatePricingFromItems(orderSummary.items);
 
   return (
     <Box
