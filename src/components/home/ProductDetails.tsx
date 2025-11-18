@@ -23,6 +23,7 @@ import { ROUTE_PATHS } from '@/routes';
 import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
 import { calculateDiscountedPrice } from '@/utils';
+import { useMemo } from 'react';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
@@ -40,6 +41,20 @@ const ProductDetails = () => {
     queryFn: () => fetchProductById(id!),
     enabled: !!id,
   });
+  
+  const finalPrice = useMemo(() => {
+    if(!product) return (
+      <div>
+        <Center h="100vh">
+          <Text className="errorText" size="lg">
+           'Product not found'
+          </Text>
+        </Center>
+      </div>
+    );
+    return calculateDiscountedPrice(product.price, product.discountPercentage);
+  }, [product]);
+
 if (isLoading) {
   return (
     <Center>
@@ -66,8 +81,7 @@ if (isFetching) {
   );
 }
 
-const finalPrice = calculateDiscountedPrice(product.price, product.discountPercentage);
-
+ 
 const cartItem = items.find((item) => item.id === product.id);
 const quantity = cartItem?.quantity ?? 0;
 

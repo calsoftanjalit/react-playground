@@ -1,4 +1,4 @@
-import { Card, Group, Text, Stack, Badge } from '@mantine/core';
+import { Card, Group, Text, Stack } from '@mantine/core';
 import { IconBox, IconRuler, IconWeight, IconTag, IconShield, IconStar } from '@tabler/icons-react';
 import { ProductInfoPanelProps } from '@/types/productInfoPanelProps';
 
