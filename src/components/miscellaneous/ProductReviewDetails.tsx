@@ -1,4 +1,4 @@
-import React,{useRef} from 'react'
+import {useRef} from 'react'
 import { Card, Text, Rating, Group, Avatar, Stack } from '@mantine/core';
 import {Product} from "@/types/index"
 import { Carousel } from '@mantine/carousel';
@@ -9,10 +9,7 @@ const ProductReviewComponent = ({reviews}:Product) => {
 
   return (
     <Carousel
-      slideSize="40%"
       withIndicators={false}
-      height="auto"
-      align="start"
       slideGap="md"
       mt="2rem"
       plugins={[autoplay.current]}

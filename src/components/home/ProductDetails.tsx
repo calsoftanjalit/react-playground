@@ -43,15 +43,7 @@ const ProductDetails = () => {
   });
   
   const finalPrice = useMemo(() => {
-    if(!product) return (
-      <div>
-        <Center h="100vh">
-          <Text className="errorText" size="lg">
-           'Product not found'
-          </Text>
-        </Center>
-      </div>
-    );
+    if (!product) return null;
     return calculateDiscountedPrice(product.price, product.discountPercentage);
   }, [product]);
 

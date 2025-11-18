@@ -1,14 +1,7 @@
 
-export const calculateDiscountedPrice = (price:string, percentage:string )=>{
-       const priceInNumericValue:number = Number(price);
-       const discountPercentage:number = Number(percentage);
-
-       if(isNaN(priceInNumericValue) || isNaN(discountPercentage)) return 0;
-
-       const discountAmount = (priceInNumericValue*discountPercentage)/100;
-
-       const finalPrice = priceInNumericValue - discountAmount;
+export const calculateDiscountedPrice = (price:number, percentage:number )=>{
+       if(isNaN(price) || isNaN(percentage)) return 0;
+       const discountAmount = (price*percentage)/100;
+       const finalPrice = price - discountAmount;
        return Number(finalPrice.toFixed(2))
-
-
 }
