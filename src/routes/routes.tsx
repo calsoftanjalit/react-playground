@@ -5,7 +5,6 @@ import { ROUTE_PATHS } from './paths';
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const ProductsPage = lazy(() => import("../pages/ProductPage"));
-const CheckoutPage = lazy(() => import("../pages/CheckoutPage"));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const CartPage = lazy(() => import('@/pages/Cart'));
 const ProductDetailPage = lazy(()=>import("@/components/home/ProductDetails"))

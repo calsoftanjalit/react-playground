@@ -2,7 +2,7 @@ import { Group, Title, Burger } from "@mantine/core";
 import { FC } from "react";
 import { NavLink } from "react-router-dom";
 import { IconShoppingCart } from "@tabler/icons-react";
-import styles from "./header.module.scss";
+import styles from "./Header.module.scss";
 
 interface HeaderProps {
   opened: boolean;
