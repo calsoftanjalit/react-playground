@@ -1,11 +1,21 @@
-import React from 'react'
+import {useRef} from 'react'
 import { Card, Text, Rating, Group, Avatar, Stack } from '@mantine/core';
 import {Product} from "@/types/index"
 import { Carousel } from '@mantine/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 const ProductReviewComponent = ({reviews}:Product) => {
+  const autoplay = useRef(Autoplay({ delay: 1500}));
+
   return (
-    <Carousel slideSize="70%" height="auto" slideGap="md" loop mt="2rem">
+    <Carousel
+      withIndicators={false}
+      slideGap="md"
+      mt="2rem"
+      plugins={[autoplay.current]}
+      onMouseEnter={autoplay.current.stop}
+      onMouseLeave={autoplay.current.reset}
+    >
       {reviews.map((review, index) => (
         <Carousel.Slide key={index}>
           <Card shadow="sm" padding="md" radius="md" withBorder>
