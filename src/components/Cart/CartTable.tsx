@@ -16,8 +16,7 @@ const CartTable: React.FC = () => {
     [updateItem]
   );
 
-  const getTotalPrice = (p: CartItem) => p.quantity * (p.discountedPrice ?? 0);
-
+  const getTotalPrice = (p: CartItem) => p.quantity * (p.discountedPrice || p.price);
 
   const handleRemove = useCallback((id: number) => removeItem(id), [removeItem]);
 

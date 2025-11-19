@@ -26,7 +26,7 @@ const CartTableRow: React.FC<CartTableRowProps> = ({
       <Table.Td>
         <Box className="flex items-center">
           <IconCurrencyDollar size={14} />
-          {formatPrice(product.discountedPrice || 0)}
+          {formatPrice(product.discountedPrice || product.price)}
         </Box>
       </Table.Td>
       <Table.Td ta="center">

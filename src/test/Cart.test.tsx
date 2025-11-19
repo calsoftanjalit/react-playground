@@ -5,6 +5,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Cart from '@/pages/Cart';
 import { CartProvider } from '@/context';
 import { ROUTE_PATHS } from '@/routes';
+import { PropsWithChildren } from 'react';
 
 vi.mock('@/components/Cart/CartTable', () => ({
   default: () => <div>Mock CartTable</div>,
@@ -28,7 +29,7 @@ vi.mock('@/context', () => ({
     items: [{ id: 1 }],
     totalItems: 2,
   }),
-  CartProvider: ({ children }: any) => <div>{children}</div>,
+  CartProvider: ({ children }: PropsWithChildren) => <div>{children}</div>,
 }));
 
 const renderWithProviders = (ui: React.ReactNode) =>
