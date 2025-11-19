@@ -5,10 +5,10 @@ import { ROUTE_PATHS } from './paths';
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const ProductsPage = lazy(() => import("../pages/ProductPage"));
-const CheckoutPage = lazy(() => import("../pages/CheckoutPage"));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const CartPage = lazy(() => import('@/pages/Cart'));
 const ProductDetailPage = lazy(()=>import("@/components/home/ProductDetails"))
+const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 
 export const routes: RouteObject[] = [
   {
@@ -38,6 +38,14 @@ export const routes: RouteObject[] = [
       {
         path: ROUTE_PATHS.PRODUCT_DETAILS,
         element: <ProductDetailPage />,
+      },
+      {
+        path: ROUTE_PATHS.CART_CHECKOUT,
+        element: <CheckoutPage />,
+      },
+      {
+        path: ROUTE_PATHS.PRODUCT_CHECKOUT,
+        element: <CheckoutPage />,
       },
     ],
   },

@@ -18,10 +18,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { IconShoppingCartCopy, IconShoppingCart } from '@tabler/icons-react';
 import ProductReviewComponent from '@/components/miscellaneous/ProductReviewDetails';
 import { useCartStore } from '@/context';
-
+import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
+import { ROUTE_PATHS } from '@/routes';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
+  const { clearFormData } = useCheckoutFormContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const {
@@ -81,6 +83,25 @@ const handleDecrement = () => {
   }
 
   updateItem(product.id, cartItem.quantity - 1);
+};
+
+const handleBuyNow = () => {
+  clearFormData();
+  const currentQuantity = cartItem?.quantity ?? 1;
+  
+  const checkoutPath = ROUTE_PATHS.PRODUCT_CHECKOUT.replace(':id', product.id.toString());
+
+  navigate(checkoutPath, {
+    state: {
+      buyNowItem: {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: currentQuantity,
+        thumbnail: product.thumbnail,
+      },
+    },
+  });
 };
 
 
@@ -151,7 +172,12 @@ const handleDecrement = () => {
                 </Text>
               </Box>
               <Group mt="md" justify="flex-start" gap="md">
-                <Button color="red" size="md" leftSection={<IconShoppingCartCopy size={18} />}>
+                <Button
+                  color="red"
+                  size="md"
+                  leftSection={<IconShoppingCartCopy size={18} />}
+                  onClick={handleBuyNow}
+                >
                   Buy Now
                 </Button>
                 {!cartItem ? (
