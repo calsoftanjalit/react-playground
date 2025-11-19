@@ -1,7 +1,3 @@
-import { STEP_TITLES, UI_CONSTANTS } from '@/constants';
-import { useCheckoutForm } from '@/hooks/useCheckoutForm';
-import { useCheckoutFormSteps } from '@/hooks/useCheckoutFormSteps';
-import { CheckoutFormProps, CheckoutFormValues } from '@/types/checkout';
 import { Stack, Stepper, useMantineTheme } from '@mantine/core';
 import {
   IconAlertCircle,
@@ -11,6 +7,10 @@ import {
   IconIdBadge,
 } from '@tabler/icons-react';
 import { FC, useMemo } from 'react';
+import { STEP_TITLES, UI_CONSTANTS } from '@/constants';
+import { useCheckoutForm } from '@/hooks/useCheckoutForm';
+import { useCheckoutFormSteps } from '@/hooks/useCheckoutFormSteps';
+import { CheckoutFormProps, CheckoutFormValues } from '@/types/checkout';
 import { CheckoutStepContent } from './CheckoutStepContent';
 import { PaymentInfoSection } from './PaymentInfoSection';
 import { PersonalInfoSection } from './PersonalInfoSection';

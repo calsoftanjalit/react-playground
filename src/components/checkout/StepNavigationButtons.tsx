@@ -1,8 +1,8 @@
-import { UI_CONSTANTS } from '@/constants';
-import { StepNavigationButtonsProps } from '@/types/checkout';
 import { Box, Button, Group } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { FC } from 'react';
+import { UI_CONSTANTS } from '@/constants';
+import { StepNavigationButtonsProps } from '@/types/checkout';
 
 export const StepNavigationButtons: FC<StepNavigationButtonsProps> = ({
   stepIndex,
