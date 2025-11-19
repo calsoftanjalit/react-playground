@@ -1,14 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-import { CommonBreadcrumb } from '@/components/breadcrumbs/CommonBreadcrumb';
-
+import { Breadcrumb } from '@/components/breadcrumbs/Breadcrumb';
 
 const renderWithRouter = (initialEntries: string[]) =>
   render(
     <MantineProvider>
       <MemoryRouter initialEntries={initialEntries}>
-        <CommonBreadcrumb />
+        <Breadcrumb />
       </MemoryRouter>
     </MantineProvider>
   );

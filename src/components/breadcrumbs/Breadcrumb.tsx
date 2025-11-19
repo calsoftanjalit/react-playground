@@ -1,19 +1,24 @@
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { Link, useLocation, matchRoutes } from 'react-router-dom';
 import { routes } from '@/routes/routes';
+import { IconChevronRight } from '@tabler/icons-react';
 
-export const CommonBreadcrumb = () => {
+export const Breadcrumb = () => {
   const location = useLocation();
 
   const matched = matchRoutes(routes, location);
 
-  const items = matched?.map((m, index) => {
-    const routePath = m.route.path ?? '';
-    const fullPath = m.pathname;
+  const items = matched?.map((matchedRoute, index) => {
+    const routePath = matchedRoute.route.path ?? '';
+    const fullPath = matchedRoute.pathname;
 
-    const label = routePath.startsWith(':')
+    let label = routePath.startsWith(':')
       ? location.pathname.split('/').pop()
       : routePath || 'Home';
+
+    if (fullPath === '/' || fullPath === '') {
+      label = 'Home';
+    }
 
     const isLast = index === matched.length - 1;
 
@@ -27,7 +32,7 @@ export const CommonBreadcrumb = () => {
   });
 
   return (
-    <Breadcrumbs separator="›" mt="sm">
+    <Breadcrumbs separator={<IconChevronRight size={20} />} mt="sm">
       {items}
     </Breadcrumbs>
   );

@@ -1,11 +1,11 @@
-import { AppShell } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Suspense } from "react";
-import { Outlet } from "react-router-dom";
-import { LoadingFallback } from "../common";
-import { Header } from "./Header";
-import { Navbar } from "./Navbar";
-import { CommonBreadcrumb } from "../breadcrumbs/CommonBreadcrumb";
+import { AppShell } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+import { LoadingFallback } from '../common';
+import { Header } from './Header';
+import { Navbar } from './Navbar';
+import { Breadcrumb } from '../breadcrumbs/Breadcrumb';
 
 export function Layout() {
   const [opened, { toggle }] = useDisclosure();
@@ -31,7 +31,7 @@ export function Layout() {
       </AppShell.Navbar>
 
       <AppShell.Main className="bg-gray-50">
-        <CommonBreadcrumb />
+        <Breadcrumb />
         <Suspense fallback={<LoadingFallback />}>
           <Outlet />
         </Suspense>
