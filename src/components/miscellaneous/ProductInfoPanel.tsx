@@ -20,7 +20,6 @@ const ProductInfoPanel : React.FC<ProductInfoPanelProps> = ({ product }) => {
       shadow="none"
       padding="lg"
       mt="xl"
-      style={{ maxWidth: 450 }}
     >
       <Stack gap="md">
         <Group justify="space-between">
