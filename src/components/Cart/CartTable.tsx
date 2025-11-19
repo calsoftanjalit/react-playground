@@ -37,7 +37,7 @@ const CartTable: React.FC = () => {
                 key={product.id}
                 product={product}
                 quantity={product.quantity}
-                totalPrice={product.quantity * product.price}
+                totalPrice={product.quantity * (product.discountedPrice ?? 0)}
                 onQuantityChange={handleQuantityChange}
                 onRemove={() => handleRemove(product.id)}
               />

@@ -5,6 +5,7 @@ export interface CartItem {
   quantity: number;
   total?: number;
   thumbnail?: string;
+  discountedPrice?: number;
 }
 
 export interface CartInterface {
