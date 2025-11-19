@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@mantine/carousel": "^8.3.7",
@@ -36,6 +37,7 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^4.0.10",
     "@vitest/ui": "^4.0.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.1",
@@ -45,6 +47,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "happy-dom": "^20.0.10",
     "jiti": "^2.6.1",
     "jsdom": "^27.0.1",
     "postcss": "^8.5.6",
