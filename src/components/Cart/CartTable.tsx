@@ -4,6 +4,7 @@ import { useCartStore } from '@/context';
 import { useCallback } from 'react';
 import { formatPrice } from '@/utils';
 import { IconCurrencyDollar } from '@tabler/icons-react';
+import { CartItem } from '@/types';
 
 const TABLE_HEADERS = ['Image', 'Name', 'Price', 'Quantity', 'Total', 'Action'];
 
@@ -14,6 +15,9 @@ const CartTable: React.FC = () => {
     (id: number, quantity: number) => updateItem(id, quantity),
     [updateItem]
   );
+
+  const getTotalPrice = (p: CartItem) => p.quantity * (p.discountedPrice ?? 0);
+
 
   const handleRemove = useCallback((id: number) => removeItem(id), [removeItem]);
 
@@ -37,7 +41,7 @@ const CartTable: React.FC = () => {
                 key={product.id}
                 product={product}
                 quantity={product.quantity}
-                totalPrice={product.quantity * (product.discountedPrice ?? 0)}
+                totalPrice={getTotalPrice(product)}
                 onQuantityChange={handleQuantityChange}
                 onRemove={() => handleRemove(product.id)}
               />
