@@ -12,7 +12,8 @@ export const OrderItem: FC<OrderItemProps> = ({
   showQuantityControls = false,
   onQuantityChange,
 }) => {
-  const itemTotal = item.price * item.quantity;
+  const itemPrice = item.discountedPrice ?? item.price;
+  const itemTotal = itemPrice * item.quantity;
 
   const handleIncrement = () => {
     if (onQuantityChange) {

@@ -192,7 +192,7 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                               {item.name}
                             </Text>
                             <Text c="dimmed" size="sm" mt={4}>
-                              ${formatPrice(item.price)} each
+                              ${formatPrice(item.discountedPrice ?? item.price)} each
                             </Text>
                           </Box>
                         </Group>
@@ -201,7 +201,7 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                             Quantity: {item.quantity}
                           </Text>
                           <Text fw={600} size="lg">
-                            ${formatPrice(item.price * item.quantity)}
+                            ${formatPrice((item.discountedPrice ?? item.price) * item.quantity)}
                           </Text>
                         </Group>
                       </Box>

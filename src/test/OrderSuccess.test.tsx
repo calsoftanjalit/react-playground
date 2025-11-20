@@ -27,14 +27,14 @@ const mockOrderSummary: OrderSummary = {
       id: 1,
       name: 'Product 1',
       quantity: 2,
-      price: 50.0,
+      price: 200.0,
       image: '/product1.jpg',
     },
     {
       id: 2,
       name: 'Product 2',
       quantity: 1,
-      price: 40.0,
+      price: 150.0,
       image: '/product2.jpg',
     },
   ],
@@ -100,13 +100,13 @@ describe('OrderSuccess', () => {
 
   it('should calculate and display subtotal correctly', () => {
     renderComponent();
-    expect(screen.getByText(/\$140\.00/)).toBeInTheDocument();
+    expect(screen.getByText(/\$550\.00/)).toBeInTheDocument();
   });
 
   it('should calculate and display tax at 9%', () => {
     renderComponent();
     expect(screen.getByText('Tax (9%):')).toBeInTheDocument();
-    expect(screen.getByText(/\$12\.60/)).toBeInTheDocument();
+    expect(screen.getByText(/\$49\.50/)).toBeInTheDocument();
   });
 
   it('should display shipping cost when subtotal is under $100', () => {
@@ -135,7 +135,7 @@ describe('OrderSuccess', () => {
 
   it('should calculate and display total correctly', () => {
     renderComponent();
-    expect(screen.getByText(/\$152\.60/)).toBeInTheDocument();
+    expect(screen.getByText(/\$599\.50/)).toBeInTheDocument();
   });
 
   it('should navigate to home when Continue Shopping is clicked', async () => {
