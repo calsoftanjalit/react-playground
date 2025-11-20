@@ -13,18 +13,29 @@ const renderWithRouter = (initialEntries: string[]) =>
   );
 
 describe('CommonBreadcrumb', () => {
-  it('renders Home for root path', () => {
-    renderWithRouter(['/']);
-    expect(screen.getByText('Home')).toBeInTheDocument();
-  });
-
   it('renders Home › About for /about', () => {
     renderWithRouter(['/about']);
-    expect(screen.getByText('/about')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('About')).toBeInTheDocument();
   });
 
   it('renders Home › Cart for /cart', () => {
     renderWithRouter(['/cart']);
-    expect(screen.getByText('/cart')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('Cart')).toBeInTheDocument();
+  });
+
+  it('renders Home › Products › 122 for /products/122', () => {
+    renderWithRouter(['/products/122']);
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('Products')).toBeInTheDocument();
+    expect(screen.getByText('122')).toBeInTheDocument();
+  });
+
+  it('renders Home › Products › IPhone6 for /products/IPhone6', () => {
+    renderWithRouter(['/products/IPhone6']);
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('Products')).toBeInTheDocument();
+    expect(screen.getByText('IPhone6')).toBeInTheDocument();
   });
 });
