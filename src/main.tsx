@@ -8,18 +8,20 @@ import './styles/main.scss';
 import App from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
 import queryClient from '@/services/apis/queryClient.ts';
-import { CartProvider } from '@/context';
+import { CartProvider, CheckoutFormProvider } from '@/context';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <CartProvider>
-          <MantineProvider>
-            <Notifications />
-            <App />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </MantineProvider>
+          <CheckoutFormProvider>
+            <MantineProvider>
+              <Notifications />
+              <App />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </MantineProvider>
+          </CheckoutFormProvider>
         </CartProvider>
       </QueryClientProvider>
     </BrowserRouter>

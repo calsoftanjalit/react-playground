@@ -15,13 +15,19 @@ import {
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IconShoppingCartCopy, IconShoppingCart } from '@tabler/icons-react';
+import {  IconShoppingCart,  IconBolt } from '@tabler/icons-react';
 import ProductReviewComponent from '@/components/miscellaneous/ProductReviewDetails';
 import { useCartStore } from '@/context';
-
+import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
+import { ROUTE_PATHS } from '@/routes';
+import QuantitySelector from '@/components/home/QuantitySelector';
+import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
+import { calculateDiscountedPrice } from '@/utils';
+import { useMemo } from 'react';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
+  const { clearFormData } = useCheckoutFormContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const {
@@ -35,6 +41,12 @@ const ProductDetails = () => {
     queryFn: () => fetchProductById(id!),
     enabled: !!id,
   });
+  
+  const finalPrice = useMemo(() => {
+    if (!product) return null;
+    return calculateDiscountedPrice(product.price, product.discountPercentage);
+  }, [product]);
+
 if (isLoading) {
   return (
     <Center>
@@ -61,6 +73,7 @@ if (isFetching) {
   );
 }
 
+ 
 const cartItem = items.find((item) => item.id === product.id);
 const quantity = cartItem?.quantity ?? 0;
 
@@ -81,6 +94,25 @@ const handleDecrement = () => {
   }
 
   updateItem(product.id, cartItem.quantity - 1);
+};
+
+const handleBuyNow = () => {
+  clearFormData();
+  const currentQuantity = cartItem?.quantity ?? 1;
+  
+  const checkoutPath = ROUTE_PATHS.PRODUCT_CHECKOUT.replace(':id', product.id.toString());
+
+  navigate(checkoutPath, {
+    state: {
+      buyNowItem: {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: currentQuantity,
+        thumbnail: product.thumbnail,
+      },
+    },
+  });
 };
 
 
@@ -137,7 +169,15 @@ const handleDecrement = () => {
               <Text fw={700} size="xl" ta="center">
                 {product.title}
               </Text>
-              <Text fw={500} size="lg" ta="center" c="blue">
+              <Group justify="center" gap={2}>
+                <Text c="red" fw="500" size="sm">
+                 -{product.discountPercentage}%
+                </Text>
+                <Text fw={500} size="xl" ta="center" c="blue">
+                  ${finalPrice}
+                </Text>
+              </Group>
+              <Text fw={500} size="sm" ta="center" c="blue" td="line-through">
                 ${product.price}
               </Text>
             </Stack>
@@ -146,30 +186,38 @@ const handleDecrement = () => {
           <Grid.Col span={{ base: 12, md: 7 }}>
             <Stack gap="lg">
               <Box style={{ maxWidth: '65ch' }}>
-                <Text ta="justify" size="sm" style={{ lineHeight: 1.6 }}>
+                <Text size="sm" fw={500} c="gray.7" style={{ lineHeight: 1.65 }} ta="justify">
                   {product.description}
                 </Text>
               </Box>
               <Group mt="md" justify="flex-start" gap="md">
-                <Button color="red" size="md" leftSection={<IconShoppingCartCopy size={18} />}>
+                <Button
+                  variant='filled'
+                  color='blue'
+                  size="md"
+                  leftSection={<IconBolt size={18} />}
+                  onClick={handleBuyNow}
+                >
                   Buy Now
                 </Button>
                 {!cartItem ? (
-                  <Button size="md" onClick={handleIncrement} leftSection={<IconShoppingCart size={18} />}>
+                  <Button
+                    size="md"
+                    variant="light"
+                    onClick={handleIncrement}
+                    leftSection={<IconShoppingCart size={18} />}
+                  >
                     Add To Cart
                   </Button>
                 ) : (
-                  <Group gap="sm">
-                    <Button size="md" onClick={handleDecrement}>
-                      -
-                    </Button>
-                    <Text size="lg">{quantity}</Text>
-                    <Button size="md" onClick={handleIncrement}>
-                      +
-                    </Button>
-                  </Group>
+                  <QuantitySelector
+                    quantity={quantity}
+                    handleIncrement={handleIncrement}
+                    handleDecrement={handleDecrement}
+                  />
                 )}
               </Group>
+              <ProductInfoPanel product={product} />
             </Stack>
           </Grid.Col>
         </Grid>

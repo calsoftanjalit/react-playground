@@ -20,8 +20,8 @@ export function Layout() {
       }}
       padding="md"
     >
-      <AppShell.Header>
-        <Header opened={opened} toggle={toggle} />
+      <AppShell.Header data-testid="header">
+          <Header opened={opened} toggle={toggle} />
       </AppShell.Header>
 
       <AppShell.Navbar p="md">

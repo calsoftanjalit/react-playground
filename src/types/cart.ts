@@ -31,6 +31,14 @@ export interface CartTableRowProps {
   totalPrice: number;
 }
 
+export interface OrderItemProps {
+  item: CartItem;
+  showRemove?: boolean;
+  onRemove?: (id: number) => void;
+  showQuantityControls?: boolean;
+  onQuantityChange?: (id: number, newQuantity: number) => void;
+}
+
 export interface CartContextType {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'>) => void;

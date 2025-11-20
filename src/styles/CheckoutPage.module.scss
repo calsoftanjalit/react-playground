@@ -1,0 +1,36 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+.container {
+  min-height: calc(100vh - 3.75rem);
+}
+
+.containerLight {
+  background-color: var(--mantine-color-gray-0);
+}
+
+.emptyCartContainer {
+  min-height: calc(100vh - 3.75rem);
+}
+
+.emptyCartContainerLight {
+  background-color: var(--mantine-color-gray-0);
+}
+
+.emptyCartIcon {
+  color: var(--mantine-color-gray-5);
+}
+
+.checkoutGrid {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.rightColumn {
+  height: fit-content;
+}
