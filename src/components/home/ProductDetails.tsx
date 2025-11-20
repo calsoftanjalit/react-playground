@@ -68,6 +68,8 @@ const ProductDetails = () => {
       id: product.id,
       title: product.title,
       price: product.price,
+      thumbnail: product.thumbnail,
+      ...(product.discountPercentage > 0 && finalPrice && { discountedPrice: finalPrice }),
     });
   };
 
@@ -96,6 +98,7 @@ const ProductDetails = () => {
           price: product.price,
           quantity: currentQuantity,
           thumbnail: product.thumbnail,
+          ...(product.discountPercentage > 0 && finalPrice && { discountedPrice: finalPrice }),
         },
       },
     });

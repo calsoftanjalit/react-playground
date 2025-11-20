@@ -25,6 +25,7 @@ export const generateOrderSummary = (
       name: item.title,
       quantity: item.quantity,
       price: item.price,
+      discountedPrice: item.discountedPrice,
       image: item.thumbnail || '',
     })),
   };

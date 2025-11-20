@@ -5,7 +5,7 @@ import { vi } from "vitest";
 import { Layout } from "../components/layout";
 
 vi.mock("../components/layout/Header", () => ({
-  Header: () => <div data-testid="header">Header</div>,
+  Header: () => <div data-testid="header-content">Header</div>,
 }));
 
 vi.mock("../components/layout/Navbar", () => ({
@@ -22,7 +22,7 @@ describe("Layout", () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByTestId("header")).toBeInTheDocument();
+    expect(screen.getByTestId("header-content")).toBeInTheDocument();
     expect(screen.getByTestId("navbar")).toBeInTheDocument();
   });
 });

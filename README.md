@@ -11,7 +11,8 @@ A modern React application built with Vite, TypeScript, and a comprehensive tech
 - **Data Fetching**: TanStack React Query (+ devtools)
 - **Styling**: Tailwind CSS + SCSS Modules
 - **Testing**: Vitest + Testing Library (@testing-library/react, @testing-library/jest-dom)
-- **Test Environment**: jsdom
+- **Test Environment**: happy-dom
+- **Coverage**: @vitest/coverage-v8
 
 ## Getting Started
 
@@ -58,11 +59,24 @@ Run tests:
 npm test
 ```
 
-Run tests with UI:
+Run tests with interactive UI and coverage:
 
 ```bash
 npm run test:ui
 ```
+
+Run tests with terminal coverage report:
+
+```bash
+npm run test:coverage
+```
+
+#### Test Coverage Reporting
+
+The project includes comprehensive test coverage reporting using Vitest and V8 coverage provider.
+
+- Coverage reports are generated in the `./coverage` directory
+- Non-testable files (styles, configs, test files, types) are excluded from coverage
 
 ### Linting
 
@@ -100,7 +114,7 @@ react-playground/
 2. **TanStack React Query**: Data fetching with loading and error states
 3. **Tailwind CSS**: Utility-first CSS classes
 4. **SCSS Modules**: Component-scoped styles with nesting
-5. **Vitest + Testing Library**: Component testing with jsdom
+5. **Vitest + Testing Library**: Component testing with happy-dom and coverage reporting
 
 ## Available Scripts
 
@@ -108,7 +122,8 @@ react-playground/
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm test` - Run tests
-- `npm run test:ui` - Run tests with UI
+- `npm run test:ui` - Run tests with interactive UI and coverage
+- `npm run test:coverage` - Run tests with terminal coverage report
 - `npm run lint` - Run ESLint
 
 ## License
