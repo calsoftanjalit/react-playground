@@ -14,11 +14,13 @@ export const Breadcrumb = () => {
 
     let label = routePath.startsWith(':')
       ? location.pathname.split('/').pop()
-      : routePath || 'Home';
+      : routePath.replace('/', '') || 'Home'; 
 
-    if (fullPath === '/' || fullPath === '') {
+    if (fullPath === '/' || label === '') {
       label = 'Home';
     }
+
+    label = (label ?? '').charAt(0).toUpperCase() + (label ?? '').slice(1);
 
     const isLast = index === matched.length - 1;
 
