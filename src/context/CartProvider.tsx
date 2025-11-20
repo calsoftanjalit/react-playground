@@ -73,7 +73,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   }, []);
 
   const totalPrice = useMemo(() => {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
+    return items.reduce(
+      (total, item) => total + (item.discountedPrice || item.price ) * item.quantity,
+      0
+    );
   }, [items]);
 
   const totalItems = useMemo(() => {
