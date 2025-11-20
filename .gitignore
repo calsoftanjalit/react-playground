@@ -15,6 +15,10 @@ dist-ssr
 # TypeScript
 *.tsbuildinfo
 
+# Test Coverage
+coverage
+.nyc_output
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

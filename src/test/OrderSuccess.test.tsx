@@ -150,6 +150,7 @@ describe('OrderSuccess', () => {
 
   it('should call window.print when Print Receipt is clicked', async () => {
     const user = userEvent.setup();
+    window.print = window.print || vi.fn();
     const printSpy = vi.spyOn(window, 'print').mockImplementation(() => {});
     renderComponent();
 
