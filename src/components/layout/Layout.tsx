@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { LoadingFallback } from '../common';
-import { Header } from './Header';
+import { Header } from '../Header';
 import { Navbar } from './Navbar';
 import { Breadcrumb } from '../breadcrumbs/Breadcrumb';
 

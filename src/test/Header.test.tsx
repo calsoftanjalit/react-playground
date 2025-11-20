@@ -3,16 +3,11 @@ import '@testing-library/jest-dom';
 import { MantineProvider } from '@mantine/core';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi } from 'vitest';
-import { Header } from '@/components/layout';
+import { Header } from '@/components/Header/Header';
 
-// Mock HeaderActions
-vi.mock('@/components/layout/HeaderActions', () => ({
-  HeaderActions: () => <div>Mock Header Actions</div>,
-}));
-
-const renderHeader = (opened = false, toggle = vi.fn()) =>
+const renderHeader = (opened = false, toggle = vi.fn(), initialRoute = '/') =>
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[initialRoute]}>
       <MantineProvider>
         <Header opened={opened} toggle={toggle} />
       </MantineProvider>
@@ -22,7 +17,7 @@ const renderHeader = (opened = false, toggle = vi.fn()) =>
 describe('<Header />', () => {
   it('renders the header title', () => {
     renderHeader();
-    expect(screen.getByText('React Playground')).toBeInTheDocument();
+    expect(screen.getByText('MyShop')).toBeInTheDocument();
   });
 
   it('renders the burger menu button', () => {
@@ -42,14 +37,31 @@ describe('<Header />', () => {
   it('renders the rocket icon (as svg)', () => {
     renderHeader();
 
-    const title = screen.getByText('React Playground');
+    const title = screen.getByText('MyShop');
     const icon = title.previousSibling as SVGElement;
 
     expect(icon?.tagName.toLowerCase()).toBe('svg');
   });
 
-  it('renders HeaderActions component', () => {
+  it('renders all navigation links', () => {
     renderHeader();
-    expect(screen.getByText('Mock Header Actions')).toBeInTheDocument();
+
+    ['Home', 'Products', 'Cart', 'Checkout'].forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
+  });
+
+  it('applies active class to current route', () => {
+    renderHeader(false, vi.fn(), '/products');
+
+    const productsLink = screen.getByText('Products');
+    expect(productsLink.className).toContain('activeLink');
+  });
+
+  it('applies inactive class to non-active routes', () => {
+    renderHeader(false, vi.fn(), '/products');
+
+    const homeLink = screen.getByText('Home');
+    expect(homeLink.className).toContain('inactiveLink');
   });
 });

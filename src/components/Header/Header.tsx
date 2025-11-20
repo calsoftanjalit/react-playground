@@ -24,7 +24,12 @@ export const Header: FC<HeaderProps> = ({opened, toggle }) => {
         <Group gap="xs">
            <Burger opened={opened} onClick={toggle} size="sm" />
           <Group>
-            <IconShoppingCart size={28} stroke={2} className={styles.iconPrimary} />
+            <IconShoppingCart
+  data-testid="tabler-icon-shopping-cart"
+  size={28}
+  stroke={2}
+  className={styles.iconPrimary}
+/>
             <Title order={3} style={{ margin: 0 }}>
               MyShop
             </Title>
