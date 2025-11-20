@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { LoadingFallback } from '../common';
-import { Header } from '../Header';
+import { Header } from '@/components/Header';
 import { Navbar } from './Navbar';
 import { Breadcrumb } from '../breadcrumbs/Breadcrumb';
 
@@ -21,7 +21,7 @@ export function Layout() {
       padding="md"
     >
       <AppShell.Header data-testid="header">
-          <Header opened={opened} toggle={toggle} />
+        <Header opened={opened} toggle={toggle} />
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
