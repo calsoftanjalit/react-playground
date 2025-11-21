@@ -1,7 +1,7 @@
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Suspense, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { LoadingFallback } from '../common';
 import { Header } from '@/components/Header';
 import { Navbar } from './Navbar';
@@ -9,6 +9,11 @@ import { Breadcrumb } from '../breadcrumbs/Breadcrumb';
 
 export function Layout() {
   const [opened, { toggle }] = useDisclosure();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <AppShell

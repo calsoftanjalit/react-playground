@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import { Layout } from '../components/layout';
 import { ROUTE_PATHS } from './paths';
+import { RouteErrorFallback } from '@/components/miscellaneous';
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const ProductsPage = lazy(() => import("../pages/ProductPage"));
@@ -14,6 +15,7 @@ export const routes: RouteObject[] = [
   {
     path: ROUTE_PATHS.ROOT,
     element: <Layout />,
+    errorElement: <RouteErrorFallback />,
     children: [
       {
         index: true,
@@ -23,7 +25,7 @@ export const routes: RouteObject[] = [
         path: ROUTE_PATHS.ABOUT,
         element: <AboutPage />,
       },
-        {
+      {
         path: ROUTE_PATHS.PRODUCTS,
         element: <ProductsPage />,
       },
@@ -50,3 +52,5 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
+
+

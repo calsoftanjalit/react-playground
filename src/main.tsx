@@ -5,14 +5,13 @@ import { Notifications } from '@mantine/notifications';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import './styles/main.scss';
-import App from './App.tsx';
-import { BrowserRouter } from 'react-router-dom';
-import queryClient from '@/services/apis/queryClient.ts';
+import App from './App';
+import queryClient from '@/services/apis/queryClient';
 import { CartProvider, CheckoutFormProvider } from '@/context';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+
       <QueryClientProvider client={queryClient}>
         <CartProvider>
           <CheckoutFormProvider>
@@ -24,6 +23,5 @@ createRoot(document.getElementById('root')!).render(
           </CheckoutFormProvider>
         </CartProvider>
       </QueryClientProvider>
-    </BrowserRouter>
   </StrictMode>
 );
