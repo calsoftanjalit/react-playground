@@ -1,18 +1,5 @@
 import { fetchProductById } from '@/services/productService';
-import {
-  Anchor,
-  Center,
-  Loader,
-  Text,
-  Stack,
-  Group,
-  Button,
-  Breadcrumbs,
-  Box,
-  Paper,
-  Grid,
-  Badge,
-} from '@mantine/core';
+import { Center, Loader, Text, Stack, Group, Button, Box, Paper, Grid, Badge } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IconShoppingCart, IconBolt } from '@tabler/icons-react';
@@ -81,6 +68,8 @@ const ProductDetails = () => {
       id: product.id,
       title: product.title,
       price: product.price,
+      thumbnail: product.thumbnail,
+      ...(product.discountPercentage > 0 && finalPrice && { discountedPrice: finalPrice }),
     });
   };
 
@@ -109,32 +98,14 @@ const ProductDetails = () => {
           price: product.price,
           quantity: currentQuantity,
           thumbnail: product.thumbnail,
+          ...(product.discountPercentage > 0 && finalPrice && { discountedPrice: finalPrice }),
         },
       },
     });
   };
 
-  const breadcrumbItems = [
-    { title: 'Home', href: '/' },
-    { title: product.title, href: '#' },
-  ].map((item, index) => (
-    <Anchor
-      key={index}
-      href={item.href}
-      underline="hover"
-      onClick={(e) => {
-        e.preventDefault();
-        navigate(item.href);
-      }}
-    >
-      {item.title}
-    </Anchor>
-  ));
-
   return (
     <>
-      <Breadcrumbs mb="lg">{breadcrumbItems}</Breadcrumbs>
-
       <Paper shadow="sm" p="xl" radius="md">
         <Grid align="flex-start" gutter="xl">
           {/* LEFT SIDE — Image */}

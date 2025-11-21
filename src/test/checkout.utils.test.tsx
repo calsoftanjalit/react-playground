@@ -13,19 +13,19 @@ describe('checkout utils', () => {
       const result = calculatePricing(items);
 
       expect(result.subtotal).toBe(130);
-      expect(result.shipping).toBe(0);
+      expect(result.shipping).toBe(ORDER_CONSTANTS.SHIPPING_COST);
       expect(result.tax).toBe(130 * ORDER_CONSTANTS.TAX_RATE);
-      expect(result.total).toBe(130 + 0 + (130 * ORDER_CONSTANTS.TAX_RATE));
+      expect(result.total).toBe(130 + ORDER_CONSTANTS.SHIPPING_COST + (130 * ORDER_CONSTANTS.TAX_RATE));
     });
 
     it('applies free shipping when subtotal exceeds threshold', () => {
       const items = [
-        { id: 1, title: 'Item', price: 150, quantity: 1, thumbnail: '' },
+        { id: 1, title: 'Item', price: 600, quantity: 1, thumbnail: '' },
       ];
 
       const result = calculatePricing(items);
 
-      expect(result.subtotal).toBe(150);
+      expect(result.subtotal).toBe(600);
       expect(result.shipping).toBe(0);
     });
 
@@ -105,7 +105,7 @@ describe('checkout utils', () => {
 
     it('applies free shipping correctly', () => {
       const items = [
-        { price: 200, quantity: 1 },
+        { price: 600, quantity: 1 },
       ];
 
       const result = calculatePricingFromItems(items);
@@ -198,6 +198,31 @@ describe('checkout utils', () => {
 
       expect(result.discount).toBe(100);
       expect(result.total).toBeLessThan(result.subtotal);
+    });
+
+    it('uses discountedPrice when available instead of price', () => {
+      const items = [
+        { id: 1, title: 'Item', price: 100, discountedPrice: 300, quantity: 2, thumbnail: '' },
+        { id: 2, title: 'Item 2', price: 50, quantity: 1, thumbnail: '' },
+      ];
+
+      const result = calculatePricing(items);
+
+      expect(result.subtotal).toBe((300 * 2) + 50);
+      expect(result.shipping).toBe(0);
+      expect(result.tax).toBe(650 * ORDER_CONSTANTS.TAX_RATE);
+      expect(result.total).toBe(650 + 0 + (650 * ORDER_CONSTANTS.TAX_RATE));
+    });
+
+    it('falls back to price when discountedPrice is not provided', () => {
+      const items = [
+        { id: 1, title: 'Item', price: 100, quantity: 1, thumbnail: '' },
+      ];
+
+      const result = calculatePricing(items);
+
+      expect(result.subtotal).toBe(100);
+      expect(result.total).toBe(100 + ORDER_CONSTANTS.SHIPPING_COST + (100 * ORDER_CONSTANTS.TAX_RATE));
     });
   });
 });

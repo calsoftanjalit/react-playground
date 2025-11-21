@@ -42,6 +42,7 @@ export interface OrderSummary {
     name: string;
     quantity: number;
     price: number;
+    discountedPrice?: number;
     image: string;
   }>;
 }

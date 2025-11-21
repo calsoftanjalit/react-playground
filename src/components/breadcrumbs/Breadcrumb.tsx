@@ -8,29 +8,54 @@ export const Breadcrumb = () => {
 
   const matched = matchRoutes(routes, location);
 
-  const items = matched?.map((matchedRoute, index) => {
+  const items: React.ReactNode[] = [];
+
+  matched?.forEach((matchedRoute, index) => {
     const routePath = matchedRoute.route.path ?? '';
     const fullPath = matchedRoute.pathname;
 
-    let label = routePath.startsWith(':')
-      ? location.pathname.split('/').pop()
-      : routePath.replace('/', '') || 'Home'; 
-
-    if (fullPath === '/' || label === '') {
-      label = 'Home';
+    if (fullPath === '/' || routePath === '' || routePath === '/') {
+      items.push(
+        index === matched.length - 1 ? (
+          <span key={fullPath}>Home</span>
+        ) : (
+          <Anchor component={Link} to={fullPath} key={fullPath}>
+            Home
+          </Anchor>
+        )
+      );
+      return;
     }
 
-    label = (label ?? '').charAt(0).toUpperCase() + (label ?? '').slice(1);
+    const segments = routePath.split('/').filter(Boolean);
+    const fullPathSegments = fullPath.split('/').filter(Boolean);
 
-    const isLast = index === matched.length - 1;
+    segments.forEach((segment, segIdx) => {
+      let label;
+      // If segment is a param (starts with ':'), use actual value from fullPath
+      if (segment.startsWith(':')) {
+        const paramValue = fullPathSegments[segIdx];
+        label = paramValue
+          ? paramValue.charAt(0).toUpperCase() + paramValue.slice(1).replace(/\s+/g, '')
+          : segment;
+      } else {
+        label = segment.charAt(0).toUpperCase() + segment.slice(1);
+      }
 
-    return isLast ? (
-      <span key={fullPath}>{label}</span>
-    ) : (
-      <Anchor component={Link} to={fullPath} key={fullPath}>
-        {label}
-      </Anchor>
-    );
+      const pathUpToSegment = '/' + fullPathSegments.slice(0, segIdx + 1).join('/');
+
+      const isLast = index === matched.length - 1 && segIdx === segments.length - 1;
+
+      items.push(
+        isLast ? (
+          <span key={pathUpToSegment}>{label}</span>
+        ) : (
+          <Anchor component={Link} to={pathUpToSegment} key={pathUpToSegment}>
+            {label}
+          </Anchor>
+        )
+      );
+    });
   });
 
   return (
