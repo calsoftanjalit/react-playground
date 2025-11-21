@@ -1,16 +1,18 @@
 import { useCheckoutFormSteps } from '@/hooks/useCheckoutFormSteps';
 import { CartItem } from '@/types/cart';
 import { CheckoutFormValues, OrderSummary } from '@/types/checkout';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockSetActiveStep = vi.fn();
 const mockClearFormData = vi.fn();
 
+let mockActiveStep = 0;
+
 vi.mock('@/hooks/useCheckoutFormContext', () => ({
   useCheckoutFormContext: () => ({
-    activeStep: 0,
+    activeStep: mockActiveStep,
     setActiveStep: mockSetActiveStep,
     clearFormData: mockClearFormData,
   }),
@@ -53,6 +55,7 @@ describe('useCheckoutFormSteps', () => {
     vi.clearAllMocks();
     mockSetActiveStep.mockClear();
     mockClearFormData.mockClear();
+    mockActiveStep = 0;
     onSubmitSuccess = vi.fn();
     
     const { result } = renderHook(() =>
@@ -404,6 +407,235 @@ describe('useCheckoutFormSteps', () => {
       });
 
       expect(result.current.getStepColor(0, 'blue')).toBe('red');
+      
+      form.setValues({
+        fullName: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+      });
+      
+      act(() => {
+        result.current.handleNextStep();
+      });
+      
+      expect(result.current.getStepColor(0, 'blue')).toBe('blue');
+    });
+  });
+
+  describe('Edge Cases & Additional Coverage', () => {
+    it('handleFormSubmit validates and advances intermediate steps', () => {
+      form.setValues({
+        fullName: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+      });
+
+      const { result } = renderHook(() =>
+        useCheckoutFormSteps({
+          form,
+          stepConfigs: mockStepConfigs,
+          cartItems: mockCartItems,
+          totalPrice: 199.98,
+          onSubmitSuccess,
+        })
+      );
+
+      act(() => {
+        result.current.handleFormSubmit(form.values as CheckoutFormValues);
+      });
+
+      expect(result.current.activeStep).toBe(1);
+    });
+
+    it('handleFormSubmit stays on current step if invalid (intermediate)', () => {
+      const { result } = renderHook(() =>
+        useCheckoutFormSteps({
+          form,
+          stepConfigs: mockStepConfigs,
+          cartItems: mockCartItems,
+          totalPrice: 199.98,
+          onSubmitSuccess,
+        })
+      );
+
+      act(() => {
+        result.current.handleFormSubmit(form.values as CheckoutFormValues);
+      });
+
+      expect(result.current.activeStep).toBe(0);
+      expect(result.current.stepStatuses[0]).toBe('error');
+    });
+
+    it('handleFormSubmit validates final step before submitting', async () => {
+       const { submitOrder } = await import('@/services/checkoutService');
+       vi.mocked(submitOrder).mockResolvedValue({} as OrderSummary);
+
+       const { result } = renderHook(() =>
+        useCheckoutFormSteps({
+          form,
+          stepConfigs: mockStepConfigs,
+          cartItems: mockCartItems,
+          totalPrice: 199.98,
+          onSubmitSuccess,
+        })
+      );
+
+      act(() => {
+          result.current.handleStepChange(2);
+      });
+      
+      form.setValues({
+        fullName: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+        address: '123 Main St',
+        city: 'New York',
+        state: 'NY',
+        zipCode: '12345',
+        country: 'USA',
+      });
+      
+      act(() => {
+          result.current.handleNextStep();
+      });
+      act(() => {
+          result.current.handleNextStep();
+      });
+      
+      expect(result.current.activeStep).toBe(2);
+      
+      act(() => {
+          result.current.handleFormSubmit(form.values as CheckoutFormValues);
+      });
+      
+      expect(result.current.activeStep).toBe(2);
+      expect(result.current.stepStatuses[2]).toBe('error');
+      expect(submitOrder).not.toHaveBeenCalled();
+    });
+
+    it('prevents navigation to future steps if intermediate steps are incomplete', () => {
+        const { result } = renderHook(() =>
+        useCheckoutFormSteps({
+          form,
+          stepConfigs: mockStepConfigs,
+          cartItems: mockCartItems,
+          totalPrice: 199.98,
+          onSubmitSuccess,
+        })
+      );
+      
+      act(() => {
+          result.current.handleStepChange(2);
+      });
+      
+      expect(result.current.activeStep).toBe(0);
+    });
+
+    it('clears error status when form errors are resolved', () => {
+      const { result } = renderHook(() =>
+        useCheckoutFormSteps({
+          form,
+          stepConfigs: mockStepConfigs,
+          cartItems: mockCartItems,
+          totalPrice: 199.98,
+          onSubmitSuccess,
+        })
+      );
+
+      act(() => {
+        result.current.handleNextStep();
+      });
+      expect(result.current.stepStatuses[0]).toBe('error');
+
+      act(() => {
+        form.setValues({
+            fullName: 'John Doe',
+            email: 'john@example.com',
+            phone: '1234567890',
+        });
+        form.validate();
+      });
+      
+    });
+
+    it('handles invalid active step gracefully', () => {
+      mockActiveStep = 99;
+
+      const { result } = renderHook(() =>
+        useCheckoutFormSteps({
+          form,
+          stepConfigs: mockStepConfigs,
+          cartItems: mockCartItems,
+          totalPrice: 199.98,
+          onSubmitSuccess,
+        })
+      );
+      
+      expect(result.current.activeStep).toBe(99);
+
+      act(() => {
+          result.current.handleNextStep();
+      });
+      
+      expect(result.current.activeStep).toBe(2);
+    });
+    
+    it('useEffect updates step status from error to idle when errors are cleared', async () => {
+        
+        let capturedForm: UseFormReturnType<CheckoutFormValues>;
+        
+        const TestComponent = () => {
+            const form = useForm<CheckoutFormValues>({
+                initialValues: {
+                  fullName: '',
+                  email: '',
+                  phone: '',
+                  address: '',
+                  city: '',
+                  state: '',
+                  zipCode: '',
+                  country: '',
+                  cardNumber: '',
+                  cardName: '',
+                  expiryDate: '',
+                  cvv: '',
+                },
+                validate: {
+                  fullName: (value) => (!value ? 'Full name is required' : null),
+                  email: (value) => (!value || !value.includes('@') ? 'Valid email is required' : null),
+                  phone: (value) => (!value ? 'Phone is required' : null),
+                },
+            });
+            capturedForm = form;
+            
+            return useCheckoutFormSteps({
+              form,
+              stepConfigs: mockStepConfigs,
+              cartItems: mockCartItems,
+              totalPrice: 199.98,
+              onSubmitSuccess,
+            });
+        };
+
+        const { result } = renderHook(() => TestComponent());
+    
+          act(() => {
+            result.current.handleNextStep();
+          });
+          expect(result.current.stepStatuses[0]).toBe('error');
+
+          await act(async () => {
+            capturedForm.setValues({
+                fullName: 'John Doe',
+                email: 'john@example.com',
+                phone: '1234567890',
+            });
+            capturedForm.validate();
+          });
+          
+          await waitFor(() => {
+             expect(result.current.stepStatuses[0]).toBe('idle');
+          });
     });
   });
 });

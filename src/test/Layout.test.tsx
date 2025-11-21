@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { vi } from "vitest";
 import { Layout } from "../components/layout";
 
-vi.mock("../components/layout/Header", () => ({
+vi.mock("../components/Header", () => ({
   Header: () => <div data-testid="header-content">Header</div>,
 }));
 
