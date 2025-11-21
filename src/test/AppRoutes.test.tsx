@@ -1,78 +1,44 @@
-import { AppRoutes } from '@/routes/AppRoutes';
-import { MantineProvider } from '@mantine/core';
 import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 
-vi.mock('@/routes/routes', () => ({
-  routes: [
-    {
-      path: '/',
-      element: <div data-testid="layout">Layout</div>,
-      children: [
-        {
-          index: true,
-          element: <div data-testid="home">Home Page</div>,
-        },
-        {
-          path: '/about',
-          element: <div data-testid="about">About Page</div>,
-        },
-      ],
-    },
-  ],
+vi.mock('@/components/miscellaneous', () => ({
+  RouteErrorFallback: () => <div data-testid="error">Route Error</div>,
+  GlobalErrorFallback: () => <div>Global Error</div>,
+}));
+
+vi.mock('@/components/layout', () => ({
+  Layout: () => <div data-testid="layout">Layout</div>,
 }));
 
 describe('AppRoutes', () => {
-  it('should render without crashing', () => {
-    const { container } = render(
-      <MemoryRouter initialEntries={['/']}>
-        <MantineProvider>
-          <AppRoutes />
-        </MantineProvider>
-      </MemoryRouter>
-    );
+  it('should render the home route', async () => {
+    const { routes } = await import('@/routes/routes');
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/'],
+    });
 
-    expect(container).toBeInTheDocument();
-  });
-
-  it('should scroll to top when location changes', () => {
-    const scrollToSpy = vi.fn();
-    window.scrollTo = scrollToSpy;
-
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <MantineProvider>
-          <AppRoutes />
-        </MantineProvider>
-      </MemoryRouter>
-    );
-
-    expect(scrollToSpy).toHaveBeenCalledWith(0, 0);
-    expect(scrollToSpy).toHaveBeenCalled();
-  });
-
-  it('should render the routes returned by useRoutes', () => {
-    const { getByTestId } = render(
-      <MemoryRouter initialEntries={['/']}>
-        <MantineProvider>
-          <AppRoutes />
-        </MantineProvider>
-      </MemoryRouter>
-    );
-
+    const { getByTestId } = render(<RouterProvider router={router} />);
     expect(getByTestId('layout')).toBeInTheDocument();
   });
 
-  it('should handle different initial routes', () => {
-    const { getByTestId } = render(
-      <MemoryRouter initialEntries={['/about']}>
-        <MantineProvider>
-          <AppRoutes />
-        </MantineProvider>
-      </MemoryRouter>
-    );
+  it('should render the about route', async () => {
+    const { routes } = await import('@/routes/routes');
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/about'],
+    });
 
+    const { getByTestId } = render(<RouterProvider router={router} />);
     expect(getByTestId('layout')).toBeInTheDocument();
+  });
+
+  it('should render error fallback for unknown routes', async () => {
+    const { routes } = await import('@/routes/routes');
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/unknown-route'],
+    });
+
+    const { getByTestId } = render(<RouterProvider router={router} />);
+    expect(getByTestId('error')).toBeInTheDocument();
   });
 });

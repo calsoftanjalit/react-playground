@@ -8,6 +8,8 @@ import { PopularProducts } from '@/components/home';
 vi.mock('@/components/miscellaneous', () => ({
   LoadingIndicator: () => <div data-testid="loader">Loading...</div>,
   ErrorMessage: ({ message }: { message: string }) => <div data-testid="error">{message}</div>,
+  RouteErrorFallback: () => <div>Route Error</div>,
+  GlobalErrorFallback: () => <div>Global Error</div>,
 }));
 
 vi.mock('@/components/home/Product', () => ({

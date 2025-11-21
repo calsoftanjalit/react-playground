@@ -12,6 +12,8 @@ vi.mock('../components/home', () => ({
 
 vi.mock('../components/miscellaneous', () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
+  RouteErrorFallback: () => <div>Route Error</div>,
+  GlobalErrorFallback: () => <div>Global Error</div>,
 }));
 
 describe('HomePage', () => {

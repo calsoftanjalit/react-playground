@@ -1,3 +1,5 @@
 export * from './ErrorMessage'
 export * from './Footer'
 export * from './LoadingIndicator'
+export * from './GlobalErrorFallback'
+export * from './RouteErrorFallback'
