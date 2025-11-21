@@ -1,7 +1,8 @@
 import { Card, Group, Text, Stack } from '@mantine/core';
 import { IconBox, IconRuler, IconWeight, IconTag, IconShield, IconStar } from '@tabler/icons-react';
 import { ProductInfoPanelProps } from '@/types/productInfoPanelProps';
-
+import RatingStars from '@/components/miscellaneous/RatingStars';
+import UserFeedBack from '@/components/miscellaneous/UserFeedBack';
 const ProductInfoPanel : React.FC<ProductInfoPanelProps> = ({ product }) => {
   const {
     brand,
@@ -14,13 +15,7 @@ const ProductInfoPanel : React.FC<ProductInfoPanelProps> = ({ product }) => {
   } = product;
 
   return (
-    <Card
-      withBorder={false}
-      radius="md"
-      shadow="none"
-      padding="lg"
-      mt="xl"
-    >
+    <Card withBorder={false} radius="md" shadow="none" padding="lg" mt="xl">
       <Stack gap="md">
         <Group justify="space-between">
           <Text fw={600} size="lg">
@@ -65,6 +60,10 @@ const ProductInfoPanel : React.FC<ProductInfoPanelProps> = ({ product }) => {
           <Text>{rating} / 5</Text>
         </Group>
       </Stack>
+      <Group className="rating-stars">
+        <RatingStars value={rating}/>
+        <UserFeedBack />
+      </Group>
     </Card>
   );
 };

@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import {  IconShoppingCart,  IconBolt } from '@tabler/icons-react';
+import { IconShoppingCart, IconBolt } from '@tabler/icons-react';
 import ProductReviewComponent from '@/components/miscellaneous/ProductReviewDetails';
 import { useCartStore } from '@/context';
 import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
@@ -41,80 +41,78 @@ const ProductDetails = () => {
     queryFn: () => fetchProductById(id!),
     enabled: !!id,
   });
-  
+
   const finalPrice = useMemo(() => {
     if (!product) return null;
     return calculateDiscountedPrice(product.price, product.discountPercentage);
   }, [product]);
 
-if (isLoading) {
-  return (
-    <Center>
-      <Loader size="lg" />
-    </Center>
-  );
-}
-
-if (isError || !product) {
-  return (
-    <Center h="100vh">
-      <Text className="errorText" size="lg">
-        {error instanceof Error ? error.message : 'Product not found'}
-      </Text>
-    </Center>
-  );
-}
-
-if (isFetching) {
-  return (
-    <Center>
-      <Loader size="lg" />
-    </Center>
-  );
-}
-
- 
-const cartItem = items.find((item) => item.id === product.id);
-const quantity = cartItem?.quantity ?? 0;
-
-const handleIncrement = () => {
-  addItem({
-    id: product.id,
-    title: product.title,
-    price: product.price,
-  });
-};
-
-const handleDecrement = () => {
-  if (!cartItem) return;
-
-  if (cartItem.quantity <= 1) {
-    removeItem(product.id);
-    return;
+  if (isLoading) {
+    return (
+      <Center>
+        <Loader size="lg" />
+      </Center>
+    );
   }
 
-  updateItem(product.id, cartItem.quantity - 1);
-};
+  if (isError || !product) {
+    return (
+      <Center h="100vh">
+        <Text className="errorText" size="lg">
+          {error instanceof Error ? error.message : 'Product not found'}
+        </Text>
+      </Center>
+    );
+  }
 
-const handleBuyNow = () => {
-  clearFormData();
-  const currentQuantity = cartItem?.quantity ?? 1;
-  
-  const checkoutPath = ROUTE_PATHS.PRODUCT_CHECKOUT.replace(':id', product.id.toString());
+  if (isFetching) {
+    return (
+      <Center>
+        <Loader size="lg" />
+      </Center>
+    );
+  }
 
-  navigate(checkoutPath, {
-    state: {
-      buyNowItem: {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        quantity: currentQuantity,
-        thumbnail: product.thumbnail,
+  const cartItem = items.find((item) => item.id === product.id);
+  const quantity = cartItem?.quantity ?? 0;
+
+  const handleIncrement = () => {
+    addItem({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+    });
+  };
+
+  const handleDecrement = () => {
+    if (!cartItem) return;
+
+    if (cartItem.quantity <= 1) {
+      removeItem(product.id);
+      return;
+    }
+
+    updateItem(product.id, cartItem.quantity - 1);
+  };
+
+  const handleBuyNow = () => {
+    clearFormData();
+    const currentQuantity = cartItem?.quantity ?? 1;
+
+    const checkoutPath = ROUTE_PATHS.PRODUCT_CHECKOUT.replace(':id', product.id.toString());
+
+    navigate(checkoutPath, {
+      state: {
+        buyNowItem: {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          quantity: currentQuantity,
+          thumbnail: product.thumbnail,
+        },
       },
-    },
-  });
-};
-
+    });
+  };
 
   const breadcrumbItems = [
     { title: 'Home', href: '/' },
@@ -171,7 +169,7 @@ const handleBuyNow = () => {
               </Text>
               <Group justify="center" gap={2}>
                 <Text c="red" fw="500" size="sm">
-                 -{product.discountPercentage}%
+                  -{product.discountPercentage}%
                 </Text>
                 <Text fw={500} size="xl" ta="center" c="blue">
                   ${finalPrice}
@@ -192,8 +190,8 @@ const handleBuyNow = () => {
               </Box>
               <Group mt="md" justify="flex-start" gap="md">
                 <Button
-                  variant='filled'
-                  color='blue'
+                  variant="filled"
+                  color="blue"
                   size="md"
                   leftSection={<IconBolt size={18} />}
                   onClick={handleBuyNow}
