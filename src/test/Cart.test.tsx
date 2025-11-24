@@ -24,11 +24,13 @@ vi.mock('@/hooks/useCheckoutFormContext', () => ({
   }),
 }));
 
+const mockUseCartStore = vi.fn(() => ({
+  items: [{ id: 1 }],
+  totalItems: 2,
+}));
+
 vi.mock('@/context', () => ({
-  useCartStore: () => ({
-    items: [{ id: 1 }],
-    totalItems: 2,
-  }),
+  useCartStore: () => mockUseCartStore(),
   CartProvider: ({ children }: PropsWithChildren) => <div>{children}</div>,
 }));
 
@@ -69,5 +71,35 @@ describe('<Cart /> component', () => {
 
     expect(mockClearFormData).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith(ROUTE_PATHS.CART_CHECKOUT);
+  });
+
+  it('does not navigate when cart is empty (items.length === 0)', () => {
+    mockUseCartStore.mockReturnValueOnce({
+      items: [],
+      totalItems: 1,
+    });
+
+    renderWithProviders(<Cart />);
+
+    const btn = screen.getByRole('button', { name: /checkout/i });
+    
+    expect(btn).toBeInTheDocument();
+    
+    fireEvent.click(btn);
+    
+    expect(mockClearFormData).not.toHaveBeenCalled();
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('does not render checkout button when totalItems is 0', () => {
+    mockUseCartStore.mockReturnValueOnce({
+      items: [{ id: 1 }],
+      totalItems: 0,
+    });
+
+    renderWithProviders(<Cart />);
+
+    const btn = screen.queryByRole('button', { name: /checkout/i });
+    expect(btn).not.toBeInTheDocument();
   });
 });
