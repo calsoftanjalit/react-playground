@@ -4,13 +4,13 @@ import QuantitySelector from './QuantitySelector';
 import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 import { Link } from 'react-router-dom';
 
-const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) => {
+export const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) => {
   const { handleAddCartProduct, updateItem, quantity, cartItem } = useAddCartProduct(id);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" key={`product-${id}`} withBorder>
       <Link to={`/products/${id}`} className="linkReset">
-        {thumbnail && <Image src={thumbnail} height={160} alt={title} />}
+        {thumbnail && <Image src={thumbnail} width={160} alt={title} radius="md"/>}
         <Text fw={500} size="lg" mt="md">
           {title}
         </Text>
