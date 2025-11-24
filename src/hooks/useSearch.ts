@@ -5,7 +5,7 @@ import { useFilterStore } from "./useFilterStore";
 export const useSearch = () => {
     const { setSearchValue, setCategory } = useFilterStore();
     const [input, setInput] = useState('');
-    const [debouncedValue] = useDebouncedValue(input, 500);
+    const [debouncedValue] = useDebouncedValue(input.trim(), 500);
   
     useEffect(() => {
       setSearchValue(debouncedValue);
