@@ -2,8 +2,11 @@ import { useDisclosure } from '@mantine/hooks';
 import { Modal, Button, Group, Textarea, Rating, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCheck, IconStar, IconStarFilled, IconUser } from '@tabler/icons-react';
+import { saveLocalReview } from '@/utils/reviewStorage';
+import queryClient from '@/services/apis/queryClient';
+import { UserFeedbackProps } from '@/types';
 
-const UserFeedBack = ()=> {
+const UserFeedBack = ({ productId }: UserFeedbackProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
     initialValues: {
@@ -18,14 +21,19 @@ const UserFeedBack = ()=> {
     },
   });
 
-
-  const handleSubmit = (values)=>{
-    console.log('Form Data:', values);
-    // send to backend here
+  const handleSubmit = (values : typeof form.values) => {
+    const newReview = {
+      id: crypto.randomUUID(),
+      reviewerName: values.name,
+      rating: values.rating,
+      comment: values.comment,
+      date: new Date().toISOString(),
+    };
+    saveLocalReview(productId, newReview);
+    form.reset();
+    queryClient.invalidateQueries({ queryKey: ['product', productId] });
     close();
-
-  }
-
+  };
 
   return (
     <>
@@ -61,13 +69,15 @@ const UserFeedBack = ()=> {
             <div className="rating-wrapper">
               <label className="rating-label">How would you rate your experience?</label>
               <div className="rating-container">
-                <Rating
-                  size="xl"
-                  {...form.getInputProps('rating')}
-                  className="rating-stars"
-                  emptySymbol={<IconStar size={32} />}
-                  fullSymbol={<IconStarFilled size={32} />}
-                />
+                <div data-testid="rating-input">
+                  <Rating
+                    size="xl"
+                    {...form.getInputProps('rating')}
+                    className="rating-stars"
+                    emptySymbol={<IconStar size={32} color="#FFD43C" />}
+                    fullSymbol={<IconStarFilled size={32} color="#FFD43B" />}
+                  />
+                </div>
                 {form.values.rating > 0 && (
                   <span className="rating-text">
                     {form.values.rating === 5
@@ -117,6 +127,6 @@ const UserFeedBack = ()=> {
       </Button>
     </>
   );
-}
+};
 
 export default UserFeedBack;

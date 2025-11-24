@@ -6,7 +6,17 @@
    reviewerEmail: string;
  }
 
+ export interface LocalProductFeedback {
+   id: string;
+   rating: number;
+   comment: string;
+   reviewerName: string;
+   date: string;   // the current date on the go to make it consistent and for the betterment of UX
+ }
 
+ export interface UserFeedbackProps {
+   productId: number;
+ }
 export interface Product {
   reviews: ProductFeedback[];
 }
