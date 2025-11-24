@@ -1,9 +1,9 @@
 import { renderHook, act } from '@testing-library/react';
 import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 import { useCartStore } from '@/hooks/useCartStore';
-import { notifications } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
 import { CART_USER } from '@/constants/api';
+import { showToast } from '@/utils/showToast';
 
 vi.mock('@tanstack/react-query', () => ({
   useMutation: vi.fn(),
@@ -17,10 +17,8 @@ vi.mock('@/hooks/useCartStore', () => ({
   useCartStore: vi.fn(),
 }));
 
-vi.mock('@mantine/notifications', () => ({
-  notifications: {
-    show: vi.fn(),
-  },
+vi.mock('@/utils/showToast', () => ({
+  showToast: vi.fn(),
 }));
 
 describe('useAddCartProduct hook', () => {
@@ -65,10 +63,11 @@ describe('useAddCartProduct hook', () => {
     });
   });
 
-  it('executes onSuccess and adds item to store', () => {
-    const productData = { products: [{ id: 99, quantity: 1 }] };
+  it('onSuccess: calls showToast + addItem', () => {
+    const productData = {
+      products: [{ id: 99, quantity: 1, title: 'Test Product' }],
+    };
 
-    // Intercept the onSuccess callback used inside the hook
     (useMutation as ReturnType<typeof vi.fn>).mockImplementation((opts) => {
       opts.onSuccess(productData);
       return { mutate: mutateMock };
@@ -76,17 +75,18 @@ describe('useAddCartProduct hook', () => {
 
     renderHook(() => useAddCartProduct(99));
 
-    expect(notifications.show).toHaveBeenCalledWith({
-      title: 'Success!',
-      message: 'Item added to cart.',
-      color: 'green',
+    expect(showToast).toHaveBeenCalledWith({
+      type: 'success',
+      title: 'Added to cart',
+      message: 'Test Product has been added to your cart',
+      autoClose: 3000,
     });
 
     expect(addItem).toHaveBeenCalledWith(productData.products[0]);
   });
 
-  it('executes onError and shows error notification', () => {
-    const error = new Error('Failed adding');
+  it('onError: calls showToast with error', () => {
+    const error = new Error('Failed');
 
     (useMutation as ReturnType<typeof vi.fn>).mockImplementation((opts) => {
       opts.onError(error);
@@ -95,10 +95,11 @@ describe('useAddCartProduct hook', () => {
 
     renderHook(() => useAddCartProduct(1));
 
-    expect(notifications.show).toHaveBeenCalledWith({
-      title: 'Error!',
+    expect(showToast).toHaveBeenCalledWith({
+      type: 'error',
+      title: 'Error',
       message: 'The item could not be added to your cart.',
-      color: 'red',
+      autoClose: 3000,
     });
   });
 

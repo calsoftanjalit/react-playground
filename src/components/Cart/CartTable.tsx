@@ -5,20 +5,48 @@ import CartTableRow from '@/components/Cart/CartTableRow';
 import { useCartStore } from '@/context';
 import { formatPrice } from '@/utils';
 import { CartItem } from '@/types';
+import { showToast } from '@/utils/showToast';
 
 const TABLE_HEADERS = ['Image', 'Name', 'Price', 'Quantity', 'Total', 'Action'];
 
 const CartTable: React.FC = () => {
   const { items, updateItem, removeItem, totalPrice, totalItems } = useCartStore();
 
+  const handleRemove = useCallback(
+    (item: CartItem) => {
+      removeItem(item.id);
+      showToast({
+        type: 'success',
+        title: 'Item Removed',
+        message: `${item.title} removed successfully`,
+        autoClose: 2500,
+      });
+    },
+    [removeItem]
+  );
+
+  // AUTO REMOVE WHEN QUANTITY < 1 → WARNING Toast
   const handleQuantityChange = useCallback(
-    (id: number, quantity: number) => updateItem(id, quantity),
-    [updateItem]
+    (id: number, quantity: number) => {
+      const item = items.find((i) => i.id === id);
+      if (!item) return;
+      if (quantity < 1) {
+        showToast({
+          type: 'warning',
+          title: 'Removed',
+          message: `${item.title} removed from cart`,
+          autoClose: 2500,
+        });
+        updateItem(id, 0);
+      } else {
+        // normal quantity update
+        updateItem(id, quantity);
+      }
+    },
+    [items, updateItem]
   );
 
   const getTotalPrice = (p: CartItem) => p.quantity * (p.discountedPrice || p.price);
-
-  const handleRemove = useCallback((id: number) => removeItem(id), [removeItem]);
 
   return (
     <Table horizontalSpacing="xl">
@@ -42,7 +70,7 @@ const CartTable: React.FC = () => {
                 quantity={product.quantity}
                 totalPrice={getTotalPrice(product)}
                 onQuantityChange={handleQuantityChange}
-                onRemove={() => handleRemove(product.id)}
+                onRemove={() => handleRemove(product)}
               />
             ))}
 

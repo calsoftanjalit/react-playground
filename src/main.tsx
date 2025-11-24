@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
         <CartProvider>
           <CheckoutFormProvider>
             <MantineProvider>
-              <Notifications />
+              <Notifications position="top-right" />
               <App />
               <ReactQueryDevtools initialIsOpen={false} />
             </MantineProvider>
