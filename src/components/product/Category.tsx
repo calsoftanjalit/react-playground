@@ -5,7 +5,7 @@ import { fetchCategoryList } from "@/services/productService";
 
 export const Category = () => {
 	const { category, setCategory } = useFilterStore()
-  const { data, error } = useQuery({
+	const { data, error } = useQuery({
     queryKey: ['category-list'],
     queryFn: fetchCategoryList,
   })
