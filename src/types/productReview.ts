@@ -1,3 +1,5 @@
+import { User } from "./users";
+
 interface ProductFeedback {
   rating: number;
   comment: string;
@@ -17,6 +19,9 @@ export interface LocalProductFeedback {
 export interface UserFeedbackProps {
   productId: number;
 }
-export interface Product {
+
+export interface RatingStarProp {
+  value: number;
+}export interface Product {
   reviews: ProductFeedback[];
 }

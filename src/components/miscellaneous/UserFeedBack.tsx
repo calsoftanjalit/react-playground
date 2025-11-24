@@ -1,5 +1,5 @@
 import { useDisclosure } from '@mantine/hooks';
-import { Modal, Button, Group, Textarea, Rating, TextInput } from '@mantine/core';
+import { Modal, Button, Group, Textarea, Rating, TextInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCheck, IconStar, IconStarFilled, IconUser } from '@tabler/icons-react';
 import { saveLocalReview } from '@/utils/reviewStorage';
@@ -33,6 +33,22 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
     form.reset();
     queryClient.invalidateQueries({ queryKey: ['product', productId] });
     close();
+  };
+  const getRatingText = (rating: number) => {
+    switch (rating) {
+      case 5:
+        return 'Excellent!';
+      case 4:
+        return 'Great!';
+      case 3:
+        return 'Good';
+      case 2:
+        return 'Fair';
+      case 1:
+        return 'Poor';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -79,17 +95,9 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
                   />
                 </div>
                 {form.values.rating > 0 && (
-                  <span className="rating-text">
-                    {form.values.rating === 5
-                      ? 'Excellent!'
-                      : form.values.rating === 4
-                        ? 'Great!'
-                        : form.values.rating === 3
-                          ? 'Good'
-                          : form.values.rating === 2
-                            ? 'Fair'
-                            : 'Poor'}
-                  </span>
+                  <Text span className="rating-text">
+                    {getRatingText(form.values.rating)}
+                  </Text>
                 )}
               </div>
             </div>
