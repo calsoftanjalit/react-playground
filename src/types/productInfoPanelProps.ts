@@ -1,6 +1,6 @@
 export interface ProductInfoPanelProps {
   product: {
-    id:number
+    id: number;
     brand: string;
     sku: string;
     weight: number;

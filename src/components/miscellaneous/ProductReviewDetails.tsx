@@ -1,14 +1,14 @@
-import {useRef} from 'react'
+import { useRef } from 'react';
 import { Card, Text, Rating, Group, Avatar, Stack, Box } from '@mantine/core';
-import {Product} from "@/types/index"
+import { Product } from '@/types/index';
 import { Carousel } from '@mantine/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 
-const ProductReviewComponent = ({reviews}:Product) => {
-  const autoplay = useRef(Autoplay({ delay: 1500}));
+const ProductReviewComponent = ({ reviews }: Product) => {
+  const autoplay = useRef(Autoplay({ delay: 1500 }));
 
   return (
-    <Box maw={700} mx="auto"  >
+    <Box maw={700} mx="auto">
       <Carousel
         withIndicators={false}
         slideGap="md"
@@ -42,6 +42,6 @@ const ProductReviewComponent = ({reviews}:Product) => {
       </Carousel>
     </Box>
   );
-}
+};
 
-export default ProductReviewComponent
+export default ProductReviewComponent;

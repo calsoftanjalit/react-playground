@@ -1,6 +1,6 @@
-import {IconStarFilled, IconStarHalfFilled } from '@tabler/icons-react';
+import { IconStarFilled, IconStarHalfFilled } from '@tabler/icons-react';
 
-const RatingStars = ( {value} :{value:number}) => {
+const RatingStars = ({ value }: { value: number }) => {
   const fullStars = Math.floor(value);
   const hasHalf = value % 1 !== 0;
 

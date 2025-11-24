@@ -8,7 +8,7 @@ export function getLocalReviews(productId: number) {
   return allReviews[productId] || [];
 }
 
-export function saveLocalReview(productId:number, review: LocalProductFeedback) {
+export function saveLocalReview(productId: number, review: LocalProductFeedback) {
   const allReviews = getFromStorage<Record<string, LocalProductFeedback[]>>(STORAGE_KEY) || {};
 
   if (!allReviews[productId]) {

@@ -21,7 +21,7 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
     },
   });
 
-  const handleSubmit = (values : typeof form.values) => {
+  const handleSubmit = (values: typeof form.values) => {
     const newReview = {
       id: crypto.randomUUID(),
       reviewerName: values.name,
