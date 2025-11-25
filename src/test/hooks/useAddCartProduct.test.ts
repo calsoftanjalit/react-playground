@@ -3,7 +3,7 @@ import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 import { useCartStore } from '@/hooks/useCartStore';
 import { useMutation } from '@tanstack/react-query';
 import { CART_USER } from '@/constants/api';
-import { showToast } from '@/utils/showToast';
+import { showToast } from '@/utils';
 
 vi.mock('@tanstack/react-query', () => ({
   useMutation: vi.fn(),

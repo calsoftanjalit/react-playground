@@ -1,6 +1,6 @@
 import { QueryClient, QueryKey } from '@tanstack/react-query';
 import { STALE_TIME } from '@/constants/api';
-import { showToast } from '@/utils/showToast';
+import { showToast } from '@/utils';
 
 const queryClient = new QueryClient({
   defaultOptions: {

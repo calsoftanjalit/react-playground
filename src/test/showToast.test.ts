@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { notifications } from '@mantine/notifications';
-import { showToast } from '@/utils/showToast';
+import { showToast } from '@/utils';
 
 vi.mock('@mantine/notifications', () => ({
   notifications: { show: vi.fn() },

@@ -2,7 +2,7 @@ import { CART_USER } from '@/constants/api';
 import { addCart } from '@/services/cartService';
 import { useMutation } from '@tanstack/react-query';
 import { useCartStore } from './useCartStore';
-import { showToast } from '@/utils/showToast';
+import { showToast } from '@/utils';
 
 export const useAddCartProduct = (id: number) => {
   const { items, addItem, updateItem } = useCartStore();

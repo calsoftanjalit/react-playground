@@ -3,9 +3,8 @@ import { useCallback } from 'react';
 import { IconCurrencyDollar } from '@tabler/icons-react';
 import CartTableRow from '@/components/Cart/CartTableRow';
 import { useCartStore } from '@/context';
-import { formatPrice } from '@/utils';
+import { formatPrice, showToast } from '@/utils';
 import { CartItem } from '@/types';
-import { showToast } from '@/utils/showToast';
 
 const TABLE_HEADERS = ['Image', 'Name', 'Price', 'Quantity', 'Total', 'Action'];
 
