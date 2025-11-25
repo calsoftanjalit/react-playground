@@ -6,7 +6,6 @@ import {
   clearStorage,
 } from '@/utils/storage';
 
-// Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
 
@@ -103,6 +102,28 @@ describe('Storage Utility', () => {
       expect(result).toBe(true);
       expect(JSON.parse(localStorage.getItem(key) || '')).toBe('new_value');
     });
+
+    it('should handle storage errors and return false', () => {
+      const key = 'test_key';
+      const value = 'test_value';
+      
+      const stringifySpy = vi.spyOn(JSON, 'stringify').mockImplementation(() => {
+        throw new Error('Cannot serialize circular structure');
+      });
+      
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const result = setInStorage(key, value);
+
+      expect(result).toBe(false);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to store "test_key" in storage:'),
+        expect.any(Error)
+      );
+
+      stringifySpy.mockRestore();
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('getFromStorage', () => {
@@ -161,6 +182,29 @@ describe('Storage Utility', () => {
 
       expect(result).toBeNull();
     });
+
+    it('should handle storage errors and return null', () => {
+      const key = 'test_key';
+      
+      const parseSpy = vi.spyOn(JSON, 'parse').mockImplementation(() => {
+        throw new Error('Unexpected token in JSON');
+      });
+      
+      localStorage.setItem(key, 'some value');
+      
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const result = getFromStorage(key);
+
+      expect(result).toBeNull();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to retrieve "test_key" from storage:'),
+        expect.any(Error)
+      );
+
+      parseSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('removeFromStorage', () => {
@@ -189,6 +233,39 @@ describe('Storage Utility', () => {
       expect(localStorage.getItem('key1')).toBeNull();
       expect(localStorage.getItem('key2')).not.toBeNull();
     });
+
+    it('should handle storage errors and return false', () => {
+      const key = 'test_key';
+      
+      const originalLocalStorage = globalThis.localStorage;
+      
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: {
+          ...originalLocalStorage,
+          removeItem: () => {
+            throw new Error('Storage removal failed');
+          },
+        },
+        configurable: true,
+      });
+      
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const result = removeFromStorage(key);
+
+      expect(result).toBe(false);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to remove "test_key" from storage:'),
+        expect.any(Error)
+      );
+
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: originalLocalStorage,
+        configurable: true,
+      });
+      
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('clearStorage', () => {
@@ -209,6 +286,37 @@ describe('Storage Utility', () => {
       const result = clearStorage();
 
       expect(result).toBe(true);
+    });
+
+    it('should handle storage errors and return false', () => {
+      const originalLocalStorage = globalThis.localStorage;
+      
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: {
+          ...originalLocalStorage,
+          clear: () => {
+            throw new Error('Storage clear failed');
+          },
+        },
+        configurable: true,
+      });
+      
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const result = clearStorage();
+
+      expect(result).toBe(false);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to clear storage:',
+        expect.any(Error)
+      );
+
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: originalLocalStorage,
+        configurable: true,
+      });
+
+      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -269,15 +377,98 @@ describe('Storage Utility', () => {
         { id: 2, title: 'Item 2', price: 75, quantity: 1 },
       ];
 
-      // Simulate CartProvider saving
       setInStorage(CART_KEY, cartItems);
 
-      // Simulate CartProvider loading
       const loaded = getFromStorage<CartItem[]>(CART_KEY);
 
       expect(loaded).toEqual(cartItems);
       expect(loaded?.[0].quantity).toBe(2);
       expect(loaded?.reduce((sum, item) => sum + item.quantity, 0)).toBe(3);
+    });
+  });
+
+  describe('sessionStorage support', () => {
+    const sessionStorageMock = (() => {
+      let store: Record<string, string> = {};
+
+      return {
+        getItem: (key: string) => store[key] || null,
+        setItem: (key: string, value: string) => {
+          store[key] = value;
+        },
+        removeItem: (key: string) => {
+          delete store[key];
+        },
+        clear: () => {
+          store = {};
+        },
+      };
+    })();
+
+    beforeEach(() => {
+      Object.defineProperty(globalThis, 'sessionStorage', {
+        value: sessionStorageMock,
+        configurable: true,
+      });
+      sessionStorage.clear();
+    });
+
+    it('should use sessionStorage when specified', () => {
+      const key = 'session_key';
+      const value = 'session_value';
+
+      const result = setInStorage(key, value, { storage: 'sessionStorage' });
+
+      expect(result).toBe(true);
+      expect(sessionStorage.getItem(key)).toBe(JSON.stringify(value));
+      expect(localStorage.getItem(key)).toBeNull();
+    });
+
+    it('should retrieve from sessionStorage when specified', () => {
+      const key = 'session_key';
+      const value = { id: 1, name: 'Session Data' };
+      sessionStorage.setItem(key, JSON.stringify(value));
+
+      const result = getFromStorage<typeof value>(key, { storage: 'sessionStorage' });
+
+      expect(result).toEqual(value);
+    });
+
+    it('should remove from sessionStorage when specified', () => {
+      const key = 'session_key';
+      setInStorage(key, 'value', { storage: 'sessionStorage' });
+
+      const result = removeFromStorage(key, { storage: 'sessionStorage' });
+
+      expect(result).toBe(true);
+      expect(sessionStorage.getItem(key)).toBeNull();
+    });
+
+    it('should clear sessionStorage when specified', () => {
+      setInStorage('key1', 'value1', { storage: 'sessionStorage' });
+      setInStorage('key2', 'value2', { storage: 'sessionStorage' });
+
+      const result = clearStorage({ storage: 'sessionStorage' });
+
+      expect(result).toBe(true);
+      expect(sessionStorage.getItem('key1')).toBeNull();
+      expect(sessionStorage.getItem('key2')).toBeNull();
+    });
+
+    it('should isolate localStorage and sessionStorage', () => {
+      const key = 'test_key';
+      const localValue = 'local_value';
+      const sessionValue = 'session_value';
+
+      setInStorage(key, localValue);
+      setInStorage(key, sessionValue, { storage: 'sessionStorage' });
+
+      const fromLocal = getFromStorage<string>(key);
+      const fromSession = getFromStorage<string>(key, { storage: 'sessionStorage' });
+
+      expect(fromLocal).toBe(localValue);
+      expect(fromSession).toBe(sessionValue);
+      expect(fromLocal).not.toBe(fromSession);
     });
   });
 });

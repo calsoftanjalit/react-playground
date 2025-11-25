@@ -27,14 +27,14 @@ const mockOrderSummary: OrderSummary = {
       id: 1,
       name: 'Product 1',
       quantity: 2,
-      price: 200.0,
+      price: 200,
       image: '/product1.jpg',
     },
     {
       id: 2,
       name: 'Product 2',
       quantity: 1,
-      price: 150.0,
+      price: 150,
       image: '/product2.jpg',
     },
   ],
@@ -117,7 +117,7 @@ describe('OrderSuccess', () => {
           id: 1,
           name: 'Small Item',
           quantity: 1,
-          price: 50.0,
+          price: 50,
           image: '/item.jpg',
         },
       ],
@@ -226,5 +226,53 @@ describe('OrderSuccess', () => {
     renderComponent();
     const images = screen.getAllByRole('img');
     expect(images.length).toBeGreaterThan(0);
+  });
+
+  it('should render with dark color scheme class', () => {
+    const { container } = render(
+      <MantineProvider forceColorScheme="dark">
+        <BrowserRouter>
+          <OrderSuccess orderSummary={mockOrderSummary} />
+        </BrowserRouter>
+      </MantineProvider>
+    );
+    expect(container.querySelector('[class*="itemCardDark"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="whatsNextBoxDark"]')).toBeInTheDocument();
+  });
+
+  it('should render Avatar when item has no image', () => {
+    const orderWithoutImage: OrderSummary = {
+      ...mockOrderSummary,
+      items: [
+        {
+          id: 1,
+          name: 'Product without image',
+          quantity: 1,
+          price: 50,
+          image: '',
+        },
+      ],
+    };
+    const { container } = renderComponent(orderWithoutImage);
+    expect(container.querySelector('.mantine-Avatar-root')).toBeInTheDocument();
+  });
+
+  it('should use discounted price when available', () => {
+    const orderWithDiscount: OrderSummary = {
+      ...mockOrderSummary,
+      items: [
+        {
+          id: 1,
+          name: 'Discounted Product',
+          quantity: 2,
+          price: 100,
+          discountedPrice: 80,
+          image: '/product.jpg',
+        },
+      ],
+    };
+    renderComponent(orderWithDiscount);
+    expect(screen.getByText('Discounted Product')).toBeInTheDocument();
+    expect(screen.getByText(/\$80\.00 each/)).toBeInTheDocument();
   });
 });
