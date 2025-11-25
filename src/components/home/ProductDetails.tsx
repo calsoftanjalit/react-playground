@@ -11,6 +11,7 @@ import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
 import { calculateDiscountedPrice } from '@/utils';
 import { useMemo } from 'react';
+import { getLocalReviews } from '@/utils';
 import { WishlistButton } from '@/components/common/WishlistButton';
 import styles from '@/styles/Product.module.scss';
 
@@ -62,6 +63,8 @@ const ProductDetails = () => {
     );
   }
 
+  const localReviews = getLocalReviews(product?.id);
+  const mergedReviews = [...(product.reviews ?? []), ...(localReviews ?? [])];
   const cartItem = items.find((item) => item.id === product.id);
   const quantity = cartItem?.quantity ?? 0;
 
@@ -108,7 +111,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Paper shadow="sm" p="xl" radius="md">
+      <Paper shadow="sm" p="xl" radius="md" mt="lg">
         <Grid align="flex-start" gutter="xl">
           {/* LEFT SIDE — Image */}
           <Grid.Col span={{ base: 12, md: 5 }}>
@@ -192,7 +195,7 @@ const ProductDetails = () => {
           </Grid.Col>
         </Grid>
       </Paper>
-      <ProductReviewComponent reviews={product?.reviews} />
+      <ProductReviewComponent reviews={mergedReviews} />
     </>
   );
 };

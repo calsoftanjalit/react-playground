@@ -8,6 +8,19 @@
     align-items: center;
     justify-content: center;
   }
+
+  @mixin flex-column($gap: 1rem) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+
+  @mixin flex($align: center, $justify: flex-start) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+}
   
   @mixin hover-brighten {
     &:hover {
