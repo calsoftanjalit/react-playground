@@ -15,7 +15,6 @@ export const WishlistButton: FC<WishlistButtonProps> = ({
   const isWishlisted = isInWishlist(product.id);
 
   const toggleWishlist = (event: React.MouseEvent) => {
-    event.preventDefault();
     event.stopPropagation();
     if (isWishlisted) {
       removeFromWishlist(product.id);
@@ -28,7 +27,6 @@ export const WishlistButton: FC<WishlistButtonProps> = ({
     <ActionIcon
       variant="default"
       style={style}
-      onMouseDown={(event) => event.preventDefault()}
       onClick={toggleWishlist}
       {...props}
     >

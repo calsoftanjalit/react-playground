@@ -1,12 +1,12 @@
-import { ProductInterface } from '@/types/product';
+import { type FC } from 'react';
 import { Button, Card, Image, Text } from '@mantine/core';
-import QuantitySelector from './QuantitySelector';
-import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 import { Link } from 'react-router-dom';
-import { WishlistButton } from '../common/WishlistButton';
-import { FC } from 'react';
-import styles from '@/styles/Product.module.scss';
+import type { ProductInterface } from '@/types/product';
+import { useAddCartProduct } from '@/hooks/useAddCartProduct';
+import { WishlistButton } from '@/components/common/WishlistButton';
+import QuantitySelector from '@/components/home/QuantitySelector';
 import { showToast } from '@/utils';
+import styles from '@/styles/Product.module.scss';
 
 export const Product: FC<ProductInterface> = (product) => {
   const { id, title, price, thumbnail } = product;

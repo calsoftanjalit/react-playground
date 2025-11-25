@@ -23,9 +23,9 @@ const WishlistPage = () => {
 
   if (wishlist.length === 0) {
     return (
-      <Container size="lg" py={80}>
+      <Container size="lg" py="xl">
         <Paper p="xl" radius="lg" withBorder className={styles.emptyStatePaper}>
-          <Center className={styles.emptyStateCenter} py={60}>
+          <Center className={styles.emptyStateCenter} py="xl">
             <ThemeIcon size={80} radius="50%" variant="light" color="gray">
               <IconHeart size={40} stroke={1.5} />
             </ThemeIcon>
@@ -56,8 +56,8 @@ const WishlistPage = () => {
   }
 
   return (
-    <Box pb={80}>
-      <Box bg="gray.0" py={60} mb={40}>
+    <Box pb="xl">
+      <Box bg="gray.0" py="xl" mb="xl">
         <Container size="lg">
           <Group justify="space-between" align="flex-end">
             <Stack gap="xs" align="flex-start">

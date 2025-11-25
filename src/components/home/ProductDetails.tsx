@@ -11,7 +11,7 @@ import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
 import { calculateDiscountedPrice } from '@/utils';
 import { useMemo } from 'react';
-import { WishlistButton } from '../common/WishlistButton';
+import { WishlistButton } from '@/components/common/WishlistButton';
 import styles from '@/styles/Product.module.scss';
 
 const ProductDetails = () => {
