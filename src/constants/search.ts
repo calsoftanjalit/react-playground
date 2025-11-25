@@ -1,1 +1,1 @@
-export const TIME_VALUE = 500
+export const DEBOUNCE_TIME_VALUE = 500
