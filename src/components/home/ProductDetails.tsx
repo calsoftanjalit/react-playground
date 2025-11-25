@@ -11,7 +11,7 @@ import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
 import { calculateDiscountedPrice } from '@/utils';
 import { useMemo } from 'react';
-import { getLocalReviews } from '@/utils/reviewStorage';
+import { getLocalReviews } from '@/utils';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();

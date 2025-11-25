@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core';
 import { IconStarFilled, IconStarHalfFilled } from '@tabler/icons-react';
-import { RatingStarProp } from '@/types/index';
+import { RatingStarProp } from '@/types';
 import styles from '@/styles/RatingStar.module.scss';
 
 const RatingStars = ({ value }: RatingStarProp) => {
