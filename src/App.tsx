@@ -1,7 +1,7 @@
 import { ErrorBoundary } from "react-error-boundary";
 import "./App.scss";
-import { GlobalErrorFallback } from "./components/miscellaneous";
-import { AppRoutes } from "./routes/AppRoutes";
+import { GlobalErrorFallback } from "@/components/miscellaneous";
+import { AppRoutes } from "@/routes/AppRoutes";
 
 function App() {
   return (

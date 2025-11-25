@@ -29,7 +29,7 @@ export const GlobalErrorFallback: React.FC<FallbackProps> = ({
           We encountered an unexpected error.
         </Text>
         <Paper withBorder p="xs" bg="gray.0" mb="xl" ta={"center"}>
-          <Text c="red" size="sm" style={{ fontFamily: "monospace" }}>
+          <Text c="red" size="sm" className="monospace">
             {error.message}
           </Text>
         </Paper>
