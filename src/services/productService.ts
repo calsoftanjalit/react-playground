@@ -12,7 +12,9 @@ export const fetchProducts = async (
   category: category, 
   searchValue: string): Promise<ProductApiInterface> => {
   const strLimit = `limit=${limit}`
-  const searchUrl = searchValue ? `/search?q=${searchValue}&${strLimit}` : `?${strLimit}`;
+  const searchUrl = searchValue
+    ? `/search?q=${ encodeURIComponent(searchValue) }&${strLimit}`
+    : `?${strLimit}`;
 
   const setUpUrl: string = category
     ? `${PRODUCT_CATEGORY_URL}/${category}?${strLimit}`
