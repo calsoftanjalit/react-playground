@@ -17,8 +17,8 @@ describe('<Category />', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (useFilterStore as ReturnType<typeof vi.fn>).mockReturnValue({
-      category: '',
-      setCategory: mockSetCategory,
+      categoryList: '',
+      setCategoryList: mockSetCategory,
     });
   });
 

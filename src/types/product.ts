@@ -14,8 +14,8 @@ export interface FilterProviderProps {
 }
 
 export interface FilterContextType {
-  category: string | null | undefined;
+  categoryList: string | null | undefined;
   searchValue: string;
-  setCategory: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  setCategoryList: React.Dispatch<React.SetStateAction<string | null | undefined>>;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }

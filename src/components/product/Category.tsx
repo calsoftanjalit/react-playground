@@ -4,7 +4,7 @@ import { useFilterStore } from "@/hooks/useFilterStore";
 import { fetchCategoryList } from "@/services/productService";
 
 export const Category = () => {
-	const { category, setCategory } = useFilterStore()
+	const { categoryList, setCategoryList } = useFilterStore()
 	const { data, error } = useQuery({
 	  queryKey: ['category-list'],
 	  queryFn: fetchCategoryList,
@@ -12,8 +12,8 @@ export const Category = () => {
 
   return (
 		<Select
-			value={category}
-			onChange={setCategory}
+			value={categoryList}
+			onChange={setCategoryList}
 			placeholder="Select Category"
 			data={data}
 			clearable

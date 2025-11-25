@@ -3,7 +3,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { useFilterStore } from "./useFilterStore";
 
 export const useSearch = () => {
-    const { setSearchValue, setCategory } = useFilterStore();
+    const { setSearchValue, setCategoryList } = useFilterStore();
     const [input, setInput] = useState('');
     const [debouncedValue] = useDebouncedValue(input.trim(), 500);
   
@@ -11,9 +11,9 @@ export const useSearch = () => {
       setSearchValue(debouncedValue);
 
       if (debouncedValue?.length > 0) {
-        setCategory(null);
+        setCategoryList(null);
       }
-    }, [debouncedValue, setSearchValue, setCategory]);
+    }, [debouncedValue, setSearchValue, setCategoryList]);
   
   return{
     input,
