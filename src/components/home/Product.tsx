@@ -3,13 +3,25 @@ import { Button, Card, Image, Text } from '@mantine/core';
 import QuantitySelector from './QuantitySelector';
 import { useAddCartProduct } from '@/hooks/useAddCartProduct';
 import { Link } from 'react-router-dom';
+import { WishlistButton } from '../common/WishlistButton';
+import { FC } from 'react';
+import styles from '@/styles/Product.module.scss';
 import { showToast } from '@/utils';
 
-export const Product: React.FC<ProductInterface> = ({ id, title, price, thumbnail }) => {
+export const Product: FC<ProductInterface> = (product) => {
+  const { id, title, price, thumbnail } = product;
   const { handleAddCartProduct, updateItem, quantity, cartItem } = useAddCartProduct(id);
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" key={`product-${id}`} withBorder>
+    <Card shadow="sm" padding="lg" radius="md" key={`product-${id}`} withBorder pos="relative">
+      <WishlistButton
+        product={product}
+        variant="transparent"
+        pos="absolute"
+        top={10}
+        right={10}
+        className={styles.wishlistButton}
+      />
       <Link to={`/products/${id}`} className="linkReset">
         {thumbnail && <Image src={thumbnail} width={160} alt={title} radius="md"/>}
         <Text fw={500} size="lg" mt="md">

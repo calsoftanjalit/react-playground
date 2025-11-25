@@ -4,8 +4,9 @@ import { MantineProvider } from '@mantine/core';
 import Product from '@/components/home/Product';
 import { ProductInterface } from '@/types/product';
 
-vi.mock('@/hooks/useAddCartProduct', () => ({
-  useAddCartProduct: vi.fn(),
+vi.mock('@/hooks/useAddCartProduct');
+vi.mock('@/components/common/WishlistButton', () => ({
+  WishlistButton: () => <button data-testid="wishlist-button">Wishlist</button>,
 }));
 
 import { useAddCartProduct } from '@/hooks/useAddCartProduct';
@@ -13,7 +14,15 @@ import { MemoryRouter } from 'react-router-dom';
 import { CartProvider } from '@/context';
 
 vi.mock('@/components/home/QuantitySelector', () => ({
-  default: ({ quantity, handleIncrement, handleDecrement }: any) => (
+  default: ({
+    quantity,
+    handleIncrement,
+    handleDecrement,
+  }: {
+    quantity: number;
+    handleIncrement: () => void;
+    handleDecrement: () => void;
+  }) => (
     <div>
       <span>Qty: {quantity}</span>
       <button onClick={handleIncrement}>+</button>
@@ -55,6 +64,7 @@ describe('Product Component', () => {
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('$99.99')).toBeInTheDocument();
+    expect(screen.getByTestId('wishlist-button')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Test Product' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /add to cart/i })).toBeInTheDocument();
   });
@@ -112,4 +122,3 @@ describe('Product Component', () => {
     expect(mockUpdate).toHaveBeenCalledWith(1, 2);
   });
 });
-   

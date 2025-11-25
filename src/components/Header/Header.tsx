@@ -12,6 +12,7 @@ interface HeaderProps {
 const links = [
   { label: 'Home', to: '/' },
   { label: 'Products', to: '/products' },
+  { label: 'Wishlist', to: '/wishlist' },
   { label: 'Cart', to: '/cart' },
   { label: 'Checkout', to: '/checkout' },
 ];
