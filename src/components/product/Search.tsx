@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { Input } from '@mantine/core';
-import { useSearch } from '@/hooks/useSearch';
+import { useSearch } from '@/hooks';
 
 export const Search = () => {
   const {input, setInput} = useSearch()

@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MantineProvider } from '@mantine/core';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import useProduct from '@/hooks/useProduct';
 import ProductsPage from '@/pages/ProductPage';
 import { ErrorMessageInterface, ProductApiInterface } from '@/types';
+import { useProduct } from '@/hooks';
 
 vi.mock('@/hooks/useProduct');
 vi.mock('@/components/product', () => ({

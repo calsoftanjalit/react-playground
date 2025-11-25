@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/services/productService";
 import { useFilterStore } from "./useFilterStore";
 
-const useProduct = () => {
+export const useProduct = () => {
   const {categoryList, searchValue} = useFilterStore()
   const { data, isLoading, error } = useQuery({
     queryKey: ['products', searchValue, categoryList],
@@ -15,5 +15,3 @@ const useProduct = () => {
     error,
   }
 }
-
-export default useProduct

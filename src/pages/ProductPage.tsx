@@ -1,7 +1,7 @@
 import { Container, Group, Title } from "@mantine/core";
 import { ErrorMessage, LoadingIndicator } from "@/components/miscellaneous";
-import useProduct from "@/hooks/useProduct";
 import { FilterBar, ProductList } from "@/components/product";
+import { useProduct } from "@/hooks";
 
 const ProductsPage=() =>{
   const {data, isLoading, error} = useProduct()

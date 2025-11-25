@@ -24,6 +24,6 @@ describe('ProductList', () => {
   it('shows not available message when no products passed', () => {
     renderWithMantine(<ProductList products={[]} />);
 
-    expect(screen.getByText(/Product is not avalible/i)).toBeInTheDocument();
+    expect(screen.getByText(/Products are not available/i)).toBeInTheDocument();
   });
 });

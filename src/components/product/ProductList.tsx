@@ -21,7 +21,7 @@ export const ProductList: React.FC<ProductApiInterface> = ({ products }) => {
         </SimpleGrid>
       ) : (
         <Box className="w-full">
-          <Text ta="center" fw={500} size="1.5rem"> Product is not avalible</Text>
+          <Text ta="center" fw={500} size="1.5rem">Products are not available</Text>
         </Box>
       )}
     </>
