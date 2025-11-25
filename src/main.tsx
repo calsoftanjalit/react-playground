@@ -1,14 +1,14 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { CartProvider, CheckoutFormProvider, WishlistProvider } from '@/context';
+import queryClient from '@/services/apis/queryClient.ts';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import './styles/main.scss';
-import App from './App.tsx';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import queryClient from '@/services/apis/queryClient.ts';
-import { CartProvider, CheckoutFormProvider } from '@/context';
+import App from './App.tsx';
+import './styles/main.scss';
 import { FilterProvider } from '@/context/FilterProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
@@ -17,13 +17,15 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <FilterProvider>
           <CartProvider>
-            <CheckoutFormProvider>
-              <MantineProvider>
-                <Notifications />
-                <App />
-                <ReactQueryDevtools initialIsOpen={false} />
-              </MantineProvider>
-            </CheckoutFormProvider>
+          <WishlistProvider>
+              <CheckoutFormProvider>
+                <MantineProvider>
+                  <Notifications position="top-right" />
+                  <App />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                </MantineProvider>
+              </CheckoutFormProvider>
+          </WishlistProvider>
           </CartProvider>
         </FilterProvider>
       </QueryClientProvider>
