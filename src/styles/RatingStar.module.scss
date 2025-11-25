@@ -1,0 +1,13 @@
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  svg:hover {
+    transform: scale(1.1);
+  }
+}

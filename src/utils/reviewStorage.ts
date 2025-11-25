@@ -1,7 +1,6 @@
 import { getFromStorage, setInStorage } from '@/utils/storage';
 import { LocalProductFeedback } from '@/types/productReview';
-
-const STORAGE_KEY = 'localReviews';
+import { STORAGE_KEY } from '@/constants/index';
 
 export function getLocalReviews(productId: number) {
   const allReviews = getFromStorage<Record<string, LocalProductFeedback[]>>(STORAGE_KEY) || {};

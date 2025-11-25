@@ -1,5 +1,3 @@
-import { User } from "./users";
-
 interface ProductFeedback {
   rating: number;
   comment: string;

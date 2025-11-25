@@ -12,3 +12,4 @@ export {
 export { calculatePricing, recalculatePricing } from './checkout';
 
 export * from './calculateDiscountedPrice'
+export * from './reviewStorage';

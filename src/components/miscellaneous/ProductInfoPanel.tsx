@@ -3,6 +3,7 @@ import { IconBox, IconRuler, IconWeight, IconTag, IconShield, IconStar } from '@
 import { ProductInfoPanelProps } from '@/types/productInfoPanelProps';
 import RatingStars from '@/components/miscellaneous/RatingStars';
 import UserFeedBack from '@/components/miscellaneous/UserFeedBack';
+import styles from '@/styles/ProductInfoPanel.module.scss';
 const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({ product }) => {
   const { brand, sku, weight, dimensions, warrantyInformation, rating, id } = product;
 
@@ -52,7 +53,7 @@ const ProductInfoPanel: React.FC<ProductInfoPanelProps> = ({ product }) => {
           <Text>{rating} / 5</Text>
         </Group>
       </Stack>
-      <Group className="rating-stars">
+      <Group className={styles.ratingStarsWrapper}>
         <RatingStars value={rating} />
         <UserFeedBack productId={id} />
       </Group>

@@ -5,9 +5,11 @@ import { IconCheck, IconStar, IconStarFilled, IconUser } from '@tabler/icons-rea
 import { saveLocalReview } from '@/utils/reviewStorage';
 import queryClient from '@/services/apis/queryClient';
 import { UserFeedbackProps } from '@/types';
+import styles from '@/styles/UserFeedBack.module.scss';
 
 const UserFeedBack = ({ productId }: UserFeedbackProps) => {
   const [opened, { open, close }] = useDisclosure(false);
+
   const form = useForm({
     initialValues: {
       name: '',
@@ -34,6 +36,7 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
     queryClient.invalidateQueries({ queryKey: ['product', productId] });
     close();
   };
+
   const getRatingText = (rating: number) => {
     switch (rating) {
       case 5:
@@ -58,44 +61,46 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
         onClose={close}
         centered
         title={
-          <div className="modal-header">
-            <IconStarFilled size={24} className="header-icon" />
+          <div className={styles.modalHeader}>
+            <IconStarFilled size={24} className={styles.headerIcon} />
             <span>Share Your Experience</span>
           </div>
         }
         size="md"
         classNames={{
-          header: 'custom-modal-header',
-          body: 'custom-modal-body',
+          header: styles.customModalHeader,
+          body: styles.customModalBody,
         }}
       >
-        <form onSubmit={form.onSubmit(handleSubmit)} className="review-form">
-          <div className="form-section">
+        <form onSubmit={form.onSubmit(handleSubmit)} className={styles.reviewForm}>
+          <div className={styles.formSection}>
             <TextInput
               label="Your Name"
               placeholder="John Doe"
               {...form.getInputProps('name')}
-              className="review-field"
+              className={styles.reviewField}
               leftSection={<IconUser size={18} />}
               size="md"
             />
           </div>
 
-          <div className="form-section">
-            <div className="rating-wrapper">
-              <label className="rating-label">How would you rate your experience?</label>
-              <div className="rating-container">
+          <div className={styles.formSection}>
+            <div className={styles.ratingWrapper}>
+              <label className={styles.ratingLabel}>How would you rate your experience?</label>
+
+              <div className={styles.ratingContainer}>
                 <div data-testid="rating-input">
                   <Rating
                     size="xl"
                     {...form.getInputProps('rating')}
-                    className="rating-stars"
+                    className={styles.ratingStars}
                     emptySymbol={<IconStar size={32} color="#FFD43C" />}
                     fullSymbol={<IconStarFilled size={32} color="#FFD43B" />}
                   />
                 </div>
+
                 {form.values.rating > 0 && (
-                  <Text span className="rating-text">
+                  <Text span className={styles.ratingText}>
                     {getRatingText(form.values.rating)}
                   </Text>
                 )}
@@ -103,26 +108,27 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
             </div>
           </div>
 
-          <div className="form-section">
+          <div className={styles.formSection}>
             <Textarea
               label="Your Review"
               placeholder="Tell us about your experience..."
               minRows={4}
               {...form.getInputProps('comment')}
-              className="review-field"
+              className={styles.reviewField}
               size="md"
             />
-            <div className="character-hint">Share what you loved or what could be better</div>
+            <div className={styles.characterHint}>Share what you loved or what could be better</div>
           </div>
 
-          <Group justify="flex-end" mt="xl" className="review-actions">
-            <Button variant="subtle" onClick={close} size="md" className="cancel-btn">
+          <Group justify="flex-end" mt="xl" className={styles.reviewActions}>
+            <Button variant="subtle" onClick={close} size="md" className={styles.cancelBtn}>
               Cancel
             </Button>
+
             <Button
               type="submit"
               size="md"
-              className="submit-btn"
+              className={styles.submitBtn}
               leftSection={<IconCheck size={18} />}
             >
               Submit Review
@@ -130,7 +136,8 @@ const UserFeedBack = ({ productId }: UserFeedbackProps) => {
           </Group>
         </form>
       </Modal>
-      <Button className="feedback-group" size="sm" variant="gradient" onClick={open}>
+
+      <Button className={styles.feedbackGroup} size="sm" variant="gradient" onClick={open}>
         Rate Product
       </Button>
     </>
