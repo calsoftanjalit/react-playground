@@ -1,6 +1,6 @@
 import { useWishlistStore } from '@/hooks/useWishlistStore';
 import type { WishlistButtonProps } from '@/types/wishlist';
-import { ActionIcon } from '@mantine/core';
+import { ActionIcon, useMantineTheme } from '@mantine/core';
 import { IconHeart } from '@tabler/icons-react';
 import { type FC } from 'react';
 
@@ -10,6 +10,7 @@ export const WishlistButton: FC<WishlistButtonProps> = ({
   style,
   ...props
 }) => {
+  const theme = useMantineTheme();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
   const isWishlisted = isInWishlist(product.id);
 
@@ -33,8 +34,8 @@ export const WishlistButton: FC<WishlistButtonProps> = ({
     >
       <IconHeart
         size={iconSize}
-        color={isWishlisted ? 'red' : 'gray'}
-        fill={isWishlisted ? 'red' : 'none'}
+        color={isWishlisted ? theme.colors.red[6] : theme.colors.gray[6]}
+        fill={isWishlisted ? theme.colors.red[6] : 'none'}
       />
     </ActionIcon>
   );
