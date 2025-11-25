@@ -28,6 +28,10 @@ vi.mock('@/pages/CheckoutPage', () => ({
   default: () => <div data-testid="checkout-page">Checkout Page</div>,
 }));
 
+vi.mock('@/pages/WishlistPage', () => ({
+  default: () => <div data-testid="wishlist-page">Wishlist Page</div>,
+}));
+
 describe('routes configuration', () => {
   it('should have routes array defined', () => {
     expect(routes).toBeDefined();
@@ -83,6 +87,13 @@ describe('routes configuration', () => {
     expect(checkoutRoute!.element).toBeDefined();
   });
 
+  it('should have /wishlist route', () => {
+    const rootRoute = routes[0];
+    const wishlistRoute = rootRoute.children!.find((route) => route.path === '/wishlist');
+    expect(wishlistRoute).toBeDefined();
+    expect(wishlistRoute!.element).toBeDefined();
+  });
+
   it('should have product details route', () => {
     const rootRoute = routes[0];
     const productDetailsRoute = rootRoute.children!.find((route) => route.path?.includes('product'));
@@ -103,6 +114,7 @@ describe('routes configuration', () => {
     expect(paths).toContain('/products');
     expect(paths).toContain('/cart');
     expect(paths).toContain('/checkout');
+    expect(paths).toContain('/wishlist');
   });
 
   it('should render HomePage lazy component', async () => {
@@ -199,5 +211,21 @@ describe('routes configuration', () => {
 
     const checkoutPage = await findByTestId('checkout-page');
     expect(checkoutPage).toBeInTheDocument();
+  });
+
+  it('should render WishlistPage lazy component', async () => {
+    const rootRoute = routes[0];
+    const wishlistRoute = rootRoute.children!.find((route) => route.path === '/wishlist');
+    
+    const { findByTestId } = render(
+      <MemoryRouter>
+        <Suspense fallback={<div>Loading...</div>}>
+          {wishlistRoute!.element}
+        </Suspense>
+      </MemoryRouter>
+    );
+
+    const wishlistPage = await findByTestId('wishlist-page');
+    expect(wishlistPage).toBeInTheDocument();
   });
 });

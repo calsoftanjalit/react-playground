@@ -12,6 +12,8 @@ import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
 import { calculateDiscountedPrice } from '@/utils';
 import { useMemo } from 'react';
 import { getLocalReviews } from '@/utils';
+import { WishlistButton } from '@/components/common/WishlistButton';
+import styles from '@/styles/Product.module.scss';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
@@ -118,13 +120,7 @@ const ProductDetails = () => {
                 <img
                   src={product.thumbnail}
                   alt={product.title}
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    objectFit: 'contain',
-                    display: 'block',
-                    borderRadius: '8px',
-                  }}
+                  className={styles.productImage}
                 />
                 <Badge
                   color={product.availabilityStatus === 'In Stock' ? 'green' : 'red'}
@@ -158,7 +154,7 @@ const ProductDetails = () => {
           <Grid.Col span={{ base: 12, md: 7 }}>
             <Stack gap="lg">
               <Box style={{ maxWidth: '65ch' }}>
-                <Text size="sm" fw={500} c="gray.7" style={{ lineHeight: 1.65 }} ta="justify">
+                <Text size="sm" fw={500} c="gray.7" ta="justify" className={styles.productDescription}>
                   {product.description}
                 </Text>
               </Box>
@@ -188,6 +184,11 @@ const ProductDetails = () => {
                     handleDecrement={handleDecrement}
                   />
                 )}
+                <WishlistButton
+                  product={product}
+                  size="xl"
+                  radius="md"
+                />
               </Group>
               <ProductInfoPanel product={product} />
             </Stack>
