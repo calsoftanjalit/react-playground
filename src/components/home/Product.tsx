@@ -1,4 +1,3 @@
-import { type FC } from 'react';
 import { Button, Card, Image, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import type { ProductInterface } from '@/types/product';
@@ -8,7 +7,7 @@ import QuantitySelector from '@/components/home/QuantitySelector';
 import { showToast } from '@/utils';
 import styles from '@/styles/Product.module.scss';
 
-export const Product: FC<ProductInterface> = (product) => {
+export const Product = (product: ProductInterface) => {
   const { id, title, price, thumbnail } = product;
   const { handleAddCartProduct, updateItem, quantity, cartItem } = useAddCartProduct(id);
 
