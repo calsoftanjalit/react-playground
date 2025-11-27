@@ -5,7 +5,7 @@ import { IconCheck, IconStar, IconStarFilled, IconUser } from '@tabler/icons-rea
 import { saveLocalReview } from '@/utils/reviewStorage';
 import queryClient from '@/services/apis/queryClient';
 import { UserFeedbackProps } from '@/types';
-import styles from '@/styles/UserFeedBack.module.scss';
+import styles from '@/styles/userfeedBack.module.scss';
 
 const UserFeedBack = ({ productId }: UserFeedbackProps) => {
   const [opened, { open, close }] = useDisclosure(false);
