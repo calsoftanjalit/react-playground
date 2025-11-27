@@ -7,4 +7,5 @@ export interface ProductInterface {
 
 export interface ProductApiInterface {
   products: ProductInterface[];
+  total?: number;
 }
