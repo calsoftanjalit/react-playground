@@ -8,7 +8,7 @@ import { ErrorMessage, LoadingIndicator } from '@/components/miscellaneous';
 export const PopularProducts = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['products'],
-    queryFn: () => fetchProducts(4, null, ''),
+    queryFn: () => fetchProducts(1, 4, '', ''),
   });
 
   if (isLoading) return <LoadingIndicator />;
