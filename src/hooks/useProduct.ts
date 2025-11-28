@@ -1,17 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchProducts } from "@/services/productService";
-import { useFilterStore } from "./useFilterStore";
+import { useQuery } from '@tanstack/react-query';
+import { fetchProducts } from '@/services/productService';
+import { useFilterStore } from './useFilterStore';
 
-export const useProduct = () => {
-  const {categoryList, searchValue} = useFilterStore()
+export const useProduct = (page: number, limit: number) => {
+  const { categoryList, searchValue } = useFilterStore();
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['products', searchValue, categoryList],
-    queryFn: () => fetchProducts(10, categoryList, searchValue),
+    queryKey: ['products', page, limit, searchValue, categoryList],
+    queryFn: () => fetchProducts(page, limit, categoryList, searchValue),
   });
 
-  return{
+  return {
     data,
     isLoading,
     error,
-  }
-}
+  };
+};

@@ -1,10 +1,10 @@
-import { useMemo } from "react";
-import { Box, SimpleGrid, Text } from "@mantine/core";
-import { ProductApiInterface, ProductInterface } from "@/types";
-import { Product } from "@/components/home";
+import { useMemo } from 'react';
+import { Box, SimpleGrid, Text } from '@mantine/core';
+import { ProductApiInterface, ProductInterface } from '@/types';
+import { Product } from '@/components/home';
 
 export const ProductList: React.FC<ProductApiInterface> = ({ products }) => {
-  const hasProducts = useMemo( () => products.length > 0, [products]);
+  const hasProducts = useMemo(() => products.length > 0, [products]);
   return (
     <>
       {hasProducts ? (
@@ -21,8 +21,11 @@ export const ProductList: React.FC<ProductApiInterface> = ({ products }) => {
         </SimpleGrid>
       ) : (
         <Box className="w-full">
-          <Text ta="center" fw={500} size="1.5rem">Products are not available</Text>
+          <Text ta="center" fw={500} size="1.5rem">
+            Products are not available
+          </Text>
         </Box>
       )}
     </>
-  );};
+  );
+};

@@ -8,16 +8,21 @@ const PRODUCT_CATEGORY_URL = '/products/category';
 const CATEGORY_LIST_URL = `${PRODUCT_URL}/category-list`;
 
 export const fetchProducts = async (
-  limit: number, 
-  category: category, 
-  searchValue: string): Promise<ProductApiInterface> => {
-  const strLimit = `limit=${limit}`
+  page: number,
+  limit: number,
+  category: category,
+  searchValue: string
+): Promise<ProductApiInterface> => {
+  const skip = (page - 1) * limit;
+
+  const strPagination = `limit=${limit}&skip=${skip}`;
+
   const searchUrl = searchValue
-    ? `/search?q=${ encodeURIComponent(searchValue) }&${strLimit}`
-    : `?${strLimit}`;
+    ? `/search?q=${encodeURIComponent(searchValue)}&${strPagination}`
+    : `?${strPagination}`;
 
   const setUpUrl: string = category
-    ? `${PRODUCT_CATEGORY_URL}/${category}?${strLimit}`
+    ? `${PRODUCT_CATEGORY_URL}/${category}?${strPagination}`
     : `${PRODUCT_URL}${searchUrl}`;
   const { data } = await apiClient.get(setUpUrl);
   return data;
