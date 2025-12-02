@@ -10,6 +10,10 @@ vi.mock('../components/home', () => ({
   PopularProducts: () => <div data-testid="popular-products">Popular Products</div>,
 }));
 
+vi.mock('../components/recently-viewed', () => ({
+  RecentlyViewed: () => <div data-testid="recently-viewed">Recently Viewed</div>,
+}));
+
 vi.mock('../components/miscellaneous', () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
   RouteErrorFallback: () => <div>Route Error</div>,
@@ -24,11 +28,14 @@ describe('HomePage', () => {
       </MantineProvider>
     );
 
-    const sections = screen.getAllByTestId(/section|featured|products|footer/);
-    expect(sections).toHaveLength(4);
+    const sections = screen.getAllByTestId(
+      /hero-section|featured-categories|popular-products|recently-viewed|footer/
+    );
+    expect(sections).toHaveLength(5);
     expect(sections[0]).toHaveTextContent('Hero Section');
     expect(sections[1]).toHaveTextContent('Featured Categories');
     expect(sections[2]).toHaveTextContent('Popular Products');
-    expect(sections[3]).toHaveTextContent('Footer');
+    expect(sections[3]).toHaveTextContent('Recently Viewed');
+    expect(sections[4]).toHaveTextContent('Footer');
   });
 });

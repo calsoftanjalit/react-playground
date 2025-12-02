@@ -10,10 +10,11 @@ import { ROUTE_PATHS } from '@/routes';
 import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
 import { calculateDiscountedPrice } from '@/utils';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { getLocalReviews } from '@/utils';
 import { WishlistButton } from '@/components/common/WishlistButton';
 import styles from '@/styles/Product.module.scss';
+import { useRecentlyViewed } from '@/hooks';
 
 const ProductDetails = () => {
   const { items, addItem, updateItem, removeItem } = useCartStore();
@@ -31,6 +32,17 @@ const ProductDetails = () => {
     queryFn: () => fetchProductById(id!),
     enabled: !!id,
   });
+  const { addItem: addRecentlyViewed } = useRecentlyViewed(5);
+  useEffect(() => {
+    if (product) {
+      addRecentlyViewed({
+        id: product.id,
+        title: product.title,
+        thumbnail: product.thumbnail,
+        price: product.price,
+      });
+    }
+  }, [addRecentlyViewed, product]);
 
   const finalPrice = useMemo(() => {
     if (!product) return null;
@@ -117,11 +129,7 @@ const ProductDetails = () => {
           <Grid.Col span={{ base: 12, md: 5 }}>
             <Stack gap="md">
               <Box pos="relative">
-                <img
-                  src={product.thumbnail}
-                  alt={product.title}
-                  className={styles.productImage}
-                />
+                <img src={product.thumbnail} alt={product.title} className={styles.productImage} />
                 <Badge
                   color={product.availabilityStatus === 'In Stock' ? 'green' : 'red'}
                   size="lg"
@@ -154,7 +162,13 @@ const ProductDetails = () => {
           <Grid.Col span={{ base: 12, md: 7 }}>
             <Stack gap="lg">
               <Box style={{ maxWidth: '65ch' }}>
-                <Text size="sm" fw={500} c="gray.7" ta="justify" className={styles.productDescription}>
+                <Text
+                  size="sm"
+                  fw={500}
+                  c="gray.7"
+                  ta="justify"
+                  className={styles.productDescription}
+                >
                   {product.description}
                 </Text>
               </Box>
@@ -184,11 +198,7 @@ const ProductDetails = () => {
                     handleDecrement={handleDecrement}
                   />
                 )}
-                <WishlistButton
-                  product={product}
-                  size="xl"
-                  radius="md"
-                />
+                <WishlistButton product={product} size="xl" radius="md" />
               </Group>
               <ProductInfoPanel product={product} />
             </Stack>
