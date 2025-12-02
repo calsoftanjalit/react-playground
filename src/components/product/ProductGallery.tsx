@@ -6,7 +6,7 @@ import { ThumbnailList, MainImage } from "@/components/product";
 
 export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
   const [mainImage, setMainImage] = useState<string>(images[0]);
-  const paneRef = useRef<HTMLDivElement>(null); // external pane
+  const paneRef = useRef<HTMLDivElement>(null);
 
   return (
     <Flex gap="lg" align="flex-start">
