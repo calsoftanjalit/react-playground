@@ -1,0 +1,45 @@
+.mainImageContainer {
+  position: relative;
+}
+
+.productImage {
+  cursor: zoom-in;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnailStack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.thumbnailPaper {
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: 8px;
+  border-radius: 8px;
+  transition: border 0.2s ease;
+}
+
+.thumbnailPaper.active {
+  border-color: #4f46e5;
+}
+
+.galleryContainer {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.zoomPane {
+  position: absolute;
+  top: 0;
+  left: 55%;
+  width: 350px;
+  height: 300px;
+  background-color: #fff;
+  z-index: 9999;
+}
