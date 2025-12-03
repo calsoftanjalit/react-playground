@@ -7,16 +7,18 @@ import { Badge, Box, Divider, Group, Paper, ScrollArea, Stack, Text, Title } fro
 import { IconShoppingBag, IconTags, IconTruck } from '@tabler/icons-react';
 import { FC } from 'react';
 import { OrderItem } from './OrderItem';
+import ApplyCopuon from './ApplyCoupon';
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
   cart,
   isSticky = true,
   onCartUpdate,
 }) => {
-  const { localCart, itemCount, handleQuantityChange } = useOrderSummaryCard({
-    cart,
-    onCartUpdate,
-  });
+  const { localCart, itemCount, handleQuantityChange, applyCoupon, removeCoupon, appliedCoupon } =
+    useOrderSummaryCard({
+      cart,
+      onCartUpdate,
+    });
 
   return (
     <Paper
@@ -63,7 +65,11 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
 
       <Box>
         <Divider mb="lg" />
-
+        <ApplyCopuon
+          onApplyCoupon={applyCoupon}
+          onRemoveCoupon={removeCoupon}
+          appliedCoupon={appliedCoupon}
+        />
         <Stack gap="sm">
           <Group justify="space-between">
             <Text c="dimmed">Subtotal</Text>
@@ -75,7 +81,10 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
               <IconTruck size={16} />
               <Text c="dimmed">Shipping</Text>
             </Group>
-            <Text fw={500} c={localCart.pricing.shipping === 0 ? UI_CONSTANTS.COLORS.SUCCESS_TEXT : undefined}>
+            <Text
+              fw={500}
+              c={localCart.pricing.shipping === 0 ? UI_CONSTANTS.COLORS.SUCCESS_TEXT : undefined}
+            >
               {localCart.pricing.shipping === 0
                 ? 'FREE'
                 : `$${formatPrice(localCart.pricing.shipping)}`}
