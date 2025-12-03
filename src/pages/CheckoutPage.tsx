@@ -86,7 +86,6 @@ export const CheckoutPage: FC = () => {
     const enhancedSummary = {
       ...summary,
       pricing: {
-        // ✅ Nested in pricing object
         subtotal: finalPricing.subtotal,
         shipping: finalPricing.shipping,
         tax: finalPricing.tax,
