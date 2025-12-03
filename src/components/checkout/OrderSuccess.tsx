@@ -27,6 +27,8 @@ import {
   IconPrinter,
   IconReceipt,
   IconShoppingBag,
+  IconTags,
+  IconTruck,
   IconUser,
 } from '@tabler/icons-react';
 import { FC } from 'react';
@@ -36,7 +38,8 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
   const navigate = useNavigate();
   const { colorScheme } = useMantineColorScheme();
 
-  const { subtotal, tax, shipping, total } = calculatePricingFromItems(orderSummary.items);
+  const { subtotal, tax, shipping, total, discount } =
+    orderSummary.pricing || calculatePricingFromItems(orderSummary.items);
 
   return (
     <Box
@@ -225,7 +228,10 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                 </Group>
 
                 <Group justify="space-between">
-                  <Text>Shipping:</Text>
+                  <Group gap="xs">
+                    <IconTruck size={16} />
+                    <Text>Shipping:</Text>
+                  </Group>
                   <Text fw={500} c={shipping === 0 ? 'green' : undefined}>
                     {shipping === 0 ? 'FREE' : `$${formatPrice(shipping)}`}
                   </Text>
@@ -235,6 +241,19 @@ export const OrderSuccess: FC<OrderSuccessProps> = ({ orderSummary }) => {
                   <Text>Tax (9%):</Text>
                   <Text fw={500}>${formatPrice(tax)}</Text>
                 </Group>
+
+                {/* Show discount if it was applied */}
+                {discount && discount > 0 && (
+                  <Group justify="space-between">
+                    <Group gap="xs">
+                      <IconTags size={16} />
+                      <Text c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>Discount:</Text>
+                    </Group>
+                    <Text fw={500} c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>
+                      -${formatPrice(discount)}
+                    </Text>
+                  </Group>
+                )}
 
                 <Divider my="sm" />
 
