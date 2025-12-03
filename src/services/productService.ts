@@ -15,7 +15,7 @@ export const fetchProducts = async (
 ): Promise<ProductApiInterface> => {
   const skip = (page - 1) * limit;
 
-  const strPagination = `limit=${limit}&skip=${skip}`;
+  const strPagination = `limit=${limit || 5}&skip=${skip}`;
 
   const searchUrl = searchValue
     ? `/search?q=${encodeURIComponent(searchValue)}&${strPagination}`
@@ -28,12 +28,12 @@ export const fetchProducts = async (
   return data;
 };
 
-export const fetchProductById = async(id:string)=>{
-  const {data} = await apiClient.get(`${PRODUCT_URL}/${id}`)
-  return data
-}
+export const fetchProductById = async (id: string) => {
+  const { data } = await apiClient.get(`${PRODUCT_URL}/${id}`);
+  return data;
+};
 
-export const fetchCategoryList = async(): Promise<string[]> => {
-  const {data} = await apiClient.get(CATEGORY_LIST_URL)
-  return data
-}
+export const fetchCategoryList = async (): Promise<string[]> => {
+  const { data } = await apiClient.get(CATEGORY_LIST_URL);
+  return data;
+};
