@@ -3,6 +3,7 @@ import { Container, Group, Title, Box, Pagination } from '@mantine/core';
 import { ErrorMessage, LoadingIndicator } from '@/components/miscellaneous';
 import { FilterBar, ProductList } from '@/components/product';
 import { useProduct } from '@/hooks';
+import { RecentlyViewed } from '@/components/recently-viewed';
 
 const ProductsPage = () => {
   const [page, setPage] = useState(1);
@@ -26,7 +27,7 @@ const ProductsPage = () => {
       ) : (
         <>
           <ProductList products={data?.products ?? []} />
-
+          <RecentlyViewed />
           <Box mt="lg" className="flex justify-center">
             <Pagination
               value={page}
