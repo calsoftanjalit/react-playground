@@ -73,6 +73,11 @@ export const useCheckoutFormSteps = ({
         return true;
       }
 
+      if (step.fields.length === 0) {
+        updateStepStatus(stepIndex, 'completed');
+        return true;
+      }
+
       const validationResults = step.fields.map((field) => form.validateField(field));
       const hasError = validationResults.some((result) => result.hasError);
 
@@ -162,16 +167,26 @@ export const useCheckoutFormSteps = ({
         return;
       }
 
-      const isFinalStepValid = validateStep(lastStepIndex);
-      if (!isFinalStepValid) {
-        setActiveStep(lastStepIndex);
-        saveActiveStep(lastStepIndex);
+      const allStepsValid = stepConfigs.every((_, index) => validateStep(index));
+
+      if (!allStepsValid) {
+        const firstInvalidStep = stepConfigs.findIndex((_, index) => {
+          const step = stepConfigs[index];
+          if (step.fields.length === 0) return false;
+          const hasErrors = step.fields.some((field) => Boolean(form.errors[field]));
+          return hasErrors;
+        });
+        
+        if (firstInvalidStep !== -1) {
+          setActiveStep(firstInvalidStep);
+          saveActiveStep(firstInvalidStep);
+        }
         return;
       }
 
       void handleFinalSubmit(values);
     },
-    [activeStep, stepConfigs.length, validateStep, saveActiveStep, handleFinalSubmit]
+    [activeStep, stepConfigs, validateStep, saveActiveStep, handleFinalSubmit, form.errors]
   );
 
   const getStepColor = useCallback(

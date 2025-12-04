@@ -67,15 +67,17 @@ export const UI_CONSTANTS = {
 } as const;
 
 export const STEP_TITLES = {
-  personal: 'Personal Information',
-  shipping: 'Shipping Address',
-  payment: 'Payment Information',
+  shipping: 'Shipping',
+  payment: 'Payment',
+  review: 'Review',
+  confirmation: 'Confirmation',
 } as const;
 
 export const CHECKOUT_STEPS = {
-  PERSONAL: 'personal',
   SHIPPING: 'shipping',
   PAYMENT: 'payment',
+  REVIEW: 'review',
+  CONFIRMATION: 'confirmation',
 } as const;
 
 export const STORAGE_KEYS = {
