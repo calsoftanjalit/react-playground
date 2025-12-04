@@ -1,0 +1,25 @@
+@use './variables.scss';
+
+.container {
+  width: 100%;
+  max-width: 37.5rem;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.listWrapper {
+  width: 100%;
+  max-width: 37.5rem;
+  text-align: center;
+}
+
+.listContent {
+  text-align: left;
+  display: inline-block;
+}
+
+.alertsContainer {
+  width: 100%;
+}

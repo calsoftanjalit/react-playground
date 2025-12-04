@@ -2,9 +2,10 @@ import { Stack, Stepper, useMantineTheme } from '@mantine/core';
 import {
   IconAlertCircle,
   IconCheck,
+  IconCircleCheck,
   IconCreditCard,
-  IconHome,
-  IconIdBadge,
+  IconEye,
+  IconTruck,
 } from '@tabler/icons-react';
 import { FC, useMemo } from 'react';
 import { STEP_TITLES, UI_CONSTANTS } from '@/constants';
@@ -12,9 +13,10 @@ import { useCheckoutForm } from '@/hooks/useCheckoutForm';
 import { useCheckoutFormSteps } from '@/hooks/useCheckoutFormSteps';
 import { CheckoutFormProps, CheckoutFormValues } from '@/types/checkout';
 import { CheckoutStepContent } from './CheckoutStepContent';
+import { ConfirmationSection } from './ConfirmationSection';
 import { PaymentInfoSection } from './PaymentInfoSection';
-import { PersonalInfoSection } from './PersonalInfoSection';
-import { ShippingAddressSection } from './ShippingAddressSection';
+import { ReviewSection } from './ReviewSection';
+import { ShippingInfoSection } from './ShippingInfoSection';
 import { StepNavigationButtons } from './StepNavigationButtons';
 
 export const CheckoutForm: FC<CheckoutFormProps> = ({ cartItems, totalPrice, onSubmitSuccess }) => {
@@ -24,33 +26,35 @@ export const CheckoutForm: FC<CheckoutFormProps> = ({ cartItems, totalPrice, onS
   const stepConfigs = useMemo(
     () => [
       {
-        key: 'personal',
-        label: STEP_TITLES.personal,
-        description: 'Contact details',
-        fields: ['fullName', 'email', 'phone'] as Array<keyof CheckoutFormValues>,
-        icon: IconIdBadge,
-        render: () => <PersonalInfoSection form={form} />,
-      },
-      {
         key: 'shipping',
         label: STEP_TITLES.shipping,
-        description: 'Delivery address',
-        fields: ['address', 'city', 'state', 'zipCode', 'country'] as Array<
-          keyof CheckoutFormValues
-        >,
-        icon: IconHome,
-        render: () => <ShippingAddressSection form={form} />,
+        fields: ['fullName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'country'] as Array<keyof CheckoutFormValues>,
+        icon: IconTruck,
+        render: () => <ShippingInfoSection form={form} />,
       },
       {
         key: 'payment',
         label: STEP_TITLES.payment,
-        description: 'Payment details',
         fields: ['cardNumber', 'cardName', 'expiryDate', 'cvv'] as Array<keyof CheckoutFormValues>,
         icon: IconCreditCard,
         render: () => <PaymentInfoSection form={form} />,
       },
+      {
+        key: 'review',
+        label: STEP_TITLES.review,
+        fields: [] as Array<keyof CheckoutFormValues>,
+        icon: IconEye,
+        render: () => <ReviewSection form={form} />,
+      },
+      {
+        key: 'confirmation',
+        label: STEP_TITLES.confirmation,
+        fields: [] as Array<keyof CheckoutFormValues>,
+        icon: IconCircleCheck,
+        render: () => <ConfirmationSection form={form} totalPrice={totalPrice} />,
+      },
     ],
-    [form]
+    [form, totalPrice]
   );
 
   const {
@@ -90,7 +94,6 @@ export const CheckoutForm: FC<CheckoutFormProps> = ({ cartItems, totalPrice, onS
               <Stepper.Step
                 key={step.key}
                 label={step.label}
-                description={step.description}
                 color={getStepColor(index, theme.primaryColor)}
                 icon={<StepIcon size={UI_CONSTANTS.ICON_SIZES.SM} stroke={UI_CONSTANTS.ICON_STROKE.BOLD} />}
                 completedIcon={<IconCheck size={UI_CONSTANTS.ICON_SIZES.XS} stroke={UI_CONSTANTS.ICON_STROKE.BOLD} />}
