@@ -30,4 +30,4 @@ class IntersectionObserverMock {
 
 
 window.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
-window.IntersectionObserver = IntersectionObserverMock as any;
+window.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;

@@ -22,6 +22,12 @@ vi.mock('@/services/checkoutService', () => ({
   submitOrder: vi.fn(),
 }));
 
+vi.mock('@/hooks/useAuthStore', () => ({
+  useAuthStore: () => ({
+    user: { id: 1 },
+  }),
+}));
+
 const mockCartItems: CartItem[] = [
   {
     id: 1,
@@ -280,7 +286,7 @@ describe('useCheckoutFormSteps', () => {
       });
 
       await waitFor(() => {
-        expect(submitOrder).toHaveBeenCalledWith(form.values, mockCartItems, 199.98);
+        expect(submitOrder).toHaveBeenCalledWith(form.values, mockCartItems, 199.98, 1);
         expect(onSubmitSuccess).toHaveBeenCalledWith(mockOrder);
       });
     });
