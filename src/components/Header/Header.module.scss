@@ -21,3 +21,14 @@
     color:$black-color;
   }
 }
+
+.userMenu {
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--mantine-color-gray-1);
+  }
+}

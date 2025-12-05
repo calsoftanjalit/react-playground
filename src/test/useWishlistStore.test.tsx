@@ -4,6 +4,16 @@ import { useWishlistStore } from '@/hooks/useWishlistStore';
 import { WishlistProvider } from '@/context/WishlistProvider';
 import { notifications } from '@mantine/notifications';
 import { ProductInterface } from '@/types/product';
+import { getUserWishlistKey } from '@/constants/cart';
+import type { AuthUser } from '@/types/auth';
+
+vi.mock('zustand/middleware', async (importOriginal) => {
+  const original = await importOriginal<typeof import('zustand/middleware')>();
+  return {
+    ...original,
+    persist: (fn: Parameters<typeof original.persist>[0]) => fn,
+  };
+});
 
 // Mock notifications
 vi.mock('@mantine/notifications', () => ({
@@ -11,6 +21,24 @@ vi.mock('@mantine/notifications', () => ({
     show: vi.fn(),
   },
 }));
+
+let mockAuthState = {
+  user: { id: 1, username: 'testuser', email: 'test@example.com' },
+  isAuthenticated: true,
+  isLoading: false,
+  error: null,
+};
+
+vi.mock('@/hooks/useAuthStore', () => {
+  const useAuthStore = () => mockAuthState;
+  useAuthStore.getState = () => mockAuthState;
+  useAuthStore.setState = vi.fn();
+  useAuthStore.subscribe = vi.fn(() => () => {});
+  useAuthStore.destroy = vi.fn();
+  return { useAuthStore };
+});
+
+const WISHLIST_STORAGE_KEY = getUserWishlistKey(1);
 
 const mockProduct: ProductInterface = {
   id: 1,
@@ -50,6 +78,12 @@ describe('useWishlistStore', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    mockAuthState = {
+      user: { id: 1, username: 'testuser', email: 'test@example.com' },
+      isAuthenticated: true,
+      isLoading: false,
+      error: null,
+    };
   });
 
   const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -146,14 +180,14 @@ describe('useWishlistStore', () => {
       result.current.addToWishlist(mockProduct);
     });
 
-    const stored = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const stored = JSON.parse(localStorage.getItem(WISHLIST_STORAGE_KEY) || '[]');
     expect(stored).toHaveLength(1);
     expect(stored[0].id).toBe(mockProduct.id);
   });
 
   it('should initialize from localStorage', () => {
     const savedWishlist = [{ ...mockProduct, addedAt: Date.now() }];
-    localStorage.setItem('wishlist', JSON.stringify(savedWishlist));
+    localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(savedWishlist));
 
     const { result } = renderHook(() => useWishlistStore(), { wrapper });
 
@@ -170,5 +204,42 @@ describe('useWishlistStore', () => {
     );
 
     consoleSpy.mockRestore();
+  });
+  describe('Authentication Handling', () => {
+    it('should clear wishlist when user logs out', () => {
+      const { result, rerender } = renderHook(() => useWishlistStore(), { wrapper });
+
+      act(() => {
+        result.current.addToWishlist(mockProduct);
+      });
+
+      expect(result.current.wishlist).toHaveLength(1);
+
+      mockAuthState = {
+        ...mockAuthState,
+        user: null as unknown as AuthUser,
+        isAuthenticated: false,
+      };
+      
+      rerender();
+
+      expect(result.current.wishlist).toHaveLength(0);
+    });
+
+    it('should not save to storage when unauthenticated', () => {
+      mockAuthState = {
+        ...mockAuthState,
+        user: null as unknown as AuthUser,
+        isAuthenticated: false,
+      };
+
+      const { result } = renderHook(() => useWishlistStore(), { wrapper });
+
+      act(() => {
+        result.current.addToWishlist(mockProduct);
+      });
+
+      expect(localStorage.getItem(WISHLIST_STORAGE_KEY)).toBeNull();
+    });
   });
 });

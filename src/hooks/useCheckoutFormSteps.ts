@@ -1,24 +1,9 @@
-import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
-import { submitOrder } from '@/services/checkoutService';
-import { CartItem } from '@/types/cart';
-import { CheckoutFormValues, OrderSummary } from '@/types/checkout';
-import { UseFormReturnType } from '@mantine/form';
 import { useCallback, useEffect, useState } from 'react';
-
-type StepState = 'idle' | 'completed' | 'error';
-
-interface StepConfig {
-  key: string;
-  fields: Array<keyof CheckoutFormValues>;
-}
-
-interface UseCheckoutFormStepsProps {
-  form: UseFormReturnType<CheckoutFormValues>;
-  stepConfigs: StepConfig[];
-  cartItems: CartItem[];
-  totalPrice: number;
-  onSubmitSuccess: (orderSummary: OrderSummary) => void;
-}
+import type { CheckoutFormValues, StepState } from '@/types/checkout';
+import type { UseCheckoutFormStepsProps } from '@/types/hooks';
+import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
+import { useAuthStore } from '@/hooks/useAuthStore';
+import { submitOrder } from '@/services/checkoutService';
 
 export const useCheckoutFormSteps = ({
   form,
@@ -32,6 +17,8 @@ export const useCheckoutFormSteps = ({
     setActiveStep: saveActiveStep,
     clearFormData,
   } = useCheckoutFormContext();
+  
+  const { user } = useAuthStore();
 
   const [activeStep, setActiveStep] = useState(savedActiveStep);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -135,7 +122,7 @@ export const useCheckoutFormSteps = ({
     async (values: CheckoutFormValues) => {
       setIsSubmitting(true);
       try {
-        const orderSummary = await submitOrder(values, cartItems, totalPrice);
+        const orderSummary = await submitOrder(values, cartItems, totalPrice, user?.id);
         clearFormData();
         onSubmitSuccess(orderSummary);
       } catch (error) {
@@ -145,7 +132,7 @@ export const useCheckoutFormSteps = ({
         setIsSubmitting(false);
       }
     },
-    [cartItems, totalPrice, clearFormData, onSubmitSuccess, stepConfigs.length, updateStepStatus]
+    [cartItems, totalPrice, user, clearFormData, onSubmitSuccess, stepConfigs.length, updateStepStatus]
   );
 
   const handleFormSubmit = useCallback(

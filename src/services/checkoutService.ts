@@ -1,6 +1,7 @@
-import { CartItem } from '@/types/cart';
-import { CheckoutFormValues, OrderSummary } from '@/types/checkout';
+import type { CartItem } from '@/types/cart';
+import type { CheckoutFormValues, OrderSummary } from '@/types/checkout';
 import { formatFullAddress, formatOrderDate, generateOrderId } from '@/utils';
+import { createOrder } from '@/services/orderService';
 
 export const generateOrderSummary = (
   values: CheckoutFormValues,
@@ -35,11 +36,21 @@ export const submitOrder = (
   values: CheckoutFormValues,
   cartItems: CartItem[],
   totalPrice: number,
+  userId?: number,
   delay: number = 1500
 ): Promise<OrderSummary> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const orderSummary = generateOrderSummary(values, cartItems, totalPrice);
+      
+      if (userId) {
+        createOrder({
+          userId,
+          items: cartItems,
+          total: totalPrice,
+        });
+      }
+      
       resolve(orderSummary);
     }, delay);
   });
