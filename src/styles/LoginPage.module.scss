@@ -1,0 +1,35 @@
+.container {
+  min-height: calc(100vh - 12.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paper {
+  max-width: 28rem;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  color: var(--mantine-color-blue-6);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.demoUser {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--mantine-color-gray-0);
+  
+  &:hover {
+    background-color: var(--mantine-color-gray-1);
+  }
+}

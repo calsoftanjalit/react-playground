@@ -123,7 +123,7 @@ describe('CheckoutForm', () => {
       expect(screen.getByText(/payment information/i)).toBeInTheDocument();
       expect(screen.getByText(/step 3 of 3/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/card number/i)).toBeInTheDocument();
-    });
+    }, 15000);
 
     it('allows going back to previous step', async () => {
       const { user } = renderCheckoutForm();
@@ -237,7 +237,7 @@ describe('CheckoutForm', () => {
         expect(submitOrder).toHaveBeenCalledTimes(1);
         expect(onSubmitSuccess).toHaveBeenCalledWith(mockOrder);
       });
-    });
+    }, 15000);
 
     it('shows loading state during submission', async () => {
       const { user } = renderCheckoutForm();

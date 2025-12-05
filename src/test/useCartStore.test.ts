@@ -1,11 +1,37 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { CartProvider , useCartStore} from '@/context';
-import { CART_STORAGE_KEY } from '@/constants/cart';
+import { getUserCartKey } from '@/constants/cart';
 import type { CartItem } from '@/types/cart';
+import type { AuthUser } from '@/types/auth';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-// Mock localStorage
+vi.mock('zustand/middleware', async (importOriginal) => {
+  const original = await importOriginal<typeof import('zustand/middleware')>();
+  return {
+    ...original,
+    persist: (fn: Parameters<typeof original.persist>[0]) => fn,
+  };
+});
+
+let mockAuthState = {
+  user: { id: 1, username: 'testuser', email: 'test@example.com' },
+  isAuthenticated: true,
+  isLoading: false,
+  error: null,
+};
+
+vi.mock('@/hooks/useAuthStore', () => {
+  const useAuthStore = () => mockAuthState;
+  useAuthStore.getState = () => mockAuthState;
+  useAuthStore.setState = vi.fn();
+  useAuthStore.subscribe = vi.fn(() => () => {});
+  useAuthStore.destroy = vi.fn();
+  return { useAuthStore };
+});
+
+const CART_STORAGE_KEY = getUserCartKey(1);
+
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
 
@@ -35,6 +61,12 @@ describe('useCartStore', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    mockAuthState = {
+      user: { id: 1, username: 'testuser', email: 'test@example.com' },
+      isAuthenticated: true,
+      isLoading: false,
+      error: null,
+    };
   });
 
   afterEach(() => {
@@ -509,5 +541,45 @@ describe('useCartStore', () => {
     });
   });
 
-  
+  describe('Authentication Handling', () => {
+    it('should clear items when user logs out', async () => {
+      const { result, rerender } = renderHook(() => useCartStore(), { wrapper });
+
+      act(() => {
+        result.current.addItem({ id: 1, title: 'Product 1', price: 50 });
+      });
+
+      expect(result.current.items).toHaveLength(1);
+
+      mockAuthState = {
+        ...mockAuthState,
+        user: null as unknown as AuthUser,
+        isAuthenticated: false,
+      };
+      
+      rerender();
+
+      await waitFor(() => {
+        expect(result.current.items).toHaveLength(0);
+      });
+    });
+
+    it('should not save to storage when unauthenticated', async () => {
+      mockAuthState = {
+        ...mockAuthState,
+        user: null as unknown as AuthUser,
+        isAuthenticated: false,
+      };
+
+      const { result } = renderHook(() => useCartStore(), { wrapper });
+
+      act(() => {
+        result.current.addItem({ id: 1, title: 'Product 1', price: 50 });
+      });
+
+      await waitFor(() => {
+        expect(localStorage.getItem(CART_STORAGE_KEY)).toBeNull();
+      });
+    });
+  });
 });

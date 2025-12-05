@@ -1,18 +1,31 @@
-import { ProductInterface } from '@/types/product';
-import { WishlistItem, WishlistProviderProps } from '@/types/wishlist';
-import { notifications } from '@mantine/notifications';
 import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
-import { WishlistContext } from './WishlistContext';
+import { notifications } from '@mantine/notifications';
+import type { ProductInterface } from '@/types/product';
+import type { WishlistItem, WishlistProviderProps } from '@/types/wishlist';
+import { useAuthStore } from '@/hooks/useAuthStore';
+import { getUserWishlistKey } from '@/constants/cart';
+import { WishlistContext } from '@/context/WishlistContext';
 
 export const WishlistProvider: FC<WishlistProviderProps> = ({ children }) => {
-  const [wishlist, setWishlist] = useState<WishlistItem[]>(() => {
-    const savedWishlist = localStorage.getItem('wishlist');
-    return savedWishlist ? JSON.parse(savedWishlist) : [];
-  });
+  const { user, isAuthenticated } = useAuthStore();
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+    if (isAuthenticated && user) {
+      const userWishlistKey = getUserWishlistKey(user.id);
+      const savedWishlist = localStorage.getItem(userWishlistKey);
+      setWishlist(savedWishlist ? JSON.parse(savedWishlist) : []);
+    } else {
+      setWishlist([]);
+    }
+  }, [user, isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const userWishlistKey = getUserWishlistKey(user.id);
+      localStorage.setItem(userWishlistKey, JSON.stringify(wishlist));
+    }
+  }, [wishlist, user, isAuthenticated]);
 
   const addToWishlist = useCallback((product: ProductInterface) => {
     setWishlist((prev) => {
