@@ -1,0 +1,22 @@
+.wrapper {
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  justify-content: center;
+
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.card {
+  width: 200px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}

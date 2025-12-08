@@ -9,10 +9,11 @@ import { useCheckoutFormContext } from '@/hooks/useCheckoutFormContext';
 import { ROUTE_PATHS } from '@/routes';
 import QuantitySelector from '@/components/home/QuantitySelector';
 import ProductInfoPanel from '../miscellaneous/ProductInfoPanel';
-import { calculateDiscountedPrice, getLocalReviews } from '@/utils';
-import { useMemo } from 'react';
-import { WishlistButton } from '@/components/common/WishlistButton';
+import { useEffect, useMemo } from 'react';
 import styles from '@/styles/Product.module.scss';
+import { useRecentlyViewed } from '@/hooks';
+import { calculateDiscountedPrice, getLocalReviews } from '@/utils';
+import { WishlistButton } from '@/components/common/WishlistButton';
 import { ProductGallery } from '@/components/product';
 
 const ProductDetails = () => {
@@ -31,6 +32,17 @@ const ProductDetails = () => {
     queryFn: () => fetchProductById(id!),
     enabled: !!id,
   });
+  const { addItem: addRecentlyViewed } = useRecentlyViewed(5);
+  useEffect(() => {
+    if (product) {
+      addRecentlyViewed({
+        id: product.id,
+        title: product.title,
+        thumbnail: product.thumbnail,
+        price: product.price,
+      });
+    }
+  }, [addRecentlyViewed, product]);
 
   const finalPrice = useMemo(() => {
     if (!product) return null;
@@ -117,6 +129,7 @@ const ProductDetails = () => {
           <Grid.Col span={{ base: 12, md: 8 }}>
             <Stack gap="md">
               <Box pos="relative">
+                {/* <img src={product.thumbnail} alt={product.title} className={styles.productImage} /> */}
                 <ProductGallery images={[product.thumbnail, ...product.images]} />
                 <Badge
                   color={product.availabilityStatus === 'In Stock' ? 'green' : 'red'}
