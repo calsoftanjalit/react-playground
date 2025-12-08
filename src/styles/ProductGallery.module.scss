@@ -12,7 +12,7 @@
 }
 
 .thumbnailStack {
-  display: flex;
+  @include flex(flex-start, flex-start);
   flex-direction: column;
   gap: 0.5rem;
 }
