@@ -5,6 +5,7 @@ import type { WishlistItem, WishlistProviderProps } from '@/types/wishlist';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { getUserWishlistKey } from '@/constants/cart';
 import { WishlistContext } from '@/context/WishlistContext';
+import { getFromStorage, setInStorage } from '@/utils/storage';
 
 export const WishlistProvider: FC<WishlistProviderProps> = ({ children }) => {
   const { user, isAuthenticated } = useAuthStore();
@@ -13,8 +14,8 @@ export const WishlistProvider: FC<WishlistProviderProps> = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user) {
       const userWishlistKey = getUserWishlistKey(user.id);
-      const savedWishlist = localStorage.getItem(userWishlistKey);
-      setWishlist(savedWishlist ? JSON.parse(savedWishlist) : []);
+      const savedWishlist = getFromStorage<WishlistItem[]>(userWishlistKey);
+      setWishlist(savedWishlist || []);
     } else {
       setWishlist([]);
     }
@@ -23,7 +24,7 @@ export const WishlistProvider: FC<WishlistProviderProps> = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user) {
       const userWishlistKey = getUserWishlistKey(user.id);
-      localStorage.setItem(userWishlistKey, JSON.stringify(wishlist));
+      setInStorage(userWishlistKey, wishlist);
     }
   }, [wishlist, user, isAuthenticated]);
 

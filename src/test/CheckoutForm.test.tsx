@@ -117,9 +117,9 @@ describe('CheckoutForm', () => {
       await fillPaymentInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      expect(screen.getByText(/payment information/i)).toBeInTheDocument();
-      expect(screen.getByText(/step 3 of 3/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/card number/i)).toBeInTheDocument();
+      expect(screen.getByText(/please review your order details before confirming/i)).toBeInTheDocument();
+      expect(screen.getByText(/contact information/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 3 of 4/i)).toBeInTheDocument();
     }, 15000);
 
     it('allows going back to previous step', async () => {
