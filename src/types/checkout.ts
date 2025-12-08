@@ -35,7 +35,6 @@ export interface OrderSummary {
   fullName: string;
   email: string;
   address: string;
-  totalAmount: number;
   orderDate: string;
   items: Array<{
     id: number;
@@ -45,6 +44,13 @@ export interface OrderSummary {
     discountedPrice?: number;
     image: string;
   }>;
+  pricing: {
+    subtotal: number;
+    tax: number;
+    shipping: number;
+    total: number;
+    discount?: number;
+  };
 }
 
 export interface CheckoutFormProps {
