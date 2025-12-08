@@ -35,7 +35,6 @@ export interface OrderSummary {
   fullName: string;
   email: string;
   address: string;
-  totalAmount: number;
   orderDate: string;
   items: Array<{
     id: number;
@@ -45,6 +44,13 @@ export interface OrderSummary {
     discountedPrice?: number;
     image: string;
   }>;
+  pricing: {
+    subtotal: number;
+    tax: number;
+    shipping: number;
+    total: number;
+    discount?: number;
+  };
 }
 
 export interface CheckoutFormProps {
@@ -65,8 +71,21 @@ export interface ShippingAddressSectionProps {
   form: UseFormReturnType<CheckoutFormValues>;
 }
 
+export interface ShippingInfoSectionProps {
+  form: UseFormReturnType<CheckoutFormValues>;
+}
+
 export interface PaymentInfoSectionProps {
   form: UseFormReturnType<CheckoutFormValues>;
+}
+
+export interface ReviewSectionProps {
+  form: UseFormReturnType<CheckoutFormValues>;
+}
+
+export interface ConfirmationSectionProps {
+  form: UseFormReturnType<CheckoutFormValues>;
+  totalPrice: number;
 }
 
 export type StepState = 'idle' | 'completed' | 'error';

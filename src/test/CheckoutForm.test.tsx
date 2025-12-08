@@ -51,13 +51,10 @@ const renderCheckoutForm = () => {
   };
 };
 
-const fillPersonalInfo = async (user: ReturnType<typeof userEvent.setup>) => {
+const fillShippingInfo = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.type(screen.getByLabelText(/full name/i), 'John Doe');
   await user.type(screen.getByLabelText(/email/i), 'john@example.com');
   await user.type(screen.getByLabelText(/phone number/i), '1234567890');
-};
-
-const fillShippingAddress = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.type(screen.getByLabelText(/street address/i), '123 Main Street');
   await user.type(screen.getByLabelText(/city/i), 'New York');
   await user.type(screen.getByLabelText(/state\/province/i), 'NY');
@@ -78,12 +75,13 @@ describe('CheckoutForm', () => {
   });
 
   describe('Stepper Navigation', () => {
-    it('renders initial step with personal information', () => {
+    it('renders initial step with shipping information', () => {
       renderCheckoutForm();
 
-      expect(screen.getByText(/personal information/i)).toBeInTheDocument();
-      expect(screen.getByText(/step 1 of 3/i)).toBeInTheDocument();
+      expect(screen.getByText(/shipping/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 1 of 4/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/street address/i)).toBeInTheDocument();
     });
 
     it('blocks progression and shows validation when step is incomplete', async () => {
@@ -100,42 +98,40 @@ describe('CheckoutForm', () => {
       expect(submitOrder).not.toHaveBeenCalled();
     });
 
-    it('advances to shipping step after completing personal info', async () => {
+    it('advances to payment step after completing shipping info', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      expect(screen.getByText(/shipping address/i)).toBeInTheDocument();
-      expect(screen.getByText(/step 2 of 3/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/street address/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 2 of 4/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/card number/i)).toBeInTheDocument();
     });
 
-    it('advances to payment step after completing shipping', async () => {
+    it('advances to review step after completing payment', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      await fillShippingAddress(user);
+      await fillPaymentInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      expect(screen.getByText(/payment information/i)).toBeInTheDocument();
-      expect(screen.getByText(/step 3 of 3/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/card number/i)).toBeInTheDocument();
+      expect(screen.getByText(/please review your order details/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 3 of 4/i)).toBeInTheDocument();
     });
 
     it('allows going back to previous step', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      expect(screen.getByText(/step 2 of 3/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 2 of 4/i)).toBeInTheDocument();
 
       await user.click(screen.getByRole('button', { name: /back/i }));
 
-      expect(screen.getByText(/step 1 of 3/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 1 of 4/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/full name/i)).toHaveValue('John Doe');
     });
 
@@ -145,7 +141,7 @@ describe('CheckoutForm', () => {
       expect(screen.queryByRole('button', { name: /back/i })).not.toBeInTheDocument();
     });
 
-    it('shows complete order button on last step', async () => {
+    it('shows complete order button on confirmation step', async () => {
       const { user } = renderCheckoutForm();
       const submitOrderMock = vi.mocked(submitOrder);
       
@@ -153,14 +149,16 @@ describe('CheckoutForm', () => {
         () => new Promise(() => {})
       );
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      await fillShippingAddress(user);
+      await fillPaymentInfo(user);
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(/step 3 of 3/i)).toBeInTheDocument();
+        expect(screen.getByText(/step 4 of 4/i)).toBeInTheDocument();
       });
 
       expect(
@@ -186,24 +184,24 @@ describe('CheckoutForm', () => {
       await user.click(screen.getByRole('button', { name: /continue/i }));
       expect(screen.getByText(/please fix the highlighted fields/i)).toBeInTheDocument();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       
       await user.click(screen.getByRole('button', { name: /continue/i }));
-      expect(screen.getByText(/step 2 of 3/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 2 of 4/i)).toBeInTheDocument();
     });
 
     it('marks completed steps with validated badge', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      expect(screen.getByText(/step 2 of 3/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 2 of 4/i)).toBeInTheDocument();
       
-      await fillShippingAddress(user);
+      await fillPaymentInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      expect(screen.getByText(/step 3 of 3/i)).toBeInTheDocument();
+      expect(screen.getByText(/step 3 of 4/i)).toBeInTheDocument();
     });
   });
 
@@ -224,13 +222,14 @@ describe('CheckoutForm', () => {
 
       submitOrderMock.mockResolvedValue(mockOrder);
 
-      await fillPersonalInfo(user);
-      await user.click(screen.getByRole('button', { name: /continue/i }));
-
-      await fillShippingAddress(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
       await fillPaymentInfo(user);
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
       await user.click(screen.getByRole('button', { name: /complete order/i }));
 
       await waitFor(() => {
@@ -255,13 +254,14 @@ describe('CheckoutForm', () => {
         }), 200))
       );
 
-      await fillPersonalInfo(user);
-      await user.click(screen.getByRole('button', { name: /continue/i }));
-
-      await fillShippingAddress(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
       await fillPaymentInfo(user);
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
       await user.click(screen.getByRole('button', { name: /complete order/i }));
 
       await waitFor(() => {
@@ -277,13 +277,13 @@ describe('CheckoutForm', () => {
 
       submitOrderMock.mockRejectedValue(new Error('Payment failed'));
 
-      await fillPersonalInfo(user);
-      await user.click(screen.getByRole('button', { name: /continue/i }));
-
-      await fillShippingAddress(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
       await fillPaymentInfo(user);
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
+      await user.click(screen.getByRole('button', { name: /continue/i }));
       
       const submitButton = screen.getByRole('button', { name: /complete order/i });
       await user.click(submitButton);
@@ -298,14 +298,12 @@ describe('CheckoutForm', () => {
     it('prevents submission with invalid payment step', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      await fillShippingAddress(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      await user.click(screen.getByRole('button', { name: /complete order/i }));
-
+      expect(screen.getByText(/step 2 of 4/i)).toBeInTheDocument();
       expect(submitOrder).not.toHaveBeenCalled();
     });
   });
@@ -314,14 +312,15 @@ describe('CheckoutForm', () => {
     it('retains form data when navigating between steps', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
-      await fillShippingAddress(user);
+      await fillPaymentInfo(user);
       await user.click(screen.getByRole('button', { name: /back/i }));
 
       expect(screen.getByLabelText(/full name/i)).toHaveValue('John Doe');
       expect(screen.getByLabelText(/email/i)).toHaveValue('john@example.com');
+      expect(screen.getByLabelText(/street address/i)).toHaveValue('123 Main Street');
     });
   });
 
@@ -335,19 +334,19 @@ describe('CheckoutForm', () => {
         </MantineProvider>
       );
 
-      expect(screen.getByText(/personal information/i)).toBeInTheDocument();
+      expect(screen.getByText(/shipping/i)).toBeInTheDocument();
     });
 
     it('calculates correct totals with multiple items', async () => {
       const { user } = renderCheckoutForm();
 
-      await fillPersonalInfo(user);
-      await user.click(screen.getByRole('button', { name: /continue/i }));
-
-      await fillShippingAddress(user);
+      await fillShippingInfo(user);
       await user.click(screen.getByRole('button', { name: /continue/i }));
 
       await fillPaymentInfo(user);
+      await user.click(screen.getByRole('button', { name: /continue/i }));
+
+      await user.click(screen.getByRole('button', { name: /continue/i }));
       
       expect(screen.getByRole('button', { name: /complete order/i })).toBeEnabled();
     });

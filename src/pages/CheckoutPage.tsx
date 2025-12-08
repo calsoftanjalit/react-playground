@@ -24,6 +24,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export const CheckoutPage: FC = () => {
   const [orderSummary, setOrderSummary] = useState<OrderSummary | null>(null);
+  const [currentCart, setCurrentCart] = useState<CheckoutCart | null>(null);
   const { colorScheme } = useMantineColorScheme();
   const { items: cartItems, clearCart, updateItem } = useCartStore();
   const { clearFormData } = useCheckoutFormContext();
@@ -33,9 +34,7 @@ export const CheckoutPage: FC = () => {
 
   const buyNowItem = location.state?.buyNowItem as CartItem | undefined;
 
-  const [localItems, setLocalItems] = useState<CartItem[]>(
-    buyNowItem ? [buyNowItem] : cartItems
-  );
+  const [localItems, setLocalItems] = useState<CartItem[]>(buyNowItem ? [buyNowItem] : cartItems);
 
   useEffect(() => {
     if (!hasInitialized.current) {
@@ -60,7 +59,7 @@ export const CheckoutPage: FC = () => {
 
   const handleCartUpdate = (updatedCart: CheckoutCart) => {
     setLocalItems(updatedCart.items);
-
+    setCurrentCart(updatedCart);
     if (!buyNowItem) {
       updatedCart.items.forEach((item) => {
         updateItem(item.id, item.quantity);
@@ -80,7 +79,22 @@ export const CheckoutPage: FC = () => {
   }, [localItems.length, navigate, orderSummary]);
 
   const handleSubmitSuccess = (summary: OrderSummary) => {
-    setOrderSummary(summary);
+    // Use the currentCart pricing if available (which includes discount)
+    // Otherwise fall back to the summary pricing
+    const finalPricing = currentCart?.pricing || checkoutCart.pricing;
+
+    const enhancedSummary = {
+      ...summary,
+      pricing: {
+        subtotal: finalPricing.subtotal,
+        shipping: finalPricing.shipping,
+        tax: finalPricing.tax,
+        discount: finalPricing.discount ?? 0,
+        total: finalPricing.total,
+      },
+    };
+
+    setOrderSummary(enhancedSummary);
     if (!buyNowItem) {
       clearCart();
     }

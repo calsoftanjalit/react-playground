@@ -7,16 +7,18 @@ import { Badge, Box, Divider, Group, Paper, ScrollArea, Stack, Text, Title } fro
 import { IconShoppingBag, IconTags, IconTruck } from '@tabler/icons-react';
 import { FC } from 'react';
 import { OrderItem } from './OrderItem';
+import ApplyCopuon from './ApplyCoupon';
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
   cart,
   isSticky = true,
   onCartUpdate,
 }) => {
-  const { localCart, itemCount, handleQuantityChange } = useOrderSummaryCard({
-    cart,
-    onCartUpdate,
-  });
+  const { localCart, itemCount, handleQuantityChange, applyCoupon, removeCoupon, appliedCoupon } =
+    useOrderSummaryCard({
+      cart,
+      onCartUpdate,
+    });
 
   return (
     <Paper
@@ -29,7 +31,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
       <Box>
         <Group justify="space-between" align="center" mb="lg">
           <Group gap="xs">
-            <IconShoppingBag size={24} />
+            <IconShoppingBag size={UI_CONSTANTS.ICON_SIZES.XL} />
             <Title order={3}>Order Summary</Title>
           </Group>
           <Badge size="lg" variant="light" color="blue" circle>
@@ -40,8 +42,8 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
       </Box>
 
       <ScrollArea
-        h={localCart.items.length <= 2 ? 'auto' : 245}
-        mah={245}
+        h={localCart.items.length <= 3 ? 'auto' : 375}
+        mah={375}
         type="scroll"
         offsetScrollbars
         classNames={{
@@ -63,7 +65,11 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
 
       <Box>
         <Divider mb="lg" />
-
+        <ApplyCopuon
+          onApplyCoupon={applyCoupon}
+          onRemoveCoupon={removeCoupon}
+          appliedCoupon={appliedCoupon}
+        />
         <Stack gap="sm">
           <Group justify="space-between">
             <Text c="dimmed">Subtotal</Text>
@@ -72,10 +78,13 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
 
           <Group justify="space-between">
             <Group gap="xs">
-              <IconTruck size={16} />
+              <IconTruck size={UI_CONSTANTS.ICON_SIZES.SM} />
               <Text c="dimmed">Shipping</Text>
             </Group>
-            <Text fw={500} c={localCart.pricing.shipping === 0 ? UI_CONSTANTS.COLORS.SUCCESS_TEXT : undefined}>
+            <Text
+              fw={500}
+              c={localCart.pricing.shipping === 0 ? UI_CONSTANTS.COLORS.SUCCESS_TEXT : undefined}
+            >
               {localCart.pricing.shipping === 0
                 ? 'FREE'
                 : `$${formatPrice(localCart.pricing.shipping)}`}
@@ -90,7 +99,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
           {(localCart.pricing.discount ?? 0) > 0 && (
             <Group justify="space-between">
               <Group gap="xs">
-                <IconTags size={16} />
+                <IconTags size={UI_CONSTANTS.ICON_SIZES.SM} />
                 <Text c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>Discount</Text>
               </Group>
               <Text fw={500} c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>
