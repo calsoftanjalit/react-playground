@@ -29,7 +29,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
       <Box>
         <Group justify="space-between" align="center" mb="lg">
           <Group gap="xs">
-            <IconShoppingBag size={24} />
+            <IconShoppingBag size={UI_CONSTANTS.ICON_SIZES.XL} />
             <Title order={3}>Order Summary</Title>
           </Group>
           <Badge size="lg" variant="light" color="blue" circle>
@@ -40,8 +40,8 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
       </Box>
 
       <ScrollArea
-        h={localCart.items.length <= 2 ? 'auto' : 245}
-        mah={245}
+        h={localCart.items.length <= 3 ? 'auto' : 375}
+        mah={375}
         type="scroll"
         offsetScrollbars
         classNames={{
@@ -72,7 +72,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
 
           <Group justify="space-between">
             <Group gap="xs">
-              <IconTruck size={16} />
+              <IconTruck size={UI_CONSTANTS.ICON_SIZES.SM} />
               <Text c="dimmed">Shipping</Text>
             </Group>
             <Text fw={500} c={localCart.pricing.shipping === 0 ? UI_CONSTANTS.COLORS.SUCCESS_TEXT : undefined}>
@@ -90,7 +90,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({
           {(localCart.pricing.discount ?? 0) > 0 && (
             <Group justify="space-between">
               <Group gap="xs">
-                <IconTags size={16} />
+                <IconTags size={UI_CONSTANTS.ICON_SIZES.SM} />
                 <Text c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>Discount</Text>
               </Group>
               <Text fw={500} c={UI_CONSTANTS.COLORS.SUCCESS_TEXT}>
