@@ -4,6 +4,7 @@ import { ErrorMessage, LoadingIndicator } from '@/components/miscellaneous';
 import { FilterBar, ProductList } from '@/components/product';
 import { useProduct } from '@/hooks';
 import { useSearchParams } from 'react-router-dom';
+import { RecentlyViewed } from '@/components/recently-viewed';
 
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -60,7 +61,7 @@ const ProductsPage: React.FC = () => {
       ) : (
         <>
           <ProductList products={sortedProducts} />
-
+          <RecentlyViewed />
           <Box mt="lg" className="flex justify-center">
             <Pagination
               value={page}

@@ -13,3 +13,19 @@
 .productDescription {
   line-height: 1.65;
 }
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.linkArea {
+  flex-grow: 1;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bottomSection {
+  margin-top: auto;
+}

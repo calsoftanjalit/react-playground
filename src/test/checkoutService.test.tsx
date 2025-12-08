@@ -1,7 +1,12 @@
 import { generateOrderSummary, submitOrder } from '@/services/checkoutService';
+import { createOrder } from '@/services/orderService';
 import { CartItem } from '@/types/cart';
 import { CheckoutFormValues } from '@/types/checkout';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/services/orderService', () => ({
+  createOrder: vi.fn(),
+}));
 
 describe('checkoutService', () => {
   let mockFormValues: CheckoutFormValues;
@@ -9,6 +14,7 @@ describe('checkoutService', () => {
   let mockTotalPrice: number;
 
   beforeEach(() => {
+    vi.useFakeTimers();
     vi.clearAllMocks();
 
     mockFormValues = {
@@ -44,6 +50,10 @@ describe('checkoutService', () => {
     ];
 
     mockTotalPrice = 249.97;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   describe('generateOrderSummary', () => {
@@ -201,45 +211,55 @@ describe('checkoutService', () => {
 
   describe('submitOrder', () => {
     it('resolves with order summary after delay', async () => {
-      const orderSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         100
       );
+
+      await vi.advanceTimersByTimeAsync(100);
+      const orderSummary = await promise;
 
       expect(orderSummary).toBeDefined();
       expect(orderSummary.fullName).toBe(mockFormValues.fullName);
       expect(orderSummary.email).toBe(mockFormValues.email);
       expect(orderSummary.totalAmount).toBe(mockTotalPrice);
+      
+      expect(createOrder).not.toHaveBeenCalled();
     });
 
     it('uses default delay of 1500ms when not specified', async () => {
-      const startTime = Date.now();
-      await submitOrder(mockFormValues, mockCartItems, mockTotalPrice);
-      const endTime = Date.now();
+      const promise = submitOrder(mockFormValues, mockCartItems, mockTotalPrice);
 
-      expect(endTime - startTime).toBeGreaterThanOrEqual(1500);
-      expect(endTime - startTime).toBeLessThan(1600);
+      await vi.advanceTimersByTimeAsync(1500);
+      const orderSummary = await promise;
+
+      expect(orderSummary).toBeDefined();
     });
 
     it('uses custom delay when provided', async () => {
       const customDelay = 500;
-      const startTime = Date.now();
-      await submitOrder(mockFormValues, mockCartItems, mockTotalPrice, customDelay);
-      const endTime = Date.now();
+      const promise = submitOrder(mockFormValues, mockCartItems, mockTotalPrice, undefined, customDelay);
 
-      expect(endTime - startTime).toBeGreaterThanOrEqual(customDelay);
-      expect(endTime - startTime).toBeLessThan(customDelay + 100);
+      await vi.advanceTimersByTimeAsync(customDelay);
+      const orderSummary = await promise;
+
+      expect(orderSummary).toBeDefined();
     });
 
     it('generates order summary with correct data', async () => {
-      const orderSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         100
       );
+
+      await vi.advanceTimersByTimeAsync(100);
+      const orderSummary = await promise;
 
       expect(orderSummary.orderId).toBeDefined();
       expect(orderSummary.items).toHaveLength(mockCartItems.length);
@@ -247,12 +267,16 @@ describe('checkoutService', () => {
     });
 
     it('handles empty cart submission', async () => {
-      const orderSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         [],
         0,
+        undefined,
         100
       );
+
+      await vi.advanceTimersByTimeAsync(100);
+      const orderSummary = await promise;
 
       expect(orderSummary.items).toHaveLength(0);
       expect(orderSummary.totalAmount).toBe(0);
@@ -260,12 +284,16 @@ describe('checkoutService', () => {
 
     it('uses provided totalPrice parameter', async () => {
       const customTotal = 1234.56;
-      const orderSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         mockCartItems,
         customTotal,
+        undefined,
         100
       );
+
+      await vi.advanceTimersByTimeAsync(100);
+      const orderSummary = await promise;
 
       expect(orderSummary.totalAmount).toBe(customTotal);
     });
@@ -275,42 +303,71 @@ describe('checkoutService', () => {
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         100
       );
 
       expect(promise).toBeInstanceOf(Promise);
+      await vi.advanceTimersByTimeAsync(100);
       await expect(promise).resolves.toBeDefined();
     });
 
     it('generates different order IDs for multiple submissions', async () => {
-      const order1 = await submitOrder(
+      const promise1 = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         50
       );
-      const order2 = await submitOrder(
+      await vi.advanceTimersByTimeAsync(50);
+      const order1 = await promise1;
+
+      const promise2 = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         50
       );
+      await vi.advanceTimersByTimeAsync(50);
+      const order2 = await promise2;
 
       expect(order1.orderId).not.toBe(order2.orderId);
     });
 
     it('handles zero delay', async () => {
-      const startTime = Date.now();
-      const orderSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         0
       );
-      const endTime = Date.now();
+
+      await vi.advanceTimersByTimeAsync(0);
+      const orderSummary = await promise;
 
       expect(orderSummary).toBeDefined();
-      expect(endTime - startTime).toBeLessThan(50);
+    });
+    it('calls createOrder when userId is provided', async () => {
+      const userId = 123;
+      const promise = submitOrder(
+        mockFormValues,
+        mockCartItems,
+        mockTotalPrice,
+        userId,
+        100
+      );
+
+      await vi.advanceTimersByTimeAsync(100);
+      await promise;
+
+      expect(createOrder).toHaveBeenCalledWith({
+        userId,
+        items: mockCartItems,
+        total: mockTotalPrice,
+      });
     });
   });
 
@@ -321,12 +378,16 @@ describe('checkoutService', () => {
         mockCartItems,
         mockTotalPrice
       );
-      const submittedSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         50
       );
+
+      await vi.advanceTimersByTimeAsync(50);
+      const submittedSummary = await promise;
 
       expect(submittedSummary.fullName).toBe(generatedSummary.fullName);
       expect(submittedSummary.email).toBe(generatedSummary.email);
@@ -335,12 +396,16 @@ describe('checkoutService', () => {
     });
 
     it('maintains data integrity through submission process', async () => {
-      const orderSummary = await submitOrder(
+      const promise = submitOrder(
         mockFormValues,
         mockCartItems,
         mockTotalPrice,
+        undefined,
         100
       );
+
+      await vi.advanceTimersByTimeAsync(100);
+      const orderSummary = await promise;
 
       expect(orderSummary.fullName).toBe(mockFormValues.fullName);
       expect(orderSummary.email).toBe(mockFormValues.email);

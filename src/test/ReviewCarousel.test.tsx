@@ -103,11 +103,9 @@ describe('ProductReviewComponent', () => {
     const { container } = renderComponent([]);
 
     const carousel = container.querySelector('.mantine-Carousel-root');
-    expect(carousel).toBeInTheDocument();
+    expect(carousel).not.toBeInTheDocument();
 
-    // case when No slides should be rendered
-    const slides = container.querySelectorAll('.mantine-Carousel-slide');
-    expect(slides.length).toBe(0);
+    expect(screen.getByText('No reviews yet. Be the first to review this product!')).toBeInTheDocument();
   });
 
   it('should render single review correctly', () => {

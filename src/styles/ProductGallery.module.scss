@@ -1,0 +1,46 @@
+@use './mixins' as *;
+
+.mainImageContainer {
+  position: relative;
+}
+
+.productImage {
+  cursor: zoom-in;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnailStack {
+  @include flex(flex-start, flex-start);
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.thumbnailPaper {
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: border 0.2s ease;
+}
+
+.thumbnailPaper.active {
+  border-color: blue;
+}
+
+.galleryContainer {
+  @include flex(center, flex-start);
+  gap: 1rem;
+  position: relative;
+}
+
+.zoomPane {
+  position: absolute;
+  top: 0;
+  left: 55%;
+  width: 22rem;
+  height: 22rem;
+  background-color: white;
+  z-index: 9999;
+}

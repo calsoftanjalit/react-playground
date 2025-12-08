@@ -12,6 +12,10 @@ vi.mock('@/components/product', () => ({
   ProductList: ({ products }: ProductApiInterface) => <div>Mock ProductList {products.length}</div>,
 }));
 
+vi.mock('@/components/recently-viewed', () => ({
+  RecentlyViewed: () => <div data-testid="recently-viewed">Mock RecentlyViewed</div>,
+}));
+
 vi.mock('@/components/miscellaneous', () => ({
   ErrorMessage: ({ message }: ErrorMessageInterface) => <div>Error: {message}</div>,
   LoadingIndicator: () => <div>Loading...</div>,
@@ -36,7 +40,7 @@ describe('<ProductsPage />', () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  it('renders product list when data is loaded', () => {
+  it('renders product list and RecentlyViewed when data is loaded', () => {
     (useProduct as ReturnType<typeof vi.fn>).mockReturnValue({
       data: { products: [{ id: 1 }] },
       isLoading: false,
@@ -48,6 +52,7 @@ describe('<ProductsPage />', () => {
     expect(screen.getByText(/Products/i)).toBeInTheDocument();
     expect(screen.getByText(/Mock FilterBar/i)).toBeInTheDocument();
     expect(screen.getByText(/Mock ProductList 1/i)).toBeInTheDocument();
+    expect(screen.getByTestId('recently-viewed')).toBeInTheDocument();
   });
 
   it('renders empty ProductList if no products available', () => {
@@ -60,6 +65,7 @@ describe('<ProductsPage />', () => {
     renderWithMantine(<ProductsPage />);
 
     expect(screen.getByText(/Mock ProductList 0/i)).toBeInTheDocument();
+    expect(screen.getByTestId('recently-viewed')).toBeInTheDocument();
   });
 
   it('renders error message when API fails', () => {
