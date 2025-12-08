@@ -1,3 +1,5 @@
+@use './mixins' as *;
+
 .mainImageContainer {
   position: relative;
 }
@@ -28,9 +30,8 @@
 }
 
 .galleryContainer {
-  display: flex;
+  @include flex(center, flex-start);
   gap: 1rem;
-  align-items: flex-start;
   position: relative;
 }
 
