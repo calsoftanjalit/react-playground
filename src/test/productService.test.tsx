@@ -15,61 +15,54 @@ describe('productService', () => {
   });
 
   describe('fetchProducts', () => {
-    it('calls correct default URL (only limit)', async () => {
+    it('calls correct default URL when category and searchValue are empty', async () => {
       const mockData: ProductApiInterface = { products: [] };
 
-      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockData,
-      });
+      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockData });
 
-      await fetchProducts(10, null, '');
+      await fetchProducts(1, 5, '', '');
 
-      expect(apiClient.get).toHaveBeenCalledWith('/products?limit=10');
+      expect(apiClient.get).toHaveBeenCalledWith('/products?limit=5&skip=0');
     });
 
     it('calls correct URL when category is provided', async () => {
       const mockData: ProductApiInterface = { products: [] };
 
-      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockData,
-      });
+      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockData });
 
-      await fetchProducts(10, 'Fashion', '');
+      await fetchProducts(2, 5, 'Fashion', '');
 
-      expect(apiClient.get).toHaveBeenCalledWith('/products/category/Fashion?limit=10');
+      expect(apiClient.get).toHaveBeenCalledWith('/products/category/Fashion?limit=5&skip=5');
     });
 
     it('calls correct URL when searchValue is provided', async () => {
       const mockData: ProductApiInterface = { products: [] };
 
-      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockData,
-      });
+      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockData });
 
-      await fetchProducts(10, null, 'shoes');
+      await fetchProducts(1, 5, '', 'shoes');
 
-      expect(apiClient.get).toHaveBeenCalledWith('/products/search?q=shoes&limit=10');
+      expect(apiClient.get).toHaveBeenCalledWith('/products/search?q=shoes&limit=5&skip=0');
     });
 
-    it('returns product data', async () => {
+    it('returns product data correctly', async () => {
       const mockData: ProductApiInterface = {
         products: [{ id: 1, title: 'Test', price: 100, thumbnail: '' }],
       };
 
-      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockData,
-      });
+      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockData });
 
-      const result = await fetchProducts(5, null, '');
+      const result = await fetchProducts(1, 5, '', '');
 
       expect(result).toEqual(mockData);
     });
 
     it('throws error when API fails', async () => {
       const mockError = new Error('API Error');
+
       (apiClient.get as ReturnType<typeof vi.fn>).mockRejectedValue(mockError);
 
-      await expect(fetchProducts(10, null, '')).rejects.toThrow('API Error');
+      await expect(fetchProducts(1, 5, '', '')).rejects.toThrow('API Error');
     });
   });
 
@@ -96,9 +89,7 @@ describe('productService', () => {
     it('fetches category list successfully', async () => {
       const mockCategories = ['Fashion', 'Electronics'];
 
-      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockCategories,
-      });
+      (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockCategories });
 
       const result = await fetchCategoryList();
 

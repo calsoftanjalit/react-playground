@@ -15,7 +15,7 @@ export const fetchProducts = async (
 ): Promise<ProductApiInterface> => {
   const skip = (page - 1) * limit;
 
-  const strPagination = `limit=${limit}&skip=${skip}`;
+  const strPagination = `limit=${ limit || 5 }&skip=${skip}`;
 
   const searchUrl = searchValue
     ? `/search?q=${encodeURIComponent(searchValue)}&${strPagination}`
