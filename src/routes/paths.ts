@@ -9,6 +9,9 @@ export const ROUTE_PATHS = {
   CART_CHECKOUT: '/cart/checkout',
   PRODUCT_CHECKOUT: '/products/:id/checkout',
   WISHLIST: '/wishlist',
+  LOGIN: '/login',
+  PROFILE: '/profile',
+  ORDERS: '/orders',
 } as const;
 
 export type RoutePathKey = keyof typeof ROUTE_PATHS;

@@ -1,35 +1,36 @@
-import React, { useCallback, useEffect, useState, useMemo } from "react";
-
-import { CartContext } from "./CartContext";
-
-import { CART_STORAGE_KEY } from "@/constants/cart";
-import { getFromStorage, setInStorage } from "@/utils/storage";
-
-import type {
-  CartContextType,
-  CartItem,
-  CartProviderProps,
-} from "@/types/cart";
+import { useCallback, useEffect, useState, useMemo } from 'react';
+import type { CartContextType, CartItem, CartProviderProps } from '@/types/cart';
+import { CartContext } from '@/context/CartContext';
+import { useAuthStore } from '@/hooks/useAuthStore';
+import { getUserCartKey } from '@/constants/cart';
+import { getFromStorage, setInStorage } from '@/utils/storage';
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user, isAuthenticated } = useAuthStore();
 
-  // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = getFromStorage<CartItem[]>(CART_STORAGE_KEY);
-    if (savedCart) {
-      setItems(savedCart);
+    setIsLoading(true);
+    
+    if (isAuthenticated && user) {
+      const userCartKey = getUserCartKey(user.id);
+      const savedCart = getFromStorage<CartItem[]>(userCartKey);
+      setItems(savedCart || []);
+    } else {
+      setItems([]);
     }
+    
     setIsLoading(false);
-  }, []);
+  }, [user, isAuthenticated]);
 
   // Save cart to localStorage whenever items change
   useEffect(() => {
-    if (!isLoading) {
-      setInStorage(CART_STORAGE_KEY, items);
+    if (!isLoading && isAuthenticated && user) {
+      const userCartKey = getUserCartKey(user.id);
+      setInStorage(userCartKey, items);
     }
-  }, [items, isLoading]);
+  }, [items, isLoading, user, isAuthenticated]);
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
     setItems((prevItems) => {
