@@ -13,12 +13,17 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
       error: null,
 
+      updateUser: (partialUser: Partial<AuthStore["user"]>) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...partialUser } : state.user,
+        })),
+
       login: async (credentials: LoginCredentials) => {
         set({ isLoading: true, error: null });
 
         try {
           const response = await loginService(credentials);
-          
+
           set({
             user: response.user,
             token: response.token,
@@ -43,7 +48,7 @@ export const useAuthStore = create<AuthStore>()(
 
         try {
           await logoutService();
-          
+
           set({
             user: null,
             token: null,
@@ -69,7 +74,6 @@ export const useAuthStore = create<AuthStore>()(
 
         try {
           const user = await verifyToken(token);
-
           if (user) {
             set({
               user,

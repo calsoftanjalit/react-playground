@@ -1,5 +1,6 @@
 import type { LoginCredentials, LoginResponse, AuthUser, MockUser } from '@/types/auth';
 import { MOCK_USERS } from '@/constants/auth';
+import { useAuthStore } from '@/hooks';
 
 const MOCK_API_DELAY = 800;
 
@@ -59,11 +60,12 @@ export const verifyToken = async (token: string): Promise<AuthUser | null> => {
   const parts = token.split('_');
   const userId = Number.parseInt(parts[3], 10);
 
-  const user = MOCK_USERS.find(u => u.id === userId);
+  const storedUser = useAuthStore.getState().user;
 
-  if (!user) {
-    return null;
+  if (storedUser && storedUser.id === userId) {
+    return storedUser;
   }
 
-  return toAuthUser(user);
+  const user = MOCK_USERS.find((u) => u.id === userId);
+  return user ? toAuthUser(user) : null;
 };

@@ -1,27 +1,78 @@
-import { useNavigate } from 'react-router-dom';
-import { Container, Paper, Title, Text, Stack, Group, Avatar, Button, Card, Box } from '@mantine/core';
-import { IconUser, IconMail, IconLogout, IconShoppingBag } from '@tabler/icons-react';
-import { useAuthStore } from '@/hooks/useAuthStore';
-import { AUTH_ROUTES } from '@/constants/auth';
-import { ICON_SIZES, AVATAR_SIZES } from '@/constants/ui';
-import styles from '@/styles/ProfilePage.module.scss';
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Paper,
+  Title,
+  Text,
+  Stack,
+  Group,
+  Avatar,
+  Button,
+  Card,
+  Box,
+  TextInput,
+} from "@mantine/core";
+import {
+  IconUser,
+  IconMail,
+  IconLogout,
+  IconShoppingBag,
+} from "@tabler/icons-react";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { AUTH_ROUTES } from "@/constants/auth";
+import { ICON_SIZES, AVATAR_SIZES } from "@/constants/ui";
+import styles from "@/styles/ProfilePage.module.scss";
+import { useState } from "react";
 
 export const ProfilePage = () => {
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [form, setForm] = useState({
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
+    username: user?.username,
+  });
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
   if (!user) {
     return null;
   }
+
+  const editProfileDetails = () => {
+    console.log("edit the personal info");
+    setIsEditing(true);
+  };
+
+  const updateProfileDetails = () => {
+    updateUser({
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email,
+      username: form.username,
+    });
+    setIsEditing(false);
+  };
+
+  const cancelEdit = () => {
+    setForm({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+    });
+    setIsEditing(false);
+  };
 
   return (
     <Container size="md" py="xl">
@@ -42,7 +93,27 @@ export const ProfilePage = () => {
 
         <Card shadow="sm" padding="lg" radius="md">
           <Stack gap="md">
-            <Title order={3}>Profile Information</Title>
+            <Group justify="space-between" align="center">
+              <Title order={3}>Profile Information</Title>
+              {isEditing ? (
+                <Group>
+                  <Button
+                    radius="md"
+                    color="green"
+                    onClick={updateProfileDetails}
+                  >
+                    Update
+                  </Button>
+                  <Button radius="md" variant="light" onClick={cancelEdit}>
+                    Cancel
+                  </Button>
+                </Group>
+              ) : (
+                <Button radius="md" onClick={editProfileDetails}>
+                  Edit
+                </Button>
+              )}
+            </Group>
 
             <Group gap="sm" align="flex-start">
               <IconUser size={ICON_SIZES.LG} />
@@ -50,9 +121,26 @@ export const ProfilePage = () => {
                 <Text size="sm" c="dimmed" ta="left">
                   Full Name
                 </Text>
-                <Text fw={500} ta="left">
-                  {user.firstName} {user.lastName}
-                </Text>
+                {isEditing ? (
+                  <Group>
+                    <TextInput
+                      value={form.firstName}
+                      onChange={(e) =>
+                        setForm({ ...form, firstName: e.target.value })
+                      }
+                    />
+                    <TextInput
+                      value={form.lastName}
+                      onChange={(e) =>
+                        setForm({ ...form, lastName: e.target.value })
+                      }
+                    />
+                  </Group>
+                ) : (
+                  <Text fw={500} ta="left">
+                    {user.firstName} {user.lastName}
+                  </Text>
+                )}
               </Box>
             </Group>
 
@@ -62,7 +150,18 @@ export const ProfilePage = () => {
                 <Text size="sm" c="dimmed" ta="left">
                   Email Address
                 </Text>
-                <Text fw={500} ta="left">{user.email}</Text>
+                {isEditing ? (
+                  <TextInput
+                    value={form.email}
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
+                  />
+                ) : (
+                  <Text fw={500} ta="left">
+                    {user.email}
+                  </Text>
+                )}
               </Box>
             </Group>
 
@@ -72,7 +171,18 @@ export const ProfilePage = () => {
                 <Text size="sm" c="dimmed" ta="left">
                   Username
                 </Text>
-                <Text fw={500} ta="left">{user.username}</Text>
+                {isEditing ? (
+                  <TextInput
+                    value={form.username}
+                    onChange={(e) =>
+                      setForm({ ...form, username: e.target.value })
+                    }
+                  />
+                ) : (
+                  <Text fw={500} ta="left">
+                    {user.username}
+                  </Text>
+                )}
               </Box>
             </Group>
           </Stack>
