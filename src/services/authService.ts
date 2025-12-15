@@ -1,6 +1,5 @@
 import type { LoginCredentials, LoginResponse, AuthUser, MockUser } from '@/types/auth';
 import { MOCK_USERS } from '@/constants/auth';
-import { useAuthStore } from '@/hooks';
 
 const MOCK_API_DELAY = 800;
 
@@ -50,8 +49,11 @@ export const logout = async (): Promise<void> => {
  * @param token - JWT token to verify
  * @returns Promise with user data if token is valid
  */
-export const verifyToken = async (token: string): Promise<AuthUser | null> => {
-  await simulateDelay(500);
+  export const verifyToken = async (
+  token: string,
+  storedUser?: AuthUser | null
+): Promise<AuthUser | null> => {
+await simulateDelay(500);
 
   if (!token.startsWith('mock_jwt_token_')) {
     return null;
@@ -59,8 +61,6 @@ export const verifyToken = async (token: string): Promise<AuthUser | null> => {
 
   const parts = token.split('_');
   const userId = Number.parseInt(parts[3], 10);
-
-  const storedUser = useAuthStore.getState().user;
 
   if (storedUser && storedUser.id === userId) {
     return storedUser;

@@ -63,7 +63,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       checkAuth: async () => {
-        const { token } = get();
+        const {token, user} = get();
 
         if (!token) {
           set({ isAuthenticated: false, isLoading: false });
@@ -73,10 +73,10 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true });
 
         try {
-          const user = await verifyToken(token);
-          if (user) {
+          const verifiedUser = await verifyToken(token, user);
+          if(verifiedUser){
             set({
-              user,
+              user: verifiedUser,
               isAuthenticated: true,
               isLoading: false,
               error: null,

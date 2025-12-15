@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import {
   Container,
   Paper,
@@ -12,29 +14,49 @@ import {
   Box,
   TextInput,
 } from "@mantine/core";
+
+import { notifications } from "@mantine/notifications";
+import { isNotEmpty, useForm } from "@mantine/form";
 import {
   IconUser,
   IconMail,
   IconLogout,
   IconShoppingBag,
 } from "@tabler/icons-react";
+
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { AUTH_ROUTES } from "@/constants/auth";
 import { ICON_SIZES, AVATAR_SIZES } from "@/constants/ui";
+
+import { EditableField } from "./EditableField";
+
 import styles from "@/styles/ProfilePage.module.scss";
-import { useState } from "react";
 
 export const ProfilePage = () => {
   const { user, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
-  const [form, setForm] = useState({
-    firstName: user?.firstName,
-    lastName: user?.lastName,
-    email: user?.email,
-    username: user?.username,
+  const form = useForm({
+    initialValues: {
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      username: user?.username || "",
+    },
+
+    validate: {
+      firstName: isNotEmpty("First name is required"),
+      lastName: isNotEmpty("Last name is required"),
+      username: isNotEmpty("Username is required"),
+      email: (v) => (/^\S+@\S+$/.test(v) ? null : "Invalid email"),
+    },
+
+    validateInputOnChange: true,
+    validateInputOnBlur: true,
   });
+
+  const canUpdate = isEditing && form.isValid();
 
   const handleLogout = async () => {
     try {
@@ -49,28 +71,30 @@ export const ProfilePage = () => {
     return null;
   }
 
-  const editProfileDetails = () => {
-    console.log("edit the personal info");
-    setIsEditing(true);
-  };
-
-  const updateProfileDetails = () => {
-    updateUser({
-      firstName: form.firstName,
-      lastName: form.lastName,
-      email: form.email,
-      username: form.username,
-    });
-    setIsEditing(false);
-  };
+  async function updateProfileDetails() {
+    try {
+      await updateUser(form.values);
+      setIsEditing(false);
+      notifications.show({
+        title: "Profile updated",
+        message: "Your changes have been saved.",
+        color: "green",
+        autoClose: 3000,
+        withBorder: true,
+      });
+    } catch (err) {
+      notifications.show({
+        title: "Update failed",
+        message: err instanceof Error ? err.message : "Please try again.",
+        color: "red",
+        autoClose: 5000,
+        withBorder: true,
+      });
+    }
+  }
 
   const cancelEdit = () => {
-    setForm({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    });
+    form.reset();
     setIsEditing(false);
   };
 
@@ -91,102 +115,66 @@ export const ProfilePage = () => {
           </Group>
         </Paper>
 
-        <Card shadow="sm" padding="lg" radius="md">
-          <Stack gap="md">
-            <Group justify="space-between" align="center">
-              <Title order={3}>Profile Information</Title>
-              {isEditing ? (
-                <Group>
-                  <Button
-                    radius="md"
-                    color="green"
-                    onClick={updateProfileDetails}
-                  >
-                    Update
-                  </Button>
-                  <Button radius="md" variant="light" onClick={cancelEdit}>
-                    Cancel
-                  </Button>
-                </Group>
-              ) : (
-                <Button radius="md" onClick={editProfileDetails}>
-                  Edit
-                </Button>
-              )}
-            </Group>
-
-            <Group gap="sm" align="flex-start">
-              <IconUser size={ICON_SIZES.LG} />
-              <Box className={styles.infoBox}>
-                <Text size="sm" c="dimmed" ta="left">
-                  Full Name
-                </Text>
+        <form onSubmit={form.onSubmit(() => updateProfileDetails())}>
+          <Card shadow="sm" padding="lg" radius="md">
+            <Stack gap="md">
+              <Group justify="space-between" align="center">
+                <Title order={3}>Profile Information</Title>
                 {isEditing ? (
                   <Group>
-                    <TextInput
-                      value={form.firstName}
-                      onChange={(e) =>
-                        setForm({ ...form, firstName: e.target.value })
-                      }
-                    />
-                    <TextInput
-                      value={form.lastName}
-                      onChange={(e) =>
-                        setForm({ ...form, lastName: e.target.value })
-                      }
-                    />
+                    <Button
+                      radius="md"
+                      color="green"
+                      type="submit"
+                      disabled={!canUpdate}
+                      aria-disabled={!canUpdate}
+                    >
+                      Update
+                    </Button>
+                    <Button radius="md" variant="light" onClick={cancelEdit}>
+                      Cancel
+                    </Button>
                   </Group>
                 ) : (
-                  <Text fw={500} ta="left">
-                    {user.firstName} {user.lastName}
-                  </Text>
+                  <Button radius="md" onClick={() => setIsEditing(true)}>
+                    Edit
+                  </Button>
                 )}
-              </Box>
-            </Group>
+              </Group>
 
-            <Group gap="sm" align="flex-start">
-              <IconMail size={ICON_SIZES.LG} />
-              <Box className={styles.infoBox}>
-                <Text size="sm" c="dimmed" ta="left">
-                  Email Address
-                </Text>
-                {isEditing ? (
-                  <TextInput
-                    value={form.email}
-                    onChange={(e) =>
-                      setForm({ ...form, email: e.target.value })
-                    }
-                  />
-                ) : (
-                  <Text fw={500} ta="left">
-                    {user.email}
-                  </Text>
+              <EditableField
+                icon={<IconUser size={ICON_SIZES.LG} />}
+                label="Full Name"
+                isEditing={isEditing}
+                displayValue={`${user.firstName} ${user.lastName}`}
+                className={styles.infoBox}
+                renderInputs={() => (
+                  <Group>
+                    <TextInput {...form.getInputProps("firstName")} />
+                    <TextInput {...form.getInputProps("lastName")} />
+                  </Group>
                 )}
-              </Box>
-            </Group>
+              />
 
-            <Group gap="sm" align="flex-start">
-              <IconUser size={ICON_SIZES.LG} />
-              <Box className={styles.infoBox}>
-                <Text size="sm" c="dimmed" ta="left">
-                  Username
-                </Text>
-                {isEditing ? (
-                  <TextInput
-                    value={form.username}
-                    onChange={(e) =>
-                      setForm({ ...form, username: e.target.value })
-                    }
-                  />
-                ) : (
-                  <Text fw={500} ta="left">
-                    {user.username}
-                  </Text>
-                )}
-              </Box>
-            </Group>
-          </Stack>
-        </Card>
+              <EditableField
+                icon={<IconMail size={ICON_SIZES.LG} />}
+                label="Email Address"
+                isEditing={isEditing}
+                displayValue={user.email}
+                className={styles.infoBox}
+                inputProps={form.getInputProps("email")}
+              />
+              <EditableField
+                icon={<IconUser size={ICON_SIZES.LG} />}
+                label="Username"
+                isEditing={isEditing}
+                displayValue={user.username}
+                className={styles.infoBox}
+                inputProps={form.getInputProps("username")}
+              />
+            </Stack>
+          </Card>
+        </form>
 
         <Card shadow="sm" padding="lg" radius="md">
           <Stack gap="md">
