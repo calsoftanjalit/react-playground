@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Group, Box, Text, TextInput } from "@mantine/core";
+import { Group, Box, Text, TextInput, TextInputProps } from "@mantine/core";
 
 interface EditableFieldProps {
   icon: ReactNode;
@@ -8,8 +8,7 @@ interface EditableFieldProps {
   /** Shown when not editing */
   displayValue: ReactNode;
   /** For single input fields */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  inputProps?: ReturnType<any>["getInputProps"] | any;
+  inputProps?: TextInputProps;
   /** For composite fields like First + Last name */
   renderInputs?: () => ReactNode;
   className?: string;

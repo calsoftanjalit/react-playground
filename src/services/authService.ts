@@ -1,10 +1,15 @@
-import type { LoginCredentials, LoginResponse, AuthUser, MockUser } from '@/types/auth';
-import { MOCK_USERS } from '@/constants/auth';
+import type {
+  LoginCredentials,
+  LoginResponse,
+  AuthUser,
+  MockUser,
+} from "@/types/auth";
+import { MOCK_USERS } from "@/constants/auth";
 
 const MOCK_API_DELAY = 800;
 
 const simulateDelay = (ms: number = MOCK_API_DELAY): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 const toAuthUser = (user: MockUser): AuthUser => ({
@@ -21,15 +26,18 @@ const toAuthUser = (user: MockUser): AuthUser => ({
  * @param credentials - Username and password
  * @returns Promise with user data and token
  */
-export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
+export const login = async (
+  credentials: LoginCredentials
+): Promise<LoginResponse> => {
   await simulateDelay();
 
   const user = MOCK_USERS.find(
-    u => u.username === credentials.username && u.password === credentials.password
+    (u) =>
+      u.username === credentials.username && u.password === credentials.password
   );
 
   if (!user) {
-    throw new Error('Invalid username or password');
+    throw new Error("Invalid username or password");
   }
 
   const token = `mock_jwt_token_${user.id}_${Date.now()}`;
@@ -49,17 +57,17 @@ export const logout = async (): Promise<void> => {
  * @param token - JWT token to verify
  * @returns Promise with user data if token is valid
  */
-  export const verifyToken = async (
+export const verifyToken = async (
   token: string,
   storedUser?: AuthUser | null
 ): Promise<AuthUser | null> => {
-await simulateDelay(500);
+  await simulateDelay(500);
 
-  if (!token.startsWith('mock_jwt_token_')) {
+  if (!token.startsWith("mock_jwt_token_")) {
     return null;
   }
 
-  const parts = token.split('_');
+  const parts = token.split("_");
   const userId = Number.parseInt(parts[3], 10);
 
   if (storedUser && storedUser.id === userId) {

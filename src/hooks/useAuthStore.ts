@@ -1,8 +1,12 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { LoginCredentials, AuthStore } from '@/types/auth';
-import { login as loginService, logout as logoutService, verifyToken } from '@/services/authService';
-import { AUTH_STORAGE_KEY } from '@/constants/auth';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { LoginCredentials, AuthStore } from "@/types/auth";
+import {
+  login as loginService,
+  logout as logoutService,
+  verifyToken,
+} from "@/services/authService";
+import { AUTH_STORAGE_KEY } from "@/constants/auth";
 
 export const useAuthStore = create<AuthStore>()(
   persist(
@@ -37,7 +41,7 @@ export const useAuthStore = create<AuthStore>()(
             token: null,
             isAuthenticated: false,
             isLoading: false,
-            error: error instanceof Error ? error.message : 'Login failed',
+            error: error instanceof Error ? error.message : "Login failed",
           });
           throw error;
         }
@@ -63,7 +67,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       checkAuth: async () => {
-        const {token, user} = get();
+        const { token, user } = get();
 
         if (!token) {
           set({ isAuthenticated: false, isLoading: false });
@@ -74,7 +78,7 @@ export const useAuthStore = create<AuthStore>()(
 
         try {
           const verifiedUser = await verifyToken(token, user);
-          if(verifiedUser){
+          if (verifiedUser) {
             set({
               user: verifiedUser,
               isAuthenticated: true,

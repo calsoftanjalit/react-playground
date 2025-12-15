@@ -149,8 +149,8 @@ describe("ProfilePage", () => {
 
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
 
-  // updateUser should not be called
-  expect(mockUpdateUser).not.toHaveBeenCalled();
+    // updateUser should not be called
+    expect(mockUpdateUser).not.toHaveBeenCalled();
   });
 
   it('should navigate to orders page when "View My Orders" is clicked', () => {
