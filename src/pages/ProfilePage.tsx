@@ -15,7 +15,6 @@ import {
   TextInput,
 } from "@mantine/core";
 
-import { notifications } from "@mantine/notifications";
 import { isNotEmpty, useForm } from "@mantine/form";
 import {
   IconUser,
@@ -31,6 +30,7 @@ import { ICON_SIZES, AVATAR_SIZES } from "@/constants/ui";
 import { EditableField } from "./EditableField";
 
 import styles from "@/styles/ProfilePage.module.scss";
+import { showToast } from "@/utils";
 
 export const ProfilePage = () => {
   const { user, logout, updateUser } = useAuthStore();
@@ -75,20 +75,18 @@ export const ProfilePage = () => {
     try {
       await updateUser(form.values);
       setIsEditing(false);
-      notifications.show({
+      showToast({
+        type: "success",
         title: "Profile updated",
         message: "Your changes have been saved.",
-        color: "green",
-        autoClose: 3000,
-        withBorder: true,
+        autoClose: 2500,
       });
     } catch (err) {
-      notifications.show({
+      showToast({
+        type: "error",
         title: "Update failed",
         message: err instanceof Error ? err.message : "Please try again.",
-        color: "red",
-        autoClose: 5000,
-        withBorder: true,
+        autoClose: 2500,
       });
     }
   }
