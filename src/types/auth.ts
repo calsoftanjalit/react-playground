@@ -39,4 +39,6 @@ export interface AuthStore {
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   clearError: () => void;
+
+  updateUser: (partialUser: Partial<AuthUser>) => void;
 }

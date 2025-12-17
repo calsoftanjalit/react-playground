@@ -1,8 +1,12 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { LoginCredentials, AuthStore } from '@/types/auth';
-import { login as loginService, logout as logoutService, verifyToken } from '@/services/authService';
-import { AUTH_STORAGE_KEY } from '@/constants/auth';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { LoginCredentials, AuthStore } from "@/types/auth";
+import {
+  login as loginService,
+  logout as logoutService,
+  verifyToken,
+} from "@/services/authService";
+import { AUTH_STORAGE_KEY } from "@/constants/auth";
 
 export const useAuthStore = create<AuthStore>()(
   persist(
@@ -13,12 +17,17 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
       error: null,
 
+      updateUser: (partialUser: Partial<AuthStore["user"]>) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...partialUser } : state.user,
+        })),
+
       login: async (credentials: LoginCredentials) => {
         set({ isLoading: true, error: null });
 
         try {
           const response = await loginService(credentials);
-          
+
           set({
             user: response.user,
             token: response.token,
@@ -32,7 +41,7 @@ export const useAuthStore = create<AuthStore>()(
             token: null,
             isAuthenticated: false,
             isLoading: false,
-            error: error instanceof Error ? error.message : 'Login failed',
+            error: error instanceof Error ? error.message : "Login failed",
           });
           throw error;
         }
@@ -43,7 +52,7 @@ export const useAuthStore = create<AuthStore>()(
 
         try {
           await logoutService();
-          
+
           set({
             user: null,
             token: null,
@@ -58,7 +67,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       checkAuth: async () => {
-        const { token } = get();
+        const { token, user } = get();
 
         if (!token) {
           set({ isAuthenticated: false, isLoading: false });
@@ -68,11 +77,10 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true });
 
         try {
-          const user = await verifyToken(token);
-
-          if (user) {
+          const verifiedUser = await verifyToken(token, user);
+          if (verifiedUser) {
             set({
-              user,
+              user: verifiedUser,
               isAuthenticated: true,
               isLoading: false,
               error: null,

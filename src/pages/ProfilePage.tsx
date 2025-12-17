@@ -1,27 +1,100 @@
-import { useNavigate } from 'react-router-dom';
-import { Container, Paper, Title, Text, Stack, Group, Avatar, Button, Card, Box } from '@mantine/core';
-import { IconUser, IconMail, IconLogout, IconShoppingBag } from '@tabler/icons-react';
-import { useAuthStore } from '@/hooks/useAuthStore';
-import { AUTH_ROUTES } from '@/constants/auth';
-import { ICON_SIZES, AVATAR_SIZES } from '@/constants/ui';
-import styles from '@/styles/ProfilePage.module.scss';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  Container,
+  Paper,
+  Title,
+  Text,
+  Stack,
+  Group,
+  Avatar,
+  Button,
+  Card,
+  Box,
+  TextInput,
+} from "@mantine/core";
+
+import { isNotEmpty, useForm } from "@mantine/form";
+import {
+  IconUser,
+  IconMail,
+  IconLogout,
+  IconShoppingBag,
+} from "@tabler/icons-react";
+
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { AUTH_ROUTES } from "@/constants/auth";
+import { ICON_SIZES, AVATAR_SIZES } from "@/constants/ui";
+
+import { EditableField } from "./EditableField";
+
+import styles from "@/styles/ProfilePage.module.scss";
+import { showToast } from "@/utils";
 
 export const ProfilePage = () => {
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const form = useForm({
+    initialValues: {
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      username: user?.username || "",
+    },
+
+    validate: {
+      firstName: isNotEmpty("First name is required"),
+      lastName: isNotEmpty("Last name is required"),
+      username: isNotEmpty("Username is required"),
+      email: (v) => (/^\S+@\S+$/.test(v) ? null : "Invalid email"),
+    },
+
+    validateInputOnChange: true,
+    validateInputOnBlur: true,
+  });
+
+  const canUpdate = isEditing && form.isValid();
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
   if (!user) {
     return null;
   }
+
+  async function updateProfileDetails() {
+    try {
+      await updateUser(form.values);
+      setIsEditing(false);
+      showToast({
+        type: "success",
+        title: "Profile updated",
+        message: "Your changes have been saved.",
+        autoClose: 2500,
+      });
+    } catch (err) {
+      showToast({
+        type: "error",
+        title: "Update failed",
+        message: err instanceof Error ? err.message : "Please try again.",
+        autoClose: 2500,
+      });
+    }
+  }
+
+  const cancelEdit = () => {
+    form.reset();
+    setIsEditing(false);
+  };
 
   return (
     <Container size="md" py="xl">
@@ -40,43 +113,66 @@ export const ProfilePage = () => {
           </Group>
         </Paper>
 
-        <Card shadow="sm" padding="lg" radius="md">
-          <Stack gap="md">
-            <Title order={3}>Profile Information</Title>
+        <form onSubmit={form.onSubmit(() => updateProfileDetails())}>
+          <Card shadow="sm" padding="lg" radius="md">
+            <Stack gap="md">
+              <Group justify="space-between" align="center">
+                <Title order={3}>Profile Information</Title>
+                {isEditing ? (
+                  <Group>
+                    <Button
+                      radius="md"
+                      color="green"
+                      type="submit"
+                      disabled={!canUpdate}
+                      aria-disabled={!canUpdate}
+                    >
+                      Update
+                    </Button>
+                    <Button radius="md" variant="light" onClick={cancelEdit}>
+                      Cancel
+                    </Button>
+                  </Group>
+                ) : (
+                  <Button radius="md" onClick={() => setIsEditing(true)}>
+                    Edit
+                  </Button>
+                )}
+              </Group>
 
-            <Group gap="sm" align="flex-start">
-              <IconUser size={ICON_SIZES.LG} />
-              <Box className={styles.infoBox}>
-                <Text size="sm" c="dimmed" ta="left">
-                  Full Name
-                </Text>
-                <Text fw={500} ta="left">
-                  {user.firstName} {user.lastName}
-                </Text>
-              </Box>
-            </Group>
+              <EditableField
+                icon={<IconUser size={ICON_SIZES.LG} />}
+                label="Full Name"
+                isEditing={isEditing}
+                displayValue={`${user.firstName} ${user.lastName}`}
+                className={styles.infoBox}
+                renderInputs={() => (
+                  <Group>
+                    <TextInput {...form.getInputProps("firstName")} />
+                    <TextInput {...form.getInputProps("lastName")} />
+                  </Group>
+                )}
+              />
 
-            <Group gap="sm" align="flex-start">
-              <IconMail size={ICON_SIZES.LG} />
-              <Box className={styles.infoBox}>
-                <Text size="sm" c="dimmed" ta="left">
-                  Email Address
-                </Text>
-                <Text fw={500} ta="left">{user.email}</Text>
-              </Box>
-            </Group>
-
-            <Group gap="sm" align="flex-start">
-              <IconUser size={ICON_SIZES.LG} />
-              <Box className={styles.infoBox}>
-                <Text size="sm" c="dimmed" ta="left">
-                  Username
-                </Text>
-                <Text fw={500} ta="left">{user.username}</Text>
-              </Box>
-            </Group>
-          </Stack>
-        </Card>
+              <EditableField
+                icon={<IconMail size={ICON_SIZES.LG} />}
+                label="Email Address"
+                isEditing={isEditing}
+                displayValue={user.email}
+                className={styles.infoBox}
+                inputProps={form.getInputProps("email")}
+              />
+              <EditableField
+                icon={<IconUser size={ICON_SIZES.LG} />}
+                label="Username"
+                isEditing={isEditing}
+                displayValue={user.username}
+                className={styles.infoBox}
+                inputProps={form.getInputProps("username")}
+              />
+            </Stack>
+          </Card>
+        </form>
 
         <Card shadow="sm" padding="lg" radius="md">
           <Stack gap="md">
